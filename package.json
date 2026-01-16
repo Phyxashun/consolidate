@@ -1,26 +1,38 @@
-
 {
-  "name": "consolidate",
-  "module": "index.ts",
-  "type": "module",
-  "devDependencies": {
-    "@types/bun": "^1.3.5",
-    "@types/figlet": "^1.7.0",
-    "@types/node": "^25.0.6",
-    "@types/progress": "^2.0.7"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
-  "dependencies": {
-    "figlet": "^1.9.4",
-    "progress": "^2.0.3",
-    "logger": "link:logger"
-  },
-  "bin": {
-    "consolidate": "./index.ts"
-  },
-  "scripts": {
-    "start": "bun run ./index.ts"
-  }
+    "name": "consolidate",
+    "version": "1.1.6",
+    "description": "A utility script to consolidate project files into single, combined output files.",
+    "main": "index.ts",
+    "module": "index.ts",
+    "type": "module",
+    "scripts": {
+        "start": "bun run ./index.ts"
+    },
+    "bin": {
+        "consolidate": "./index.ts"
+    },
+    "keywords": [
+        "consolidate",
+        "merge",
+        "project"
+    ],
+    "author": "Dustin Dew",
+    "license": "MIT",
+    "dependencies": {
+        "figlet": "^1.9.4",
+        "glob": "^13.0.0",
+        "logger": "link:logger"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    },
+    "devDependencies": {
+        "@types/bun": "^1.3.5",
+        "@types/figlet": "^1.7.0",
+        "@types/glob": "^9.0.0",
+        "@types/node": "^25.0.6",
+        "@vitest/coverage-v8": "^4.0.17",
+        "prettier": "3.8.0",
+        "vitest": "^4.0.17"
+    }
 }

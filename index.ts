@@ -3,8 +3,8 @@
 
 /**
  * @file consolidate.ts
- * @description A utility script to consolidate project files into single, 
- *              combined output files. The script is organized into logical 
+ * @description A utility script to consolidate project files into single,
+ *              combined output files. The script is organized into logical
  *              namespaces:
  *              - `config`: Defines the consolidation jobs.
  *              - `ui`: Handles all console output and user interface elements.
@@ -18,169 +18,56 @@
 import { styleText } from 'node:util';
 import fs from 'node:fs';
 import path from 'node:path';
-import ProgressBar from 'progress';
-import {
-    LineType,
-    BoxType,
-    Spacer,
-    CenteredText,
-    CenteredFiglet,
-    PrintLine,
-    BoxText,
-} from 'logger';
+import { globSync } from 'glob';
+import { LineType, BoxType, Spacer, CenteredText, CenteredFiglet, PrintLine, BoxText } from 'logger';
 
-
-/**
- * Constants
- */
-const TEXT_OUTPUT_DIR = './ALL/txt/';
-const TS_OUTPUT_DIR = './ALL/ts/';
+/******************************************************************************************************
+ *
+ * CONSTANTS
+ *
+ ******************************************************************************************************/
+const PROJECT_DIR = 'C:/Users/dustin.dew/Programming/';
+const NEW_PROJECT_DIR = '../../../dustin.dew/Programming/';
+const OUTPUT_DIR = './ALL';
+const TEXT_OUTPUT_DIR = OUTPUT_DIR + '/txt/';
+const TS_OUTPUT_DIR = OUTPUT_DIR + '/ts/';
 const START_END_SPACER = 30;
 const START_END_NEWLINE = 2;
 const FILE_DIVIDER_WIDTH = 100;
 
-/**************************************************************************************************
- * 
- * CONFIGURATION
- * 
- *************************************************************************************************/
-
+/******************************************************************************************************
+ *
+ * TYPES
+ *
+ ******************************************************************************************************/
 /**
- * @interface ConsolidationSourceDef
+ * @interface JobDefinition
  * @description Defines the structure for a single consolidation task.
- * @property {string} jobName - A name for the job, used in output file name.
- * @property {string} name - A descriptive name for the job, used in logging.
+ * @property {string} name - A name for the job, used in output file name.
+ * @property {string} description - A descriptive name for the job, used in logging.
  * @property {string[]} patterns - An array of glob patterns to find files for this job.
  */
-interface ConsolidationSourceDef {
-    jobName?: string;
+interface JobDefinition {
     name: string;
+    description?: string;
     patterns: string[];
 }
 
 /**
  * @interface ConsolidationJob
  * @description Defines the structure for a single consolidation task.
- * @extends {ConsolidationSourceDef}
+ * @extends {JobDefinition}
  * @property {string} outputFile - The path to the file where content will be consolidated.
  */
-interface ConsolidationJob extends ConsolidationSourceDef {
+interface ConsolidationJob extends JobDefinition {
     outputFile: string;
 }
 
-const SOURCE_DEFINITIONS: ConsolidationSourceDef[] = [
-    {
-        name: 'MAIN_FILES',
-        jobName: 'Main Project TypeScript and JavaScript Files',
-        patterns: [
-            './src/**/*.ts',
-            './src/**/*.js',
-            './index.ts',
-            './Consolidate.ts',
-        ]
-    },
-    {
-        name: 'CONFIG',
-        jobName: 'Configuration Files and Markdown',
-        patterns: [
-            './.vscode/launch.json',
-            './.vscode/settings.json',
-            './.gitignore',
-            './*.json',
-            './*.config.ts',
-            './git-push.sh',
-        ]
-    },
-    {
-        name: 'NEW_TEST',
-        jobName: 'New Test Files',
-        patterns: [
-            './test/**/*.test.ts',
-        ]
-    },
-    {
-        name: 'OLD_TEST',
-        jobName: 'Old Test Files',
-        patterns: [
-            './test_old/**/*.ts',
-            './test_old/**/*.test.ts',
-        ],
-    },
-    {
-        name: 'MARKDOWN',
-        jobName: 'Project Markdown Files',
-        patterns: [
-            './0. NOTES/*.md',
-            './License',
-            './README.md'
-        ],
-    },
-];
-
-interface IConfig {
-    generateJobsForType: (outputDir: string, extension: string) => ConsolidationJob[];
+interface Configuration {
+    GenerateJobs: (outputDir: string, extension: string) => ConsolidationJob[];
     JOBS: ConsolidationJob[];
     IGNORELIST: string[];
 }
-
-const config: IConfig = {
-    /**
-     * @description Generates an array of all consolidation jobs to be executed by the script.
-     * @returns {ConsolidationJob[]}
-     */
-    generateJobsForType: (outputDir: string, extension: string): ConsolidationJob[] => {
-        return SOURCE_DEFINITIONS.map((definition, index) => ({
-            name: styleText(['red', 'underline'], definition.jobName ?? definition.name),
-            outputFile: `${outputDir}${index + 1}_ALL_${definition.name.toUpperCase().replace(' ', '_')}.${extension}`,
-            patterns: definition.patterns,
-        }));
-    },
-    JOBS: [] as ConsolidationJob[],
-    IGNORELIST: [] as string[],
-};
-
-/**
- * @description An array of all consolidation jobs to be executed by the script.
- * @type {ConsolidationJob[]}
- */
-Object.defineProperty(config, "JOBS", {
-    value: [
-        ...config.generateJobsForType(TS_OUTPUT_DIR, 'ts'),
-        ...config.generateJobsForType(TEXT_OUTPUT_DIR, 'txt'),
-    ],
-    writable: false,     // Prevents modification after definition
-    enumerable: true,    // Allows the property to show up during enumeration (e.g., in a for...in loop)
-    configurable: false  // Prevents the property from being deleted or having its descriptor changed further
-});
-
-Object.defineProperty(config, "IGNORELIST", {
-    value: [
-        'coverage/**',
-        'node_modules/**',
-        'ALL/**',
-    ],
-    writable: false,     // Prevents modification after definition
-    enumerable: true,    // Allows the property to show up during enumeration (e.g., in a for...in loop)
-    configurable: false  // Prevents the property from being deleted or having its descriptor changed further
-});
-
-/*
-config.JOBS = [
-    ...config.generateJobsForType(TS_OUTPUT_DIR, 'ts'),
-    ...config.generateJobsForType(TEXT_OUTPUT_DIR, 'txt'),
-];
-
-config.IGNORELIST = [
-    'coverage/**',
-    'node_modules/**',
-    'ALL/**',
-];
-*/
-/**************************************************************************************************
- * 
- * USER INTERFACE
- * 
- *************************************************************************************************/
 
 interface FinalSummaryOptions {
     totalFiles: number;
@@ -188,6 +75,62 @@ interface FinalSummaryOptions {
     skippedJobs: number;
 }
 
+/******************************************************************************************************
+ *
+ * CONFIGURATION
+ *
+ ******************************************************************************************************/
+const JOB_DEFINITIONS: JobDefinition[] = [
+    {
+        name: 'MAIN_FILES',
+        description: 'Main Project TypeScript and JavaScript Files',
+        patterns: ['src/**/*.ts', 'src/**/*.js', 'index.ts', 'Consolidate.ts'],
+    },
+    {
+        name: 'CONFIG',
+        description: 'Configuration Files and Markdown',
+        patterns: ['../../AppData/Roaming/code/user/settings.json', '.vscode/**/*', '.gitignore', '*.json', '*.config.ts', 'git-push.sh'],
+    },
+    {
+        name: 'NEW_TEST',
+        description: 'New Test Files',
+        patterns: ['{test,tests}/**/*.test.ts'],
+    },
+    {
+        name: 'OLD_TEST',
+        description: 'Old Test Files',
+        patterns: ['{test_old, tests_old}/**/*.ts', '{test_old,test_old}/**/*.test.ts'],
+    },
+    {
+        name: 'MARKDOWN',
+        description: 'Project Markdown Files',
+        patterns: ['0. NOTES/*', 'License', '*.md'],
+    },
+];
+
+const CONFIG: Configuration = {
+    GenerateJobs: (outputDir: string, fileExtension: string): ConsolidationJob[] => {
+        return JOB_DEFINITIONS.map((definition, index) => ({
+            name: styleText(['red', 'underline'], definition.description ?? definition.name),
+
+            outputFile: `${outputDir}${index + 1}_ALL_${definition.name.toUpperCase().replace(' ', '_')}.${fileExtension}`,
+
+            patterns: definition.patterns,
+        }));
+    },
+    JOBS: [],
+    IGNORELIST: [] as string[],
+};
+
+CONFIG.JOBS = [...CONFIG.GenerateJobs(TS_OUTPUT_DIR, 'ts'), ...CONFIG.GenerateJobs(TEXT_OUTPUT_DIR, 'txt')];
+
+CONFIG.IGNORELIST = ['./**/*.lock', './coverage/**/*.*', './node_modules/**/*.*', './ALL/**'];
+
+/******************************************************************************************************
+ *
+ * USER INTERFACE
+ *
+ ******************************************************************************************************/
 const ui = {
     /**
      * @function displayHeader
@@ -198,16 +141,20 @@ const ui = {
         PrintLine({ preNewLine: true, lineType: LineType.boldBlock });
         console.log(styleText(['yellowBright', 'bold'], CenteredFiglet(`Consolidate!!!`)));
         CenteredText(styleText(['magentaBright', 'bold'], '*** PROJECT FILE CONSOLIDATOR SCRIPT ***'));
-        PrintLine({ preNewLine: true, postNewLine: true, lineType: LineType.boldBlock });
+        PrintLine({
+            preNewLine: true,
+            postNewLine: true,
+            lineType: LineType.boldBlock,
+        });
     },
 
     /**
      * Logs the start of a new consolidation job.
-     * @param {string} jobName - The name of the job being processed.
+     * @param {string} description - The name of the job being processed.
      * @param {string} outputFile - The path of the output file for the job.
      */
-    logJobStart: (jobName: string, outputFile: string): void => {
-        CenteredText(styleText('cyan', `Consolidating all project ${jobName}`));
+    logJobStart: (description: string, outputFile: string): void => {
+        CenteredText(styleText('cyan', `Consolidating all project ${description}`));
         CenteredText(styleText('cyan', `files into ${outputFile}...\n`));
     },
 
@@ -224,8 +171,12 @@ const ui = {
      */
     logComplete: (): void => {
         console.log();
-        CenteredText(styleText(['yellow', 'bold'], 'Consolidation complete!!!'));
-        PrintLine({ preNewLine: true, postNewLine: true, lineType: LineType.boldBlock });
+        CenteredText(styleText(['green', 'bold'], 'Consolidation complete!!!'));
+        PrintLine({
+            preNewLine: true,
+            postNewLine: true,
+            lineType: LineType.boldBlock,
+        });
     },
 
     /**
@@ -235,29 +186,28 @@ const ui = {
      */
     logFinalSummary: (options: FinalSummaryOptions): void => {
         const { totalFiles, processedJobs, skippedJobs } = options;
-
         let summaryMessage = `✓ Successfully consolidated ${totalFiles} files across ${processedJobs} jobs.`;
         if (skippedJobs > 0) {
             summaryMessage += ` (${skippedJobs} jobs skipped).`;
         }
-
-        BoxText(
-            summaryMessage, {
+        BoxText(summaryMessage, {
             boxType: BoxType.double,
             color: 'green',
-            textColor: ['green', 'bold']
-        }
-        );
-        PrintLine({ preNewLine: true, postNewLine: true, lineType: LineType.boldBlock });
+            textColor: ['green', 'bold'],
+        });
+        PrintLine({
+            preNewLine: true,
+            postNewLine: true,
+            lineType: LineType.boldBlock,
+        });
     },
-}
+};
 
-/**************************************************************************************************
- * 
+/******************************************************************************************************
+ *
  * FILE SYSTEM INTERACTION
- * 
- *************************************************************************************************/
-
+ *
+ ******************************************************************************************************/
 const fileSystem = {
     /**
      * Ensures that a directory exists, creating it if necessary.
@@ -265,7 +215,7 @@ const fileSystem = {
      */
     ensureDirectoryExists: async (dirPath: string): Promise<void> => {
         if (!fs.existsSync(dirPath)) {
-            console.log(styleText('yellow', `\tCreating directory: ${dirPath}`));
+            CenteredText(styleText(['yellow', 'bold'], `Creating directory: ${dirPath}`));
             fs.mkdirSync(dirPath, { recursive: true });
         }
     },
@@ -278,9 +228,7 @@ const fileSystem = {
         // Extract directory path and ensure it exists
         const dirPath = path.dirname(filePath);
         fileSystem.ensureDirectoryExists(dirPath);
-
-        const file = Bun.file(filePath);
-        if (await file.exists()) {
+        if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
         }
     },
@@ -289,28 +237,13 @@ const fileSystem = {
      * Finds all file paths matching an array of glob patterns using Bun.Glob.
      * @param {string[]} patterns - The glob patterns to search for.
      * @param {string} outputFile - The path of the output file, to be excluded from the search.
+     * @param {string[]} [ignorePatterns] - An optional array of glob patterns to ignore files.
      * @returns {Promise<string[]>} A promise that resolves to an array of found file paths.
      */
-    findFiles: async (patterns: string[], outputFile: string): Promise<string[]> => {
-        const allFiles = new Set<string>();
-        for (const pattern of patterns) {
-            const glob = new Bun.Glob(pattern);
-            for await (const file of glob.scan('.')) {
-                allFiles.add(file);
-            }
-        }
-
-        const ignoreList = [
-            ...config.IGNORELIST,
-            outputFile
-        ];
-
-        const finalFiles = Array.from(allFiles);
-
-        // Filter out ignored files
-        return finalFiles.filter(file =>
-            !ignoreList.some(ignorePattern => new Bun.Glob(ignorePattern).match(file))
-        );
+    findFiles: (patterns: string[], outputFile: string): string[] => {
+        return globSync(patterns, {
+            ignore: [...CONFIG.IGNORELIST, outputFile],
+        });
     },
 
     /**
@@ -326,17 +259,15 @@ const fileSystem = {
         const startFile = `${endLine}//${space} Start of file: ${sourceFile} ${space}${endLine}${endLine}\n`;
         const content = await Bun.file(sourceFile).text();
         const endFile = `\n${endLine}${endLine}//${space} End of file: ${sourceFile} ${space}${endLine}\n`;
-
         return `${startFile}${content}${endFile}${fileDivider}${fileDivider}`;
     },
-}
+};
 
-/**************************************************************************************************
- * 
+/******************************************************************************************************
+ *
  * MAIN EXECUTION AND EXPORTS
- * 
- *************************************************************************************************/
-
+ *
+ ******************************************************************************************************/
 const consolidateJobs = {
     /**
      * Processes a single consolidation job. Finds files and, if any exist,
@@ -348,46 +279,32 @@ const consolidateJobs = {
     process: async (job: ConsolidationJob): Promise<number> => {
         const { name, outputFile, patterns } = job;
         const sourceFiles = await fileSystem.findFiles(patterns, outputFile);
-
         if (sourceFiles.length > 0) {
             ui.logJobStart(name, outputFile);
             await fileSystem.prepareOutputFile(outputFile);
-
-            // --- 4. Create and use the progress bar ---
-            const bar = new ProgressBar('  processing [:bar] :percent :etas', {
-                complete: '█',
-                incomplete: '░',
-                width: 40,
-                total: sourceFiles.length
-            });
-
             const allContent: string[] = [];
             for (const sourceFile of sourceFiles) {
+                ui.logFileAppend(sourceFile);
                 const content = await fileSystem.createFileContent(sourceFile);
                 allContent.push(content);
-                bar.tick(); // Advance the progress bar for each file
             }
-
-            await Bun.write(outputFile, allContent.join(''));
+            fs.writeFileSync(outputFile, allContent.join(''));
             ui.logComplete();
             return sourceFiles.length;
         }
-
         return 0; // No files found for this job
     },
 
     /**
      * Runs all consolidation jobs, tracks the total files processed, and logs a final summary.
-     * @param {config.ConsolidationJob[]} jobs - An array of consolidation jobs to execute.
+     * @param {CONFIG.ConsolidationJob[]} jobs - An array of consolidation jobs to execute.
      */
     run: async (jobs: ConsolidationJob[]): Promise<void> => {
         let totalFiles = 0;
         let processedJobs = 0;
         let skippedJobs = 0; // --- 5. Add counter for skipped jobs ---
-
         for (const job of jobs) {
             const fileCountForJob = await consolidateJobs.process(job);
-
             if (fileCountForJob > 0) {
                 totalFiles += fileCountForJob;
                 processedJobs++;
@@ -395,26 +312,24 @@ const consolidateJobs = {
                 skippedJobs++; // --- 6. Increment if job returned 0 files ---
             }
         }
-
         if (totalFiles > 0) {
             // --- 7. Pass all counts to the summary function ---
             ui.logFinalSummary({ totalFiles, processedJobs, skippedJobs });
         }
     },
-}
+};
 
 /**
  * @function main
- * @description The main entry point for the script. Initializes the UI and 
+ * @description The main entry point for the script. Initializes the UI and
  *              starts the consolidation process.
  */
 export const main = async (): Promise<void> => {
     ui.displayHeader();
-    await consolidateJobs.run(config.JOBS);
+    await consolidateJobs.run(CONFIG.JOBS);
 };
 
 // Executes and exports the script.
 const consolidate = main;
 export default consolidate;
-
 consolidate();
