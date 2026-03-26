@@ -3,16 +3,11 @@ import deconsolidate from './src/deconsolidate';
 
 import readline from 'node:readline';
 import { styleText } from 'node:util';
-import { BoxText, BoxType, CenteredFiglet, CenteredText, LineType, PrintLine } from './src/logger';
-
-export { consolidate, deconsolidate };
+import { CenteredFiglet, LineType, PrintLine } from './src/logger';
 
 PrintLine({ preNewLine: true, lineType: LineType.boldBlock });
 console.log(styleText(['yellowBright', 'bold'], CenteredFiglet(`Consolidate!!!`)));
-PrintLine({
-    postNewLine: true,
-    lineType: LineType.boldBlock,
-});
+PrintLine({ postNewLine: true, lineType: LineType.boldBlock });
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
@@ -29,8 +24,10 @@ rl.question(
             case '3':
                 process.exit(0);
             default:
-                console.log(styleText('red', `\n  Invalid option "${answer}". Exiting.\n`));
+                console.log(styleText('red', `\nError! Invalid option "${answer}". Exiting.\n`));
                 process.exit(1);
         }
     },
 );
+
+export { consolidate, deconsolidate };
