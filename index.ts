@@ -19,16 +19,20 @@ import { styleText } from 'node:util';
 import fs from 'node:fs';
 import path from 'node:path';
 import { globSync } from 'glob';
-import { LineType, BoxType, Spacer, CenteredText, CenteredFiglet, PrintLine, BoxText } from './utils/logger';
+import { LineType, BoxType, Spacer, CenteredText, CenteredFiglet, PrintLine, BoxText, Align } from './utils/logger';
 
 /******************************************************************************************************
  *
  * CONSTANTS
  *
  ******************************************************************************************************/
+const IGNORELIST = ['**/*.lock', 'coverage/**/*', 'node_modules/**/*', 'ALL/**/*', '.env'];
+const GITIGNORE_PATH = path.resolve(process.cwd(), '.gitignore');
 const OUTPUT_DIR = './ALL';
 const TEXT_OUTPUT_DIR = OUTPUT_DIR + '/txt/';
+const TEXT_FILE_EXT = 'txt';
 const TS_OUTPUT_DIR = OUTPUT_DIR + '/ts/';
+const TS_FILE_EXT = 'ts';
 const START_END_SPACER = 30;
 const START_END_NEWLINE = 2;
 const FILE_DIVIDER_WIDTH = 100;
@@ -43,12 +47,14 @@ const FILE_DIVIDER_WIDTH = 100;
  * @description Defines the structure for a single consolidation task.
  * @property {string} name - A name for the job, used in output file name.
  * @property {string} description - A descriptive name for the job, used in logging.
- * @property {string[]} patterns - An array of glob patterns to find files for this job.
+ * @property {string[]} include - An array of glob patterns to find files for this job.
+ * @property {string[]} exclude - An array of glob patterns to exclude for this job.
  */
 interface JobDefinition {
     name: string;
     description?: string;
-    patterns: string[];
+    include: string[];
+    exclude: string[];
 }
 
 /**
@@ -63,6 +69,7 @@ interface ConsolidationJob extends JobDefinition {
 
 interface Configuration {
     GenerateJobs: (outputDir: string, extension: string) => ConsolidationJob[];
+    AddGitIgnore: (gitignorePath: string) => string[];
     JOBS: ConsolidationJob[];
     IGNORELIST: string[];
 }
@@ -80,24 +87,27 @@ interface FinalSummaryOptions {
  ******************************************************************************************************/
 const JOB_DEFINITIONS: JobDefinition[] = [
     {
-        name: 'SOURCE',
-        description: 'Main Project TypeScript and JavaScript Source Files',
-        patterns: ['src/**/*.{ts,tsx,js,jsx}', 'index.ts'],
+        name: 'SOURCE_FILES',
+        description: 'TypeScript (ts, tsx, mts, cts) and JavaScript (js, jsx, mjs, cjs) Source Files',
+        include: ['src/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}', '**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}', 'index.ts'],
+        exclude: ['**/*.config.{ts,mts,js,mjs}', '**/*.test.ts'],
     },
     {
-        name: 'HTML',
-        description: 'Main Project HTML Files',
-        patterns: ['src/**/*.{html}', 'index.html'],
+        name: 'HTML_FILES',
+        description: 'HTML Files',
+        include: ['src/**/*.{html}', '**/*.{html}', 'index.html'],
+        exclude: [],
     },
     {
-        name: 'STYLES',
-        description: 'Main Project Style Files',
-        patterns: ['src/**/*.{css,scss,sass,less}'],
+        name: 'STYLES_FILES',
+        description: 'Style (ss,scss,sass,less) Files',
+        include: ['src/**/*.{css,scss,sass,less}', '**/*.{css,scss,sass,less}'],
+        exclude: [],
     },
     {
-        name: 'CONFIGS',
+        name: 'CONFIG_FILES',
         description: 'Configuration Files and Markdown',
-        patterns: [
+        include: [
             '../../AppData/Roaming/code/user/settings.json',
             '.vscode/**/*.json',
             '.gitignore',
@@ -106,16 +116,19 @@ const JOB_DEFINITIONS: JobDefinition[] = [
             '.editorconfig',
             '.prettierrc',
         ],
+        exclude: [],
     },
     {
-        name: 'TEST',
-        description: 'Project Test Files',
-        patterns: ['{test,tests,test_old, tests_old}/**/*.test.ts'],
+        name: 'TEST_FILES',
+        description: 'Test Files',
+        include: ['{test,tests,test_old, tests_old}/**/*.test.ts', '**/*.test.ts'],
+        exclude: [],
     },
     {
-        name: 'DOCUMENTATION',
-        description: 'Project Documentation Files',
-        patterns: ['**/*.{md,txt}', 'License'],
+        name: 'DOC_FILES',
+        description: 'Documentation Files',
+        include: ['**/*.{md,txt}', 'License'],
+        exclude: [],
     },
 ];
 
@@ -126,16 +139,31 @@ const CONFIG: Configuration = {
 
             outputFile: `${outputDir}${index + 1}_ALL_${definition.name.toUpperCase().replace(' ', '_')}.${fileExtension}`,
 
-            patterns: definition.patterns,
+            include: definition.include,
+            exclude: definition.exclude,
         }));
+    },
+    AddGitIgnore: (gitignorePath: string): string[] => {
+        let gitignoreContent;
+        if (fs.existsSync(gitignorePath)) {
+            gitignoreContent = fs.readFileSync(gitignorePath, 'utf-8');
+            return gitignoreContent
+                .split(/\r?\n/) // Split by newline
+                .map(line => line.trim()) // Remove whitespace
+                .filter(line => line && !line.startsWith('#')); // Ignore empty lines and comments
+        } else {
+            return [];
+        }
     },
     JOBS: [],
     IGNORELIST: [] as string[],
 };
 
-CONFIG.JOBS = [...CONFIG.GenerateJobs(TS_OUTPUT_DIR, 'ts'), ...CONFIG.GenerateJobs(TEXT_OUTPUT_DIR, 'txt')];
+// Create all jobs
+CONFIG.JOBS = [...CONFIG.GenerateJobs(TS_OUTPUT_DIR, TS_FILE_EXT), ...CONFIG.GenerateJobs(TEXT_OUTPUT_DIR, TEXT_FILE_EXT)];
 
-CONFIG.IGNORELIST = ['**/*.lock', 'coverage/**/*', 'node_modules/**/*', 'ALL/**/*', '.env'];
+// Merge, de-duplicate, and assign in one go
+CONFIG.IGNORELIST = [...new Set([...IGNORELIST, ...CONFIG.AddGitIgnore(GITIGNORE_PATH)])];
 
 /******************************************************************************************************
  *
@@ -152,6 +180,18 @@ const ui = {
         PrintLine({ preNewLine: true, lineType: LineType.boldBlock });
         console.log(styleText(['yellowBright', 'bold'], CenteredFiglet(`Consolidate!!!`)));
         CenteredText(styleText(['magentaBright', 'bold'], '*** PROJECT FILE CONSOLIDATOR SCRIPT ***'));
+        PrintLine({
+            preNewLine: true,
+            postNewLine: true,
+            lineType: LineType.boldBlock,
+        });
+        CenteredText(styleText(['yellowBright', 'bold'], '*** IGNORED FILES ***'));
+        BoxText(`${CONFIG.IGNORELIST.join(', ')}`, {
+            boxType: BoxType.single,
+            width: 80,
+            color: 'yellow',
+            textColor: ['gray'],
+        });
         PrintLine({
             preNewLine: true,
             postNewLine: true,
@@ -251,9 +291,9 @@ const fileSystem = {
      * @param {string[]} [ignorePatterns] - An optional array of glob patterns to ignore files.
      * @returns {Promise<string[]>} A promise that resolves to an array of found file paths.
      */
-    findFiles: (patterns: string[], outputFile: string): string[] => {
+    findFiles: (patterns: string[], ignorePatterns: string[], outputFile: string): string[] => {
         return globSync(patterns, {
-            ignore: [...CONFIG.IGNORELIST, outputFile],
+            ignore: [...CONFIG.IGNORELIST, ...ignorePatterns, outputFile],
         });
     },
 
@@ -288,8 +328,8 @@ const consolidateJobs = {
      * @returns {Promise<number>} The number of files processed in the job.
      */
     process: async (job: ConsolidationJob): Promise<number> => {
-        const { name, outputFile, patterns } = job;
-        const sourceFiles = await fileSystem.findFiles(patterns, outputFile);
+        const { name, outputFile, include, exclude } = job;
+        const sourceFiles = await fileSystem.findFiles(include, exclude, outputFile);
         if (sourceFiles.length > 0) {
             ui.logJobStart(name, outputFile);
             await fileSystem.prepareOutputFile(outputFile);

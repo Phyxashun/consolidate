@@ -520,53 +520,56 @@ const BoxText = (text: string | string[], options: BoxTextOptions = {}): void =>
         ...(styles || []),
     ];
 
-    // Calculate Content Width and Wrap Text
-    let contentWidth: number;
-    let textLines: string[];
-
     // Add this helper inside BoxText, right after the options destructuring
     const stripAnsi = (str: string): string => str.replace(/\x1b\[[0-9;]*m/g, '');
 
-    if (Array.isArray(text)) {
-        textLines = text;
-        contentWidth = Math.max(...textLines.map(line => stripAnsi(line).length));
+    // Calculate Content Width and Wrap Text
+    let contentWidth: number;
+    let textLines: string[] = [];
 
-        // If a fixed width is requested, we use it instead of the longest line
-        if (typeof width === 'number') {
-            contentWidth = width - 4;
-        } else if (width === 'max') {
-            contentWidth = MAX_WIDTH - 4;
-        }
+    // Determine the target content width
+    if (typeof width === 'number') {
+        contentWidth = width - 4;
+    } else if (width === 'max') {
+        contentWidth = MAX_WIDTH - 4;
     } else {
-        if (width === 'max') {
-            contentWidth = MAX_WIDTH - 4;
-        } else if (typeof width === 'number') {
-            if (width <= 4) throw new Error('Custom width must be greater than 4.');
-            contentWidth = width - 4;
-        } else {
-            textLines = text.split('\n');
-            contentWidth = Math.max(...textLines.map(line => line.length));
-        }
+        // Handle 'tight' or auto-detect based on input
+        const initialLines = Array.isArray(text) ? text : text.split('\n');
+        contentWidth = Math.max(...initialLines.map(line => stripAnsi(line).length));
+    }
 
-        if (width !== 'tight') {
-            const words = text.split(/\s+/);
-            textLines = words.reduce((lines, word) => {
-                if (lines.length === 0) return [word];
-                let lastLine = lines[lines.length - 1]!;
-                if (lastLine.length + word.length + 1 > contentWidth) {
-                    lines.push(word);
-                } else {
-                    lines[lines.length - 1] = lastLine + ' ' + word;
-                }
-                return lines;
-            }, [] as string[]);
+    // Wrap the text into lines that fit contentWidth
+    const inputString = Array.isArray(text) ? text.join(' ') : text;
+    const words = inputString.split(/\s+/);
+    let currentLine = '';
+
+    words.forEach(word => {
+        const lineLen = stripAnsi(currentLine).length;
+        const wordLen = stripAnsi(word).length;
+
+        if (lineLen + (lineLen > 0 ? 1 : 0) + wordLen <= contentWidth) {
+            currentLine += (currentLine ? ' ' : '') + word;
         } else {
-            textLines = text.split('\n');
+            if (currentLine) textLines.push(currentLine);
+
+            // If a single word is wider than contentWidth, force-break it
+            let remainingWord = word;
+            while (stripAnsi(remainingWord).length > contentWidth) {
+                textLines.push(remainingWord.substring(0, contentWidth));
+                remainingWord = remainingWord.substring(contentWidth);
+            }
+            currentLine = remainingWord;
         }
+    });
+    if (currentLine) textLines.push(currentLine);
+
+    // Recalculate if 'tight' was used to avoid unnecessary whitespace
+    if (width === 'tight') {
+        contentWidth = Math.max(...textLines.map(line => stripAnsi(line).length), 0);
     }
 
     // Calculate Outer Alignment Padding
-    const fullBoxWidth = contentWidth + 4; // Border(1) + Space(1) + Content + Space(1) + Border(1)
+    const fullBoxWidth = contentWidth + 4;
     let leftPaddingAmount = 0;
 
     if (boxAlign === 'center') {
@@ -579,8 +582,11 @@ const BoxText = (text: string | string[], options: BoxTextOptions = {}): void =>
 
     // Build Box Components
     const centerAlign = (str: string, width: number): string => {
-        const padding = Math.floor((width - str.length) / 2);
-        return ' '.repeat(padding) + str + ' '.repeat(width - str.length - padding);
+        const paddingCount = Math.max(0, width - str.length);
+        const leftPadding = Math.floor(paddingCount / 2);
+        const rightPadding = paddingCount - leftPadding;
+        const content = str.length > width ? str.substring(0, width) : str;
+        return ' '.repeat(leftPadding) + content + ' '.repeat(rightPadding);
     };
 
     const styledTop = styleText(boxFinalStyles, boxChars.tl + boxChars.t.repeat(contentWidth + 2) + boxChars.tr);

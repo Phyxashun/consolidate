@@ -38,3 +38,8 @@ ALL/**/*
 
 # Lock files
 *.lock
+
+# JUST FOR TESTING ***REMOVE/COMMENT OUT FOR PRODUCTION AND GIT PUSH***
+# *.md
+# **/*.ts
+# **/*.json
