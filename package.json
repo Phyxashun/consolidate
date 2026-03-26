@@ -1,12 +1,12 @@
 {
     "name": "consolidate",
-    "version": "1.1.6",
+    "version": "2.0.0",
     "description": "A utility script to consolidate project files into single, combined output files.",
-    "main": "index.ts",
-    "module": "index.ts",
+    "main": "consolidate.ts",
+    "module": "consolidate.ts",
     "type": "module",
     "scripts": {
-        "start": "bun run ./index.ts"
+        "start": "bun run ./consolidate.ts"
     },
     "bin": {
         "consolidate": "./index.ts"
@@ -19,20 +19,17 @@
     "author": "Dustin Dew",
     "license": "MIT",
     "dependencies": {
-        "figlet": "^1.9.4",
-        "glob": "^13.0.0",
-        "logger": "link:logger"
+        "figlet": "latest",
+        "glob": "latest"
     },
     "peerDependencies": {
-        "typescript": "^5"
+        "typescript": "latest"
     },
     "devDependencies": {
-        "@types/bun": "^1.3.5",
-        "@types/figlet": "^1.7.0",
-        "@types/glob": "^9.0.0",
-        "@types/node": "^25.0.6",
-        "@vitest/coverage-v8": "^4.0.17",
-        "prettier": "3.8.0",
-        "vitest": "^4.0.17"
+        "@types/bun": "latest",
+        "@types/figlet": "latest",
+        "@types/glob": "latest",
+        "@types/node": "latest",
+        "prettier": "latest"
     }
 }

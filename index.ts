@@ -19,7 +19,7 @@ import { styleText } from 'node:util';
 import fs from 'node:fs';
 import path from 'node:path';
 import { globSync } from 'glob';
-import { LineType, BoxType, Spacer, CenteredText, CenteredFiglet, PrintLine, BoxText } from 'logger';
+import { LineType, BoxType, Spacer, CenteredText, CenteredFiglet, PrintLine, BoxText } from './utils/logger';
 
 /******************************************************************************************************
  *
@@ -135,7 +135,7 @@ const CONFIG: Configuration = {
 
 CONFIG.JOBS = [...CONFIG.GenerateJobs(TS_OUTPUT_DIR, 'ts'), ...CONFIG.GenerateJobs(TEXT_OUTPUT_DIR, 'txt')];
 
-CONFIG.IGNORELIST = ['./**/*.lock', './coverage/**/*.*', './node_modules/**/*.*', './ALL/**'];
+CONFIG.IGNORELIST = ['**/*.lock', 'coverage/**/*', 'node_modules/**/*', 'ALL/**/*', '.env'];
 
 /******************************************************************************************************
  *
@@ -340,7 +340,4 @@ export const main = async (): Promise<void> => {
     await consolidateJobs.run(CONFIG.JOBS);
 };
 
-// Executes and exports the script.
-const consolidate = main;
-export default consolidate;
-consolidate();
+export default main;
