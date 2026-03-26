@@ -26,8 +26,6 @@ import { LineType, BoxType, Spacer, CenteredText, CenteredFiglet, PrintLine, Box
  * CONSTANTS
  *
  ******************************************************************************************************/
-const PROJECT_DIR = 'C:/Users/dustin.dew/Programming/';
-const NEW_PROJECT_DIR = '../../../dustin.dew/Programming/';
 const OUTPUT_DIR = './ALL';
 const TEXT_OUTPUT_DIR = OUTPUT_DIR + '/txt/';
 const TS_OUTPUT_DIR = OUTPUT_DIR + '/ts/';
@@ -82,29 +80,42 @@ interface FinalSummaryOptions {
  ******************************************************************************************************/
 const JOB_DEFINITIONS: JobDefinition[] = [
     {
-        name: 'MAIN_FILES',
-        description: 'Main Project TypeScript and JavaScript Files',
-        patterns: ['src/**/*.ts', 'src/**/*.js', 'index.ts', 'Consolidate.ts'],
+        name: 'SOURCE',
+        description: 'Main Project TypeScript and JavaScript Source Files',
+        patterns: ['src/**/*.{ts,tsx,js,jsx}', 'index.ts'],
     },
     {
-        name: 'CONFIG',
+        name: 'HTML',
+        description: 'Main Project HTML Files',
+        patterns: ['src/**/*.{html}', 'index.html'],
+    },
+    {
+        name: 'STYLES',
+        description: 'Main Project Style Files',
+        patterns: ['src/**/*.{css,scss,sass,less}'],
+    },
+    {
+        name: 'CONFIGS',
         description: 'Configuration Files and Markdown',
-        patterns: ['../../AppData/Roaming/code/user/settings.json', '.vscode/**/*', '.gitignore', '*.json', '*.config.ts', 'git-push.sh'],
+        patterns: [
+            '../../AppData/Roaming/code/user/settings.json',
+            '.vscode/**/*.json',
+            '.gitignore',
+            '*.json',
+            '*.config.{ts,mts,js,mjs}',
+            '.editorconfig',
+            '.prettierrc',
+        ],
     },
     {
-        name: 'NEW_TEST',
-        description: 'New Test Files',
-        patterns: ['{test,tests}/**/*.test.ts'],
+        name: 'TEST',
+        description: 'Project Test Files',
+        patterns: ['{test,tests,test_old, tests_old}/**/*.test.ts'],
     },
     {
-        name: 'OLD_TEST',
-        description: 'Old Test Files',
-        patterns: ['{test_old, tests_old}/**/*.ts', '{test_old,test_old}/**/*.test.ts'],
-    },
-    {
-        name: 'MARKDOWN',
-        description: 'Project Markdown Files',
-        patterns: ['0. NOTES/*', 'License', '*.md'],
+        name: 'DOCUMENTATION',
+        description: 'Project Documentation Files',
+        patterns: ['**/*.{md,txt}', 'License'],
     },
 ];
 

@@ -66,7 +66,7 @@
     /**
      ** FORMATTING & INTELLISENSE
      */
-    "editor.defaultFormatter": "prettier.prettier-vscode",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "editor.tabCompletion": "onlySnippets",
 
@@ -96,32 +96,26 @@
      */
     "[typescript]": {
         "files.autoSave": "onFocusChange",
-        "editor.defaultFormatter": "prettier.prettier-vscode",
         "editor.wordWrap": "on"
     },
     "[typescriptreact]": {
         "files.autoSave": "onFocusChange",
-        "editor.defaultFormatter": "prettier.prettier-vscode",
         "editor.wordWrap": "on"
     },
     "[javascript]": {
         "files.autoSave": "onFocusChange",
-        "editor.defaultFormatter": "prettier.prettier-vscode",
         "editor.wordWrap": "on"
     },
     "[markdown]": {
         "files.autoSave": "onFocusChange",
-        "editor.defaultFormatter": "prettier.prettier-vscode",
         "editor.wordWrap": "on"
     },
     "[json]": {
         "files.autoSave": "onFocusChange",
-        "editor.defaultFormatter": "prettier.prettier-vscode",
         "editor.wordWrap": "on"
     },
     "[jsonc]": {
         "files.autoSave": "onFocusChange",
-        "editor.defaultFormatter": "prettier.prettier-vscode",
         "editor.wordWrap": "on"
     },
 
@@ -211,5 +205,6 @@
             "bold": true,
             "italic": false
         }
-    ]
+    ],
+    "js/ts.tsdk.path": "node_modules/typescript/lib"
 }
