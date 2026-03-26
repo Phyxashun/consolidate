@@ -1,20 +1,22 @@
 {
     "name": "consolidate",
     "version": "2.0.0",
-    "description": "A utility script to consolidate project files into single, combined output files.",
-    "main": "consolidate.ts",
-    "module": "consolidate.ts",
+    "description": "A utility script to consolidate project files into single, combined output files. Also provides deconsolidate to rebuild the project files.",
+    "main": "index.ts",
+    "module": "index.ts",
     "type": "module",
     "scripts": {
-        "start": "bun run ./consolidate.ts"
+        "start": "bun run ./index.ts"
     },
     "bin": {
         "consolidate": "./index.ts"
     },
     "keywords": [
         "consolidate",
+        "deconsolidate",
         "merge",
-        "project"
+        "project",
+        "rebuild"
     ],
     "author": "Dustin Dew",
     "license": "MIT",
