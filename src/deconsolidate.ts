@@ -18,6 +18,7 @@
  * @author Dustin Dew <phyxashun@gmail.com>
  */
 
+import Bun from 'bun';
 import { styleText } from 'node:util';
 import fs from 'node:fs';
 import path from 'node:path';
