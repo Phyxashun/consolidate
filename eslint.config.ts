@@ -1,0 +1,51 @@
+// ~ FILE-PATH: /eslint.config.ts
+
+import js from '@eslint/js';
+import tsParser from '@typescript-eslint/parser';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+import prettierConfig from 'eslint-config-prettier/flat';
+import prettierPlugin from 'eslint-plugin-prettier/recommended';
+
+export default defineConfig([
+    // Global ignores
+    globalIgnores(['.vscode/**', 'ALL/**', '**/node_modules/**', 'public/**', 'build/**', 'dist/**']),
+    {
+        files: ['**/*.{js,mjs,cjs,jsx,ts,tsx}'],
+
+        extends: [js.configs.recommended, ...tseslint.configs.recommended],
+
+        languageOptions: {
+            parser: tsParser,
+            parserOptions: {
+                ecmaVersion: 'latest',
+                sourceType: 'module',
+                project: ['./tsconfig.json'],
+                tsconfigRootDir: import.meta.dirname,
+            },
+            globals: {
+                ...globals.browser,
+                ...globals.serviceworker,
+            },
+        },
+
+        rules: {
+            // Formatting
+            quotes: ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
+            semi: ['error', 'always'],
+
+            // Variables
+            'no-unused-vars': 'off',
+            'no-useless-assignment': 'off',
+            '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+
+            // TypeScript
+            '@typescript-eslint/explicit-function-return-type': 'off',
+            '@typescript-eslint/no-explicit-any': ['warn', { ignoreRestArgs: false }],
+        },
+    },
+    // PRETTIER MUST BE LAST
+    prettierConfig,
+    prettierPlugin,
+]);

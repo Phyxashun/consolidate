@@ -44,3 +44,28 @@ ALL_REBUILT/**/*
 # *.md
 # **/*.ts
 # **/*.json
+
+
+# Logs
+logs
+*.log
+
+# Dependencies and Builds
+node_modules
+build
+dist
+*.local
+*.lock
+
+# Project specific exclusions
+ALL/*
+OLD/*
+*.sqlite
+*.db
+*.txt
+*.pdf
+*.docx
+*.ttf
+*.woff2
+*.png
+*.jpg
