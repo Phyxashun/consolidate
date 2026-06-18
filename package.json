@@ -6,6 +6,7 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
+    "build": "tsc",
     "start": "bun run ./index.ts",
     "consolidate": "bun run ./src/consolidate.ts",
     "deconsolidate": "bun run ./src/deconsolidate.ts"
