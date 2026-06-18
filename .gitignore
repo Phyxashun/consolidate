@@ -1,3 +1,5 @@
+# ~ FILE-PATH: .gitignore
+
 # dependencies (bun install)
 node_modules
 

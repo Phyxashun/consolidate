@@ -8,7 +8,7 @@
  *
  *              The script is organized into logical namespaces:
  *              - `config`:      Runtime options parsed from CLI args.
- *              - `ui`:          All console output and user-interface elements.
+ *              - `ui`:          All console output via @clack/prompts + picocolors.
  *              - `parser`:      Extracts file segments from a consolidated blob.
  *              - `writer`:      Recreates directories and writes extracted files.
  *              - `deconsolidator`: Orchestrates the full pipeline.
@@ -19,11 +19,11 @@
  */
 
 import Bun from 'bun';
-import { styleText } from 'node:util';
 import fs from 'node:fs';
 import path from 'node:path';
-import readline from 'node:readline';
 import { globSync } from 'glob';
+import * as p from '@clack/prompts';
+import pc from 'picocolors';
 
 /******************************************************************************************************
  *
@@ -146,7 +146,7 @@ function parseArgs(): RunOptions {
                         opts.inputPaths.push(arg);
                     }
                 } else {
-                    console.warn(styleText('yellow', `Unknown flag: ${arg!}`));
+                    p.log.warn(`Unknown flag: ${arg!}`);
                 }
         }
         i++;
@@ -162,16 +162,16 @@ function parseArgs(): RunOptions {
 
 function printHelp(): void {
     console.log(`
-${styleText(['cyan', 'bold'], 'deconsolidate.ts')} — Reconstruct project files from consolidated .txt output.
+${pc.bold(pc.cyan('deconsolidate.ts'))} — Reconstruct project files from consolidated .txt output.
 
-${styleText('yellow', 'Usage:')}
+${pc.yellow('Usage:')}
   bun deconsolidate.ts [options] [inputPaths...]
 
-${styleText('yellow', 'Arguments:')}
+${pc.yellow('Arguments:')}
   inputPaths          One or more .txt file paths or glob patterns.
                       Default: ./ALL/txt/**/*.txt
 
-${styleText('yellow', 'Options:')}
+${pc.yellow('Options:')}
   -o, --out <dir>     Output directory for rebuilt files.
                       Default: ./ALL_REBUILT
   -f, --force         Overwrite existing files without prompting.
@@ -179,7 +179,7 @@ ${styleText('yellow', 'Options:')}
   -n, --dry-run       Show what would be written without touching disk.
   -h, --help          Show this help message.
 
-${styleText('yellow', 'Examples:')}
+${pc.yellow('Examples:')}
   bun deconsolidate.ts
   bun deconsolidate.ts ./ALL/txt/1_ALL_SOURCE.txt -o ./restored -f
   bun deconsolidate.ts "./ALL/txt/*.txt" --dry-run --verbose
@@ -193,79 +193,62 @@ ${styleText('yellow', 'Examples:')}
  ******************************************************************************************************/
 const ui = {
     displayHeader(): void {
-        const border = '═'.repeat(60);
-        console.log();
-        console.log(styleText(['cyanBright', 'bold'], `╔${border}╗`));
-        console.log(
-            styleText(['cyanBright', 'bold'], '║') +
-                styleText(['whiteBright', 'bold'], '         📂  DECONSOLIDATE — Project File Rebuilder         ') +
-                styleText(['cyanBright', 'bold'], '║'),
-        );
-        console.log(styleText(['cyanBright', 'bold'], `╚${border}╝`));
-        console.log();
+        p.intro(`${pc.bgCyan(pc.black(' DECONSOLIDATE '))}  ${pc.dim('Project File Rebuilder')}`);
     },
 
     logScanStart(pattern: string): void {
-        console.log(styleText('cyan', `  Scanning: `) + styleText('white', pattern));
+        p.log.step(`Scanning: ${pc.white(pattern)}`);
     },
 
     logParsingFile(filePath: string): void {
-        console.log(styleText('magenta', `\n  Parsing consolidated file: `) + styleText('white', filePath));
+        p.log.info(`Parsing consolidated file: ${pc.white(filePath)}`);
     },
 
     logExtracted(count: number, source: string): void {
-        console.log(styleText('green', `  ✓ Extracted ${count} file segment(s) from `) + styleText('white', source));
+        p.log.success(`Extracted ${count} file segment(s) from ${pc.white(source)}`);
     },
 
     logWriting(filePath: string): void {
-        console.log(styleText('blue', `    → Writing: `) + filePath);
+        console.log(`    ${pc.blue('→')} Writing: ${filePath}`);
     },
 
     logSkipped(filePath: string): void {
-        console.log(styleText('yellow', `    ⊘ Skipped (exists): `) + filePath);
+        console.log(`    ${pc.yellow('⊘')} Skipped (exists): ${filePath}`);
     },
 
     logError(filePath: string, err: unknown): void {
         const msg = err instanceof Error ? err.message : String(err);
-        console.log(styleText('red', `    ✗ Error writing ${filePath}: `) + msg);
+        console.log(`    ${pc.red('✗')} Error writing ${filePath}: ${msg}`);
     },
 
     logDryRun(filePath: string): void {
-        console.log(styleText('gray', `    ~ DRY-RUN would write: `) + filePath);
+        console.log(`    ${pc.gray('~')} DRY-RUN would write: ${filePath}`);
     },
 
     logSummary(summary: Summary, outputDir: string, dryRun: boolean): void {
-        const border = '─'.repeat(60);
-        console.log();
-        console.log(styleText('white', `  ${border}`));
+        const lines: string[] = [];
         if (dryRun) {
-            console.log(styleText(['yellow', 'bold'], `  DRY-RUN complete — no files were written.`));
+            lines.push(pc.bold(pc.yellow('DRY-RUN complete — no files were written.')));
         } else {
-            console.log(
-                styleText(['green', 'bold'], `  ✓ Done! `) +
-                    styleText('white', `${summary.written} file(s) written to `) +
-                    styleText('cyanBright', outputDir),
-            );
+            lines.push(`${pc.green('✓')} Done! ${summary.written} file(s) written to ${pc.cyan(outputDir)}`);
         }
         if (summary.skipped > 0) {
-            console.log(styleText('yellow', `  ⊘ ${summary.skipped} file(s) skipped (already exist).`));
+            lines.push(pc.yellow(`⊘ ${summary.skipped} file(s) skipped (already exist).`));
         }
         if (summary.errors > 0) {
-            console.log(styleText('red', `  ✗ ${summary.errors} error(s) encountered.`));
+            lines.push(pc.red(`✗ ${summary.errors} error(s) encountered.`));
         }
-        console.log(styleText('white', `  ${border}`));
-        console.log();
+        p.outro(lines.join('\n'));
     },
 
-    /** Prompt the user yes/no; resolves true for 'y', false otherwise. */
+    /** Prompt the user yes/no via @clack/prompts; exits on Ctrl+C / cancellation. */
     async confirm(message: string): Promise<boolean> {
-        const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-        return new Promise(resolve => {
-            rl.question(styleText('yellow', `  ${message} [y/N] `), answer => {
-                rl.close();
-                resolve(answer.trim().toLowerCase() === 'y');
-            });
-        });
+        const ok = await p.confirm({ message });
+        if (p.isCancel(ok)) {
+            p.cancel('Aborted.');
+            process.exit(0);
+        }
+        return ok;
     },
 };
 
@@ -317,7 +300,7 @@ const parser = {
         }
 
         if (currentPath !== null) {
-            console.warn(styleText('yellow', `  ⚠ Warning: no End-of-file banner found for "${currentPath}". Segment discarded.`));
+            p.log.warn(`No End-of-file banner found for "${currentPath}". Segment discarded.`);
         }
 
         return results;
@@ -332,7 +315,7 @@ const parser = {
 const writer = {
     /**
      * Writes a single extracted file to disk under `outputDir`.
-     * Returns `'written' | 'skipped' | 'error'`.
+     * Returns `'written' | 'skipped' | 'errors'`.
      */
     async writeFile(
         extracted: ExtractedFile,
@@ -385,12 +368,12 @@ const deconsolidator = {
                 if (fs.existsSync(pattern)) {
                     files.push(pattern);
                 } else {
-                    console.warn(styleText('yellow', `  ⚠ File not found: ${pattern}`));
+                    p.log.warn(`File not found: ${pattern}`);
                 }
             } else {
                 const found = globSync(pattern);
                 if (found.length === 0) {
-                    console.warn(styleText('yellow', `  ⚠ No files matched: ${pattern}`));
+                    p.log.warn(`No files matched: ${pattern}`);
                 }
                 files.push(...found);
             }
@@ -400,24 +383,24 @@ const deconsolidator = {
     },
 
     /**
-     * Full pipeline: resolve inputs → parse → write → summarise.
+     * Full pipeline: resolve inputs → parse → write → summarize.
      */
     async run(opts: RunOptions): Promise<void> {
         ui.displayHeader();
 
         if (opts.dryRun) {
-            console.log(styleText(['yellow', 'bold'], '  ⚡ DRY-RUN mode — no files will be written.\n'));
+            p.log.warn('DRY-RUN mode — no files will be written.');
         }
 
         // 1. Resolve input files
         const inputFiles = deconsolidator.resolveInputFiles(opts.inputPaths);
 
         if (inputFiles.length === 0) {
-            console.log(styleText('red', '\n  No input files found. Nothing to do.\n'));
+            p.cancel('No input files found. Nothing to do.');
             process.exit(1);
         }
 
-        console.log(styleText('green', `\n  Found ${inputFiles.length} consolidated file(s) to process.\n`));
+        p.log.info(`Found ${inputFiles.length} consolidated file(s) to process.`);
 
         // 2. If we will be writing to a non-empty directory and --force is not
         //    set, give the user a chance to bail out.
@@ -428,7 +411,7 @@ const deconsolidator = {
                     `Output directory "${opts.outputDir}" already has content. Continue? (Use --force to skip this prompt)`,
                 );
                 if (!ok) {
-                    console.log(styleText('yellow', '\n  Aborted.\n'));
+                    p.outro(pc.yellow('Aborted.'));
                     process.exit(0);
                 }
             }
@@ -445,7 +428,7 @@ const deconsolidator = {
                 text = await Bun.file(inputFile).text();
             } catch (err) {
                 const msg = err instanceof Error ? err.message : String(err);
-                console.error(styleText('red', `  ✗ Could not read "${inputFile}": ${msg}`));
+                p.log.error(`Could not read "${inputFile}": ${msg}`);
                 summary.errors++;
                 continue;
             }

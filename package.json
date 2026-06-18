@@ -1,12 +1,14 @@
 {
   "name": "consolidate",
-  "version": "2.0.0",
+  "version": "2.5.0",
   "description": "A utility script to consolidate project files into single, combined output files. Also provides deconsolidate to rebuild the project files.",
   "main": "index.ts",
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "start": "bun run ./index.ts"
+    "start": "bun run ./index.ts",
+    "consolidate": "bun run ./src/consolidate.ts",
+    "deconsolidate": "bun run ./src/deconsolidate.ts"
   },
   "bin": {
     "consolidate": "./index.ts"

@@ -588,9 +588,7 @@
     // http://127.0.0.1:3000
     // https://cspell.org
     // ftp://files.local/shared/data.csv
-    "([a-zA-Z0-9+.-]+:\\/\\/[a-zA-Z0-9@:%._\\+~#=\\-]{1,256}(?::\\d+)?(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*))\\s+?$": {
-      "filterScope": "**",
-      "filterLanguage": "**",
+    "([a-zA-Z0-9+.-]+:\\/\\/[a-zA-Z0-9@:%._\\+~#=\\-]{1,256}(?::\\d+)?(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*))": {
       "decorations": [
         {
           "color": "#6272a4",
@@ -599,7 +597,52 @@
           "textDecoration": "underline"
         }
       ]
-    }
+    },
+    //$ Highlight top-level and nested comments that start with '#'
+    "(^?\\s*#{2}.*$)|(^\\s*#{1}.*$)|(?:^.*[^\\s#].*)(#{1}.*$)": {
+      "regexFlags": "gi",
+      "filterLanguageRegex": "(plaintext|ignore|shellscript)",
+      "decorations": [
+        {
+          "color": "#FFB86C"
+        },
+        {
+          "color": "#2EBD59"
+        },
+        {
+          "color": "#145227",
+          "fontWeight": "400"
+        }
+      ]
+    },
+    // //$ Top-Level "##" -> Dracula Yellow (#FFB86C)
+    // "(^\\s*##.*$)": {
+    //   "filterLanguageRegex": "(plaintext|ignore|shellscript)",
+    //   "decorations": [
+    //     {
+    //       "color": "#FFB86C"
+    //     }
+    //   ]
+    // },
+    // //$ Top-Level Single "#" -> Bright Green (#2EBD59)
+    // "(^\\s*#[^#].*$)": {
+    //   "filterLanguageRegex": "(plaintext|ignore|shellscript)",
+    //   "decorations": [
+    //     {
+    //       "color": "#2EBD59"
+    //     }
+    //   ]
+    // },
+    // //$ Nested "#" Comments (Code occurs before it) -> Ultra-Dark Green (#145227)
+    // "(?:^.*[^\\s#].*)(#.*$)": {
+    //   "filterLanguageRegex": "(plaintext|ignore|shellscript)",
+    //   "decorations": [
+    //     {
+    //       "color": "#145227",
+    //       "fontWeight": "400"
+    //     }
+    //   ]
+    // }
   },
   // ==========================================================================
   //      📖 CSPELL DICTIONARY SETTINGS
@@ -663,5 +706,5 @@
     "^.*=\""
   ],
   "svg.preview.background": "dark-transparent",
-  "js/ts.tsdk.path": "node_modules\\typescript\\lib"
+  "js/ts.tsdk.path": "node_modules/typescript/lib"
 }

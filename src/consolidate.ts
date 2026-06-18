@@ -7,7 +7,7 @@
  *              combined output files. The script is organized into logical
  *              namespaces:
  *              - `config`: Defines the consolidation jobs.
- *              - `ui`: Handles all console output and user interface elements.
+ *              - `ui`: Handles all console output via @clack/prompts + picocolors.
  *              - `fileSystem`: Provides low-level functions for file system interactions.
  *              - `consolidator`: Orchestrates the consolidation process using the other namespaces.
  * @copyright 2026 Dustin Dew
@@ -16,11 +16,11 @@
  */
 
 import Bun from 'bun';
-import { styleText } from 'node:util';
 import fs from 'node:fs';
 import path from 'node:path';
 import { globSync } from 'glob';
-import { LineType, BoxType, Spacer, CenteredText, CenteredFiglet, PrintLine, BoxText } from './logger';
+import * as p from '@clack/prompts';
+import pc from 'picocolors';
 
 /******************************************************************************************************
  *
@@ -136,7 +136,7 @@ const JOB_DEFINITIONS: JobDefinition[] = [
 const CONFIG: Configuration = {
     GenerateJobs: (outputDir: string, fileExtension: string): ConsolidationJob[] => {
         return JOB_DEFINITIONS.map((definition, index) => ({
-            name: styleText(['red', 'underline'], definition.description ?? definition.name),
+            name: definition.description ?? definition.name,
 
             outputFile: `${outputDir}${index + 1}_ALL_${definition.name.toUpperCase().replace(' ', '_')}.${fileExtension}`,
 
@@ -174,84 +174,35 @@ CONFIG.IGNORELIST = [...new Set([...IGNORELIST, ...CONFIG.AddGitIgnore(GITIGNORE
 const ui = {
     /**
      * @function displayHeader
-     * @description Renders the main application header, including title and subtitle.
+     * @description Renders the main application header and the ignore-list box.
      * @returns {void}
      */
     displayHeader: (): void => {
-        PrintLine({ preNewLine: true, lineType: LineType.boldBlock });
-        console.log(styleText(['yellowBright', 'bold'], CenteredFiglet(`Consolidate!!!`)));
-        CenteredText(styleText(['magentaBright', 'bold'], '*** PROJECT FILE CONSOLIDATOR SCRIPT ***'));
-        PrintLine({
-            preNewLine: true,
-            postNewLine: true,
-            lineType: LineType.boldBlock,
-        });
-        CenteredText(styleText(['yellowBright', 'bold'], '*** IGNORED FILES ***'));
-        BoxText(`${CONFIG.IGNORELIST.join(', ')}`, {
-            boxType: BoxType.single,
-            width: 80,
-            color: 'yellow',
-            textColor: ['gray'],
-        });
-        PrintLine({
-            preNewLine: true,
-            postNewLine: true,
-            lineType: LineType.boldBlock,
-        });
-    },
+        p.intro(`${pc.bgMagenta(pc.black(' CONSOLIDATE '))}  ${pc.dim('Project File Consolidator')}`);
 
-    /**
-     * Logs the start of a new consolidation job.
-     * @param {string} description - The name of the job being processed.
-     * @param {string} outputFile - The path of the output file for the job.
-     */
-    logJobStart: (description: string, outputFile: string): void => {
-        CenteredText(styleText('cyan', `Consolidating all project ${description}`));
-        CenteredText(styleText('cyan', `files into ${outputFile}...\n`));
-    },
-
-    /**
-     * Logs the path of a file being appended to an output file.
-     * @param {string} filePath - The path of the file being appended.
-     */
-    logFileAppend: (filePath: string): void => {
-        console.log(styleText('blue', `\tAppending:`), `${filePath}`);
-    },
-
-    /**
-     * Logs a successful completion message for a job.
-     */
-    logComplete: (): void => {
-        console.log();
-        CenteredText(styleText(['green', 'bold'], 'Consolidation complete!!!'));
-        PrintLine({
-            preNewLine: true,
-            postNewLine: true,
-            lineType: LineType.boldBlock,
-        });
+        if (CONFIG.IGNORELIST.length > 0) {
+            p.box(CONFIG.IGNORELIST.join(', '), pc.dim('Ignored Patterns'));
+        }
     },
 
     /**
      * Logs a final summary message after all jobs are complete.
-     * @param {number} fileCount - The total number of files consolidated.
-     * @param {number} jobCount - The total number of jobs processed.
+     * @param {FinalSummaryOptions} options - Totals collected while running jobs.
      */
     logFinalSummary: (options: FinalSummaryOptions): void => {
         const { totalFiles, processedJobs, skippedJobs } = options;
-        let summaryMessage = `✓ Successfully consolidated ${totalFiles} files across ${processedJobs} jobs.`;
+        let summaryMessage = `Successfully consolidated ${pc.bold(String(totalFiles))} file(s) across ${pc.bold(String(processedJobs))} job(s).`;
         if (skippedJobs > 0) {
-            summaryMessage += ` (${skippedJobs} jobs skipped).`;
+            summaryMessage += `\n${pc.dim(`${skippedJobs} job(s) skipped — no matching files.`)}`;
         }
-        BoxText(summaryMessage, {
-            boxType: BoxType.double,
-            color: 'green',
-            textColor: ['green', 'bold'],
-        });
-        PrintLine({
-            preNewLine: true,
-            postNewLine: true,
-            lineType: LineType.boldBlock,
-        });
+        p.outro(pc.green(summaryMessage));
+    },
+
+    /**
+     * Logs that no files were found for any job.
+     */
+    logNoFiles: (): void => {
+        p.outro(pc.yellow('No matching files found for any job — nothing to consolidate.'));
     },
 };
 
@@ -265,9 +216,8 @@ const fileSystem = {
      * Ensures that a directory exists, creating it if necessary.
      * @param {string} dirPath - The path to the directory to create.
      */
-    ensureDirectoryExists: async (dirPath: string): Promise<void> => {
+    ensureDirectoryExists: (dirPath: string): void => {
         if (!fs.existsSync(dirPath)) {
-            CenteredText(styleText(['yellow', 'bold'], `Creating directory: ${dirPath}`));
             fs.mkdirSync(dirPath, { recursive: true });
         }
     },
@@ -276,7 +226,7 @@ const fileSystem = {
      * Ensures an output file is empty by deleting it if it already exists.
      * @param {string} filePath - The path to the output file to prepare.
      */
-    prepareOutputFile: async (filePath: string): Promise<void> => {
+    prepareOutputFile: (filePath: string): void => {
         // Extract directory path and ensure it exists
         const dirPath = path.dirname(filePath);
         fileSystem.ensureDirectoryExists(dirPath);
@@ -286,11 +236,11 @@ const fileSystem = {
     },
 
     /**
-     * Finds all file paths matching an array of glob patterns using Bun.Glob.
+     * Finds all file paths matching an array of glob patterns using glob.
      * @param {string[]} patterns - The glob patterns to search for.
+     * @param {string[]} ignorePatterns - An array of glob patterns to ignore files.
      * @param {string} outputFile - The path of the output file, to be excluded from the search.
-     * @param {string[]} [ignorePatterns] - An optional array of glob patterns to ignore files.
-     * @returns {Promise<string[]>} A promise that resolves to an array of found file paths.
+     * @returns {string[]} An array of found file paths.
      */
     findFiles: (patterns: string[], ignorePatterns: string[], outputFile: string): string[] => {
         return globSync(patterns, {
@@ -304,9 +254,9 @@ const fileSystem = {
      * @returns {Promise<string>} A promise that resolves to the formatted file content as a string.
      */
     createFileContent: async (sourceFile: string): Promise<string> => {
-        const space = Spacer(START_END_SPACER, '■');
-        const endLine = Spacer(START_END_NEWLINE, '\n');
-        const divider = Spacer(FILE_DIVIDER_WIDTH, '█');
+        const space = '■'.repeat(START_END_SPACER);
+        const endLine = '\n'.repeat(START_END_NEWLINE);
+        const divider = '█'.repeat(FILE_DIVIDER_WIDTH);
         const fileDivider = `//${divider}\n`;
         const startFile = `${endLine}//${space} Start of file: ${sourceFile} ${space}${endLine}${endLine}\n`;
         const content = await Bun.file(sourceFile).text();
@@ -323,50 +273,59 @@ const fileSystem = {
 const consolidateJobs = {
     /**
      * Processes a single consolidation job. Finds files and, if any exist,
-     * consolidates them into a single output file.
-     * Skips the job silently if no files are found.
+     * consolidates them into a single output file. Reports progress via
+     * the optional `message` callback supplied by `p.tasks()`.
      * @param {ConsolidationJob} job - The consolidation job to execute.
+     * @param {(msg: string) => void} [message] - Progress callback from the active task.
      * @returns {Promise<number>} The number of files processed in the job.
      */
-    process: async (job: ConsolidationJob): Promise<number> => {
-        const { name, outputFile, include, exclude } = job;
-        const sourceFiles = await fileSystem.findFiles(include, exclude, outputFile);
-        if (sourceFiles.length > 0) {
-            ui.logJobStart(name, outputFile);
-            await fileSystem.prepareOutputFile(outputFile);
-            const allContent: string[] = [];
-            for (const sourceFile of sourceFiles) {
-                ui.logFileAppend(sourceFile);
-                const content = await fileSystem.createFileContent(sourceFile);
-                allContent.push(content);
-            }
-            fs.writeFileSync(outputFile, allContent.join(''));
-            ui.logComplete();
-            return sourceFiles.length;
+    process: async (job: ConsolidationJob, message?: (msg: string) => void): Promise<number> => {
+        const { outputFile, include, exclude } = job;
+        const sourceFiles = fileSystem.findFiles(include, exclude, outputFile);
+        if (sourceFiles.length === 0) {
+            return 0;
         }
-        return 0; // No files found for this job
+
+        fileSystem.prepareOutputFile(outputFile);
+        const allContent: string[] = [];
+        for (const sourceFile of sourceFiles) {
+            message?.(`Appending ${sourceFile}`);
+            allContent.push(await fileSystem.createFileContent(sourceFile));
+        }
+        fs.writeFileSync(outputFile, allContent.join(''));
+        return sourceFiles.length;
     },
 
     /**
-     * Runs all consolidation jobs, tracks the total files processed, and logs a final summary.
-     * @param {CONFIG.ConsolidationJob[]} jobs - An array of consolidation jobs to execute.
+     * Runs all consolidation jobs as a `@clack/prompts` task list, tracks the
+     * total files processed, and logs a final summary.
+     * @param {ConsolidationJob[]} jobs - An array of consolidation jobs to execute.
      */
     run: async (jobs: ConsolidationJob[]): Promise<void> => {
         let totalFiles = 0;
         let processedJobs = 0;
-        let skippedJobs = 0; // --- 5. Add counter for skipped jobs ---
-        for (const job of jobs) {
-            const fileCountForJob = await consolidateJobs.process(job);
-            if (fileCountForJob > 0) {
-                totalFiles += fileCountForJob;
-                processedJobs++;
-            } else {
-                skippedJobs++; // --- 6. Increment if job returned 0 files ---
-            }
-        }
+        let skippedJobs = 0;
+
+        await p.tasks(
+            jobs.map(job => ({
+                title: job.name,
+                task: async (message: (msg: string) => void): Promise<string> => {
+                    const fileCountForJob = await consolidateJobs.process(job, message);
+                    if (fileCountForJob === 0) {
+                        skippedJobs++;
+                        return pc.dim('No matching files — skipped');
+                    }
+                    totalFiles += fileCountForJob;
+                    processedJobs++;
+                    return `${pc.bold(String(fileCountForJob))} file(s) → ${pc.dim(job.outputFile)}`;
+                },
+            })),
+        );
+
         if (totalFiles > 0) {
-            // --- 7. Pass all counts to the summary function ---
             ui.logFinalSummary({ totalFiles, processedJobs, skippedJobs });
+        } else {
+            ui.logNoFiles();
         }
     },
 };

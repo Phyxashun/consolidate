@@ -24,6 +24,8 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
+    "index.ts",
+    "src",
     "prettier.config.ts",
     "eslint.config.ts"
   ]

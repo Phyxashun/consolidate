@@ -1,33 +1,58 @@
+#!/usr/bin/env bun
+// ./index.ts
+
+/**
+ * @file index.ts
+ * @description Entry point for the consolidate/deconsolidate CLI toolkit.
+ *              Presents an interactive menu (via @clack/prompts) and
+ *              dispatches to the selected operation.
+ * @copyright 2026 Dustin Dew
+ * @license MIT
+ * @author Dustin Dew <phyxashun@gmail.com>
+ */
+
+import * as p from '@clack/prompts';
+import pc from 'picocolors';
+
 import consolidate from './src/consolidate';
 import deconsolidate from './src/deconsolidate';
 
-import readline from 'node:readline';
-import { styleText } from 'node:util';
-import { CenteredFiglet, LineType, PrintLine } from './src/logger';
+type MenuChoice = 'consolidate' | 'deconsolidate' | 'exit';
 
-PrintLine({ preNewLine: true, lineType: LineType.boldBlock });
-console.log(styleText(['yellowBright', 'bold'], CenteredFiglet(`Consolidate!!!`)));
-PrintLine({ postNewLine: true, lineType: LineType.boldBlock });
+/**
+ * @function main
+ * @description Displays the main menu and routes to the chosen operation.
+ */
+const main = async (): Promise<void> => {
+    p.intro(`${pc.bgYellow(pc.black(' CONSOLIDATE '))}  ${pc.dim('Project File Toolkit')}`);
 
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+    const action = await p.select<MenuChoice>({
+        message: 'Pick an option:',
+        options: [
+            { value: 'consolidate', label: 'Consolidate', hint: 'merge project files into ALL/' },
+            { value: 'deconsolidate', label: 'Deconsolidate', hint: 'rebuild files from ALL/' },
+            { value: 'exit', label: 'Exit' },
+        ],
+    });
 
-rl.question(
-    styleText('cyanBright', '\n[1] Consolidate\n[2] Deconsolidate\n[3] Exit\n') + styleText('white', '\nPick an option: '),
+    if (p.isCancel(action)) {
+        p.cancel('Aborted.');
+        process.exit(0);
+    }
 
-    answer => {
-        rl.close();
-        switch (answer.trim()) {
-            case '1':
-                return consolidate();
-            case '2':
-                return deconsolidate();
-            case '3':
-                process.exit(0);
-            default:
-                console.log(styleText('red', `\nError! Invalid option "${answer}". Exiting.\n`));
-                process.exit(1);
-        }
-    },
-);
+    switch (action) {
+        case 'consolidate':
+            await consolidate();
+            break;
+        case 'deconsolidate':
+            await deconsolidate();
+            break;
+        case 'exit':
+            p.outro(pc.dim('Goodbye!'));
+            process.exit(0);
+    }
+};
+
+await main();
 
 export { consolidate, deconsolidate };
