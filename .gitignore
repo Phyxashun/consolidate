@@ -5,6 +5,7 @@ node_modules
 
 # output
 out
+dist
 *.tgz
 
 # code coverage
@@ -54,6 +55,7 @@ logs
 # Dependencies and Builds
 node_modules
 build
+dist
 *.local
 *.lock
 
