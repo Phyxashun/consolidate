@@ -1,5 +1,6 @@
 #!/usr/bin/env bun
-// ./consolidate.ts
+
+// ~ FILE-PATH:  src/consolidate.ts
 
 /**
  * @file consolidate.ts

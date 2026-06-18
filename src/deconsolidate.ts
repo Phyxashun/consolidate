@@ -1,5 +1,6 @@
 #!/usr/bin/env bun
-// ./src/deconsolidate.ts
+
+// ~ FILE-PATH: src/deconsolidate.ts
 
 /**
  * @file deconsolidate.ts

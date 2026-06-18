@@ -49,14 +49,14 @@ Walks the job definitions below and writes merged output to:
 - `ALL/ts/` — each job's output, saved with a `.ts` extension
 - `ALL/txt/` — each job's output, saved with a `.txt` extension
 
-| # | Job            | Includes                                                |
-| - | -------------- | -------------------------------------------------------- |
-| 1 | Source Files   | `.ts` `.tsx` `.mts` `.cts` `.js` `.jsx` `.mjs` `.cjs`     |
-| 2 | HTML Files     | `.html`                                                   |
-| 3 | Style Files    | `.css` `.scss` `.sass` `.less`                            |
+| # | Job            | Includes                                                            |
+| - | -------------- | ------------------------------------------------------------------- |
+| 1 | Source Files   | `.ts` `.tsx` `.mts` `.cts` `.js` `.jsx` `.mjs` `.cjs`               |
+| 2 | HTML Files     | `.html`                                                             |
+| 3 | Style Files    | `.css` `.scss` `.sass` `.less`                                      |
 | 4 | Config Files   | `.json`, `.gitignore`, `*.config.*`, `.editorconfig`, `.prettierrc` |
-| 5 | Test Files     | `*.test.ts`                                               |
-| 6 | Doc Files      | `.md` `.txt`, `License`                                   |
+| 5 | Test Files     | `*.test.ts`                                                         |
+| 6 | Doc Files      | `.md` `.txt`, `License`                                             |
 
 A job is skipped silently if no files match its patterns.
 
@@ -66,13 +66,13 @@ A job is skipped silently if no files match its patterns.
 bun run src/deconsolidate.ts [options] [inputPaths...]
 ```
 
-| Flag            | Alias | Description                                  | Default              |
+| Flag            | Alias | Description                                   | Default               |
 | --------------- | ----- | --------------------------------------------- | --------------------- |
 | `--out <dir>`   | `-o`  | Output directory for rebuilt files            | `./ALL_REBUILT`       |
-| `--force`       | `-f`  | Overwrite existing files without prompting    | off                    |
-| `--verbose`     | `-v`  | Print every file path as it's written         | off                    |
-| `--dry-run`     | `-n`  | Show what would happen without writing        | off                    |
-| `--help`        | `-h`  | Show usage help                                 | —                    |
+| `--force`       | `-f`  | Overwrite existing files without prompting    | off                   |
+| `--verbose`     | `-v`  | Print every file path as it's written         | off                   |
+| `--dry-run`     | `-n`  | Show what would happen without writing        | off                   |
+| `--help`        | `-h`  | Show usage help                               | —                     |
 
 If no `inputPaths` are given, it defaults to `./ALL/txt/**/*.txt`.
 
@@ -91,7 +91,7 @@ bun run src/deconsolidate.ts "./ALL/txt/*.txt" --dry-run --verbose
 
 Each source file is wrapped in a banner when consolidated:
 
-```
+```ts
 //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ Start of file: src/foo.ts ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
 
@@ -117,7 +117,7 @@ directory.
 
 ## Project structure
 
-```
+```plaintext
 .
 ├── index.ts              # interactive menu entry point
 ├── src/
@@ -131,4 +131,4 @@ directory.
 
 ## License
 
-MIT © 2026 Dustin Dew. See [LICENSE.md](./LICENSE.md).
+MIT © 2026 Dustin Dew. See [LICENSE](License).
