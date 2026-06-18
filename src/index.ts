@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-// ~ FILE-PATH: index.ts
+// ~ FILE-PATH: src/index.ts
 
 /**
  * @file index.ts
@@ -14,8 +14,8 @@
 import * as p from '@clack/prompts';
 import pc from 'picocolors';
 
-import consolidate from './src/consolidate';
-import deconsolidate from './src/deconsolidate';
+import consolidate from './consolidate';
+import deconsolidate from './deconsolidate';
 
 type MenuChoice = 'consolidate' | 'deconsolidate' | 'exit';
 
