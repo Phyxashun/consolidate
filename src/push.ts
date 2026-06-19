@@ -10,6 +10,7 @@ function runCommand(command: string, args: string[]): boolean {
 }
 
 async function main() {
+    console.clear();
     const args = Bun.argv.slice(2);
     console.log(args);
 
@@ -20,7 +21,7 @@ async function main() {
     // Execute 'git add .'
     log.step('Staging changes (git add .)...');
     if (!runCommand('git', ['add', '.'])) {
-        log.stop('❌ Failed to stage changes.\n', 1);
+        log.stop('Failed to stage changes.\n', 1);
         process.exit(1);
     }
 
@@ -28,14 +29,14 @@ async function main() {
     log.step(`Committing changes (git commit -m "${msg}")...`);
     if (!runCommand('git', ['commit', '-m', 'Update'])) {
         // Check if there was nothing to commit
-        log.stop('❌ Failed to commit. (Are there any new changes?)\n', 1);
+        log.stop('Failed to commit. (Are there any new changes?)\n', 1);
         process.exit(1);
     }
 
     // Execute 'git push'
     log.step('Pushing to origin main (git push origin main)...');
     if (!runCommand('git', ['push', 'origin', 'main'])) {
-        log.stop('❌ Failed to push changes to remote.\n', 1);
+        log.stop('Failed to push changes to remote.\n', 1);
         process.exit(1);
     }
 
