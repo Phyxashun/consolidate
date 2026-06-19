@@ -1,4 +1,5 @@
 import { intro, outro, spinner } from '@clack/prompts';
+import pc from 'picocolors';
 import { spawnSync } from 'child_process';
 
 const MESSAGE: string = 'Update';
@@ -14,7 +15,7 @@ async function main() {
 
     const msg = args[0] ? args[0] : MESSAGE;
 
-    intro(' 󰊢 Git Automation Script ');
+    intro(`${pc.bgMagenta(pc.black(' 󰊢 Git Automation Script '))}`);
 
     const s = spinner();
 
