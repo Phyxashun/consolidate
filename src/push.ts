@@ -1,3 +1,7 @@
+#!/usr/bin/env bun
+
+// ~ FILE-PATH: src/push.ts
+
 import { intro, outro, log } from '@clack/prompts';
 import pc from 'picocolors';
 import { spawnSync } from 'child_process';
@@ -12,7 +16,6 @@ function runCommand(command: string, args: string[]): boolean {
 async function main() {
     console.clear();
     const args = Bun.argv.slice(2);
-    console.log(args, '\n');
 
     const msg = pc.bold(`${args[0] ? args[0] : MESSAGE}`);
 
