@@ -11,7 +11,7 @@
         "start": "bun run ./src/index.ts",
         "consolidate": "bun run ./src/consolidate.ts",
         "deconsolidate": "bun run ./src/deconsolidate.ts",
-        "push": "git add . && git commit -m 'Update' && git push origin main"
+        "push": "bun run ./src/push.ts"
     },
     "bin": {
         "consolidate": "./src/index.ts"
