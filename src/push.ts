@@ -3,13 +3,12 @@
 // ~ FILE-PATH: src/push.ts
 
 import { intro, outro, log, note } from '@clack/prompts';
-import boxen from 'boxen';
 import pc from 'picocolors';
 import { spawnSync } from 'child_process';
 
 const MESSAGE: string = 'Update';
-const lPill = '';
-const rPill = '';
+const lPill = pc.magenta('');
+const rPill = pc.magenta('');
 
 // Modified to return both success status and terminal output
 function runCommand(command: string, args: string[]): { success: boolean; output: string } {
