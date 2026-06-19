@@ -234,6 +234,7 @@ const convertToPdf = async (): Promise<void> => {
     try {
         spin.start('Processing files...');
         await sleep(1000);
+        await sleep(1000);
 
         const txtPath = path.resolve(import.meta.dir, '../ALL/txt/1_ALL_SOURCE_FILES.txt');
         await sleep(1000);

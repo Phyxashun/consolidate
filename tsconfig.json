@@ -6,7 +6,6 @@
         ],
         "module": "esnext",
         "types": [
-            "node",
             "bun"
         ],
         "skipLibCheck": true,
@@ -26,10 +25,12 @@
     },
     "include": [
         "src/**/*",
+        "*.ts",
         "prettier.config.ts",
         "eslint.config.ts"
     ],
     "exclude": [
+        "node_modules",
         "ALL/**/*",
         "ALL_REBUILT/**/*",
         "dist"

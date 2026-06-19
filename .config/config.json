@@ -1,6 +1,6 @@
 {
-    "appName": "consolidate.js",
-    "version": "1.0.0",
-    "theme": "matrix",
-    "notifications": true
+  "appName": "consolidate.js",
+  "version": "1.0.0",
+  "theme": "light",
+  "notifications": true
 }

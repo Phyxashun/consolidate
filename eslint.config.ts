@@ -21,12 +21,13 @@ export default defineConfig([
             parserOptions: {
                 ecmaVersion: 'latest',
                 sourceType: 'module',
-                project: ['./tsconfig.json'],
+                projectService: true,
                 tsconfigRootDir: import.meta.dirname,
             },
             globals: {
                 ...globals.browser,
                 ...globals.serviceworker,
+                ...globals.node,
             },
         },
 

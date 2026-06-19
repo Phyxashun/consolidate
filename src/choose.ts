@@ -3,7 +3,6 @@
 // ~ FILE-PATH: src/choose.ts
 
 import { intro, outro, select, confirm, isCancel, cancel, spinner } from '@clack/prompts';
-import { clear } from './utils/utils';
 import pc from 'picocolors';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
@@ -55,7 +54,8 @@ function loadSettings(): AppConfig {
 
 // 5. Main CLI flow
 async function main() {
-    clear();
+    console.clear();
+
     intro(pc.bgCyan(pc.black(' Welcome to the Config Builder ')));
 
     const currentConfig = loadSettings();
