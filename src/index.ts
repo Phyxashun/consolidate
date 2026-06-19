@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+
 // ~ FILE-PATH: src/index.ts
 
 /**
@@ -11,48 +12,95 @@
  * @author Dustin Dew <phyxashun@gmail.com>
  */
 
-import * as p from '@clack/prompts';
-import pc from 'picocolors';
+import { cancel, intro, isCancel, log, select } from '@clack/prompts';
+import { bgYellow, black, cyan, dim, italic } from 'picocolors';
 
-import consolidate from './consolidate';
-import deconsolidate from './deconsolidate';
+import consolidate from './components/consolidate';
+import deconsolidate from './components/deconsolidate';
 
+/**
+ * @type MenuChoice
+ * @description Defines the structure of the userInput menu
+ * @property {'consolidate' | 'deconsolidate' | 'exit'}
+ */
 type MenuChoice = 'consolidate' | 'deconsolidate' | 'exit';
+
+const TITLE = bgYellow(black(' CONSOLIDATE '));
+const SUBTITLE = dim(italic('Project File Toolkit'));
+
+/**
+ * @function displayTitle
+ * @description Displays the main app title and subtitle.
+ */
+const displayTitle = (): void => {
+    console.clear();
+    intro(`${TITLE}  ${SUBTITLE}`);
+};
+
+/**
+ * @function mainMenu(): symbol | MenuChoice | null
+ * @description Displays the main app title and subtitle.
+ * @returns userInput The user's selection from the menu
+ */
+const mainMenu = async (): Promise<symbol | MenuChoice | null> => {
+    const userInput = await select<MenuChoice>({
+        message: `${cyan('Pick an option:')}`,
+        options: [
+            {
+                value: 'consolidate',
+                label: 'Consolidate',
+                hint: 'merge project files into ALL/',
+            },
+            {
+                value: 'deconsolidate',
+                label: 'Deconsolidate',
+                hint: 'rebuild files from ALL/',
+            },
+            {
+                value: 'exit',
+                label: 'Exit',
+            },
+        ],
+    });
+
+    if (isCancel(userInput) || userInput === 'exit') {
+        return null;
+    }
+
+    return userInput;
+};
 
 /**
  * @function main
  * @description Displays the main menu and routes to the chosen operation.
  */
-const main = async (): Promise<void> => {
-    p.intro(`${pc.bgYellow(pc.black(' CONSOLIDATE '))}  ${pc.dim('Project File Toolkit')}`);
+export const main = async (): Promise<void> => {
+    let keepAsking = true;
+    displayTitle();
 
-    const action = await p.select<MenuChoice>({
-        message: 'Pick an option:',
-        options: [
-            { value: 'consolidate', label: 'Consolidate', hint: 'merge project files into ALL/' },
-            { value: 'deconsolidate', label: 'Deconsolidate', hint: 'rebuild files from ALL/' },
-            { value: 'exit', label: 'Exit' },
-        ],
-    });
+    while (keepAsking) {
+        const action = await mainMenu();
 
-    if (p.isCancel(action)) {
-        p.cancel('Aborted.');
-        process.exit(0);
-    }
-
-    switch (action) {
-        case 'consolidate':
-            await consolidate();
-            break;
-        case 'deconsolidate':
-            await deconsolidate();
-            break;
-        case 'exit':
-            p.outro(pc.dim('Goodbye!'));
-            process.exit(0);
+        switch (action) {
+            case 'consolidate':
+                await consolidate();
+                break;
+            case 'deconsolidate':
+                await deconsolidate();
+                break;
+            case null:
+            default:
+                cancel('Aborted.');
+                keepAsking = false;
+        }
     }
 };
 
-await main();
-
-export { main, consolidate, deconsolidate };
+if (import.meta.main) {
+    try {
+        await main();
+    } catch (err: unknown) {
+        log.error(`Error: ${err}`);
+        process.exit(1);
+    }
+}

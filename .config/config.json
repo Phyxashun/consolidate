@@ -1,0 +1,6 @@
+{
+  "appName": "My Bun CLI App",
+  "version": "1.0.0",
+  "theme": "dark",
+  "notifications": true
+}
