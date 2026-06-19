@@ -7,8 +7,8 @@ import pc from 'picocolors';
 import { spawnSync } from 'child_process';
 
 const MESSAGE: string = 'Update';
-const lPill = pc.black('');
-const rPill = pc.black('');
+const lPill = pc.magenta('');
+const rPill = pc.magenta('');
 
 // Modified to return both success status and terminal output
 function runCommand(command: string, args: string[]): { success: boolean; output: string } {
@@ -25,8 +25,8 @@ async function main() {
     const args = Bun.argv.slice(2);
     const msg = args[0] ? args[0] : MESSAGE;
     const formattedMsg = pc.bold(msg);
-    const title = `${lPill} 󰊢 Git Automation Script ${rPill}`;
-    intro(`${pc.magenta(pc.inverse(title))}`);
+    const title = `${lPill}${pc.magenta(' 󰊢 Git Automation Script ')}${rPill}`;
+    intro(`${pc.inverse(title)}`);
 
     // 1. Fetch current changes before staging them
     const status = runCommand('git', ['status', '--short']);
