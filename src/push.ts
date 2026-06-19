@@ -25,8 +25,8 @@ async function main() {
     const args = Bun.argv.slice(2);
     const msg = args[0] ? args[0] : MESSAGE;
     const formattedMsg = pc.bold(msg);
-    const title = `${lPill}${pc.magenta(' 󰊢 Git Automation Script ')}${rPill}`;
-    intro(`${pc.inverse(title)}`);
+    const title = `${lPill}${pc.magenta(pc.inverse(' 󰊢 Git Automation Script '))}${rPill}`;
+    intro(title);
 
     // 1. Fetch current changes before staging them
     const status = runCommand('git', ['status', '--short']);
