@@ -1,3 +1,5 @@
+// ~ FILE-PATH: src/utils/utils.ts
+
 import { PDFDocument, rgb } from 'pdf-lib';
 import type { PDFFont, PDFPage, RGB } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
