@@ -12,7 +12,7 @@ function runCommand(command: string, args: string[]): boolean {
 async function main() {
     console.clear();
     const args = Bun.argv.slice(2);
-    console.log(args);
+    console.log(args, '\n');
 
     const msg = args[0] ? args[0] : MESSAGE;
 
