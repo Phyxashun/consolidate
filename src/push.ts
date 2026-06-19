@@ -14,19 +14,20 @@ async function main() {
     const args = Bun.argv.slice(2);
     console.log(args, '\n');
 
-    const msg = args[0] ? args[0] : MESSAGE;
+    const msg = pc.bold(`${args[0] ? args[0] : MESSAGE}`);
 
     intro(`${pc.bgMagenta(pc.black(' 󰊢 Git Automation Script '))}`);
 
     // Execute 'git add .'
-    log.step('Staging changes (git add .)...');
+    log.step(`Staging changes (${pc.cyan('git add .')})...`);
     if (!runCommand('git', ['add', '.'])) {
         log.stop('Failed to stage changes.\n', 1);
         process.exit(1);
     }
 
     // Execute 'git commit -m "MESSAGE"'
-    log.step(`Committing changes (git commit -m "${msg}")...`);
+    const command = pc.cyan(`git commit -m '${msg}'`);
+    log.step(`Committing changes (${command})...`);
     if (!runCommand('git', ['commit', '-m', 'Update'])) {
         // Check if there was nothing to commit
         log.stop('Failed to commit. (Are there any new changes?)\n', 1);
