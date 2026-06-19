@@ -1,3 +1,7 @@
+#!/usr/bin/env bun
+
+// ~ FILE-PATH: src/choose.ts
+
 import { intro, outro, select, confirm, isCancel, cancel, spinner } from '@clack/prompts';
 import { clear } from './utils/utils';
 import pc from 'picocolors';
