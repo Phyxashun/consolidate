@@ -24,7 +24,7 @@ import { mkdir, rm } from 'fs/promises';
 import { glob } from 'glob';
 import path from 'path';
 import pc from 'picocolors';
-import { clear, line, generateShortId } from './utils/utils';
+import { generateShortId } from './utils/utils';
 import TxtToPdf from './utils/TxtToPdf';
 
 //* === CONSTANTS ===
@@ -190,7 +190,6 @@ const consolidateJobs = {
 
 //* === ENTRY POINT ===
 
-// Global customization for i18n
 p.updateSettings({
     messages: {
         cancel: 'Operation cancelled',
@@ -198,28 +197,41 @@ p.updateSettings({
     },
 });
 
-const main = async (): Promise<void> => {
-    clear();
-    ui.title();
-
-    const gitignorePatterns = await getGitignore(GITIGNORE_PATH);
-    const fullIgnoreList = [...new Set([...IGNORE_LIST_BASE, ...gitignorePatterns])];
-    const jobs = await generateJobs();
-
-    ui.header(fullIgnoreList);
-    await consolidateJobs.run(jobs, fullIgnoreList);
-
-    const spin = p.spinner({
-        indicator: 'timer', // 'dots' (default) or 'timer' for elapsed time display
-        cancelMessage: 'Process cancelled',
-        errorMessage: 'Process failed',
-        frames: ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'], // Custom animation frames
-        delay: 80, // Animation delay in ms
-        styleFrame: frame => `\x1b[35m${frame}\x1b[0m`, // Custom frame styling
+const getUserInput = async (message: string): Promise<boolean> => {
+    const action = await p.confirm({
+        message,
+        active: 'Yes',
+        inactive: 'No',
     });
 
+    if (p.isCancel(action)) {
+        p.cancel();
+        process.exit(0);
+    }
+    return action;
+};
+
+const convertToPdf = async (): Promise<void> => {
+    const spin = p.spinner({
+        indicator: 'timer',
+        cancelMessage: 'Process cancelled',
+        errorMessage: 'Process failed',
+        frames: ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'],
+        delay: 80,
+        styleFrame: frame => `\x1b[35m${frame}\x1b[0m`,
+    });
+
+    console.log();
+    p.intro(pc.yellow(pc.inverse(`  CONVERT TXT TO PDF `)));
+
+    const shouldContinue = await getUserInput('Do you want to proceed?');
+
+    if (!shouldContinue) {
+        p.outro(`${pc.green('Finished!')}`);
+        return;
+    }
+
     try {
-        p.intro(pc.yellow(pc.inverse(`  CONVERT TXT TO PDF `)));
         spin.start('Processing files...');
         await sleep(1000);
 
@@ -229,32 +241,61 @@ const main = async (): Promise<void> => {
         let suffix = generateShortId();
         let outputFile = `output-${suffix}.pdf`;
         let outputPath = path.resolve(import.meta.dir, `../ALL/pdf/${outputFile}`);
+
         await mkdir(path.resolve(import.meta.dir, '../ALL/pdf'), { recursive: true });
 
-        // Loop dynamically until an unused filename is confirmed on disk
         while (await Bun.file(outputPath).exists()) {
             suffix = generateShortId();
             outputFile = `output-${suffix}.pdf`;
             outputPath = path.resolve(import.meta.dir, `../ALL/pdf/${outputFile}`);
         }
+
         await sleep(1000);
 
         const converter = TxtToPdf.create();
         await converter.convertTxtToPdf(txtPath, outputPath);
-        spin.stop(`PDF successfully generated: ${pc.green(outputFile)}`);
+
+        spin.stop(`Conversion complete`);
         await sleep(1000);
+        const styledFile = `${pc.yellow(pc.bold(outputFile))}`;
+
+        p.box(
+            styledFile,
+            pc.green(`  PDF file generated: `, {
+                contentAlign: 'center',
+                titleAlign: 'left',
+                width: 25,
+                rounded: true,
+            }),
+        );
+
+        p.outro(`Complete!`);
     } catch (err: unknown) {
         const errorMessage = err instanceof Error ? err.message : String(err);
         spin.error(`Error generating PDF: ${errorMessage}`);
         await sleep(1000);
-        process.exit(1);
+        return;
     }
 };
 
-// Allow direct execution
+const main = async (): Promise<void> => {
+    console.clear();
+
+    ui.title();
+
+    const gitignorePatterns = await getGitignore(GITIGNORE_PATH);
+    const fullIgnoreList = [...new Set([...IGNORE_LIST_BASE, ...gitignorePatterns])];
+    const jobs = await generateJobs();
+
+    ui.header(fullIgnoreList);
+
+    await consolidateJobs.run(jobs, fullIgnoreList);
+
+    await convertToPdf();
+};
+
 if (import.meta.main) {
     await main();
-    line();
 }
 
 export default main;

@@ -35,12 +35,13 @@ export default defineConfig([
             quotes: ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
             semi: ['error', 'always'],
 
-            // Variables
+            // Eslint
             'no-unused-vars': 'off',
             'no-useless-assignment': 'off',
-            '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+            'no-control-regex': 'off',
 
             // TypeScript
+            '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
             '@typescript-eslint/explicit-function-return-type': 'off',
             '@typescript-eslint/no-explicit-any': ['warn', { ignoreRestArgs: false }],
         },

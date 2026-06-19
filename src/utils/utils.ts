@@ -6,16 +6,6 @@ import fontkit from '@pdf-lib/fontkit';
 import { resolve } from 'path';
 import { type BunFile } from 'bun';
 
-// Clear the console
-export const clear = (): void => {
-    console.clear();
-};
-
-// Output empty line to console
-export const line = (): void => {
-    console.log(`\n`);
-};
-
 export interface PDFDimensions {
     width: number;
     height: number;
