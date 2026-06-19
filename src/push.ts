@@ -22,7 +22,7 @@ async function main() {
     // Execute 'git add .'
     s.start('Staging changes (git add .)...');
     if (!runCommand('git', ['add', '.'])) {
-        s.stop('Failed to stage changes.', 1);
+        s.stop('❌ Failed to stage changes.\n', 1);
         process.exit(1);
     }
 
@@ -30,19 +30,19 @@ async function main() {
     s.message(`Committing changes (git commit -m "${msg}")...`);
     if (!runCommand('git', ['commit', '-m', 'Update'])) {
         // Check if there was nothing to commit
-        s.stop('Failed to commit. (Are there any new changes?)', 1);
+        s.stop('❌ Failed to commit. (Are there any new changes?)\n', 1);
         process.exit(1);
     }
 
     // Execute 'git push'
     s.message('Pushing to origin main (git push origin main)...');
     if (!runCommand('git', ['push', 'origin', 'main'])) {
-        s.stop('Failed to push changes to remote.', 1);
+        s.stop('❌ Failed to push changes to remote.\n', 1);
         process.exit(1);
     }
 
     s.stop('All steps completed successfully!');
-    outro('Workflow complete!');
+    outro('✅ Git update complete!');
 }
 
 main().catch(console.error);
