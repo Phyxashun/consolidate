@@ -24,7 +24,7 @@ async function main() {
     const msg = args[0] ? args[0] : MESSAGE;
     const formattedMsg = pc.bold(msg);
 
-    intro(`${pc.magenta(pc.inverse('    Git Automation Script '))}`);
+    intro(`${pc.magenta(pc.inverse(' 󰊢 Git Automation Script '))}`);
 
     // 1. Fetch current changes before staging them
     const status = runCommand('git', ['status', '--short']);
