@@ -26,9 +26,11 @@
   "license": "MIT",
   "dependencies": {
     "@clack/prompts": "^1.5.1",
+    "@pdf-lib/fontkit": "^1.1.1",
     "bun": "^1.3.14",
-    "picocolors": "^1.1.1",
-    "glob": "latest"
+    "glob": "latest",
+    "pdf-lib": "^1.17.1",
+    "picocolors": "^1.1.1"
   },
   "devDependencies": {
     "@types/glob": "latest",

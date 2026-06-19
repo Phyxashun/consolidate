@@ -19,11 +19,13 @@
  */
 
 import * as p from '@clack/prompts';
-import { file, write } from 'bun';
+import { file, write, sleep } from 'bun';
 import { mkdir, rm } from 'fs/promises';
 import { glob } from 'glob';
 import path from 'path';
 import pc from 'picocolors';
+import { clear, line, generateShortId } from './utils/utils';
+import TxtToPdf from './utils/TxtToPdf';
 
 //* === CONSTANTS ===
 
@@ -91,16 +93,23 @@ const generateJobs = async (): Promise<ConsolidationJob[]> => {
 //* === UI HELPER ===
 
 const ui = {
+    title: () => {
+        p.intro(`${pc.bgMagenta(pc.black('  󰽜  󰕘 CONSOLIDATE '))}  ${pc.dim('Project File Consolidator')}`);
+        p.log.message('');
+    },
     header: (ignoreList: string[]) => {
-        p.intro(`${pc.bgMagenta(pc.black(' CONSOLIDATE '))}  ${pc.dim('Project File Consolidator')}`);
-        if (ignoreList.length > 0) {
-            p.box(ignoreList.join(', '), pc.dim('Ignored Patterns'));
-        }
+        if (ignoreList.length === 0) return;
+
+        p.box(ignoreList.join(', '), pc.dim('Ignored Patterns'), {
+            titleAlign: 'center',
+            width: 'auto',
+            rounded: true,
+        });
     },
     summary: (totalFiles: number, processedJobs: number, skippedJobs: number) => {
         let msg = `Successfully consolidated ${pc.bold(String(totalFiles))} file(s) across ${pc.bold(String(processedJobs))} job(s).`;
         if (skippedJobs > 0) {
-            msg += `\n${pc.dim(`${skippedJobs} job(s) skipped — no matching files.`)}`;
+            msg += `\n\t${pc.yellow(pc.bold(skippedJobs))} ${pc.green(pc.dim('job(s) skipped — no matching files.'))}`;
         }
         p.outro(pc.green(msg));
     },
@@ -158,11 +167,11 @@ const consolidateJobs = {
         await p.tasks(
             jobs.map(job => ({
                 title: job.description,
-                task: async (message: (msg: string) => void): Promise<string> => {
+                task: async (message: (msg: string) => void): Promise<string | null> => {
                     const fileCount = await consolidateJobs.process(job, ignoreList, message);
                     if (fileCount === 0) {
                         skippedJobs++;
-                        return pc.dim('No matching files — skipped');
+                        return null;
                     }
                     totalFiles += fileCount;
                     processedJobs++;
@@ -181,18 +190,71 @@ const consolidateJobs = {
 
 //* === ENTRY POINT ===
 
+// Global customization for i18n
+p.updateSettings({
+    messages: {
+        cancel: 'Operation cancelled',
+        error: 'An error occurred',
+    },
+});
+
 const main = async (): Promise<void> => {
+    clear();
+    ui.title();
+
     const gitignorePatterns = await getGitignore(GITIGNORE_PATH);
     const fullIgnoreList = [...new Set([...IGNORE_LIST_BASE, ...gitignorePatterns])];
     const jobs = await generateJobs();
 
     ui.header(fullIgnoreList);
     await consolidateJobs.run(jobs, fullIgnoreList);
+
+    const spin = p.spinner({
+        indicator: 'timer', // 'dots' (default) or 'timer' for elapsed time display
+        cancelMessage: 'Process cancelled',
+        errorMessage: 'Process failed',
+        frames: ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'], // Custom animation frames
+        delay: 80, // Animation delay in ms
+        styleFrame: frame => `\x1b[35m${frame}\x1b[0m`, // Custom frame styling
+    });
+
+    try {
+        p.intro(pc.yellow(pc.inverse(`  CONVERT TXT TO PDF `)));
+        spin.start('Processing files...');
+        await sleep(1000);
+
+        const txtPath = path.resolve(import.meta.dir, '../ALL/txt/1_ALL_SOURCE_FILES.txt');
+        await sleep(1000);
+
+        let suffix = generateShortId();
+        let outputFile = `output-${suffix}.pdf`;
+        let outputPath = path.resolve(import.meta.dir, `../ALL/pdf/${outputFile}`);
+        await mkdir(path.resolve(import.meta.dir, '../ALL/pdf'), { recursive: true });
+
+        // Loop dynamically until an unused filename is confirmed on disk
+        while (await Bun.file(outputPath).exists()) {
+            suffix = generateShortId();
+            outputFile = `output-${suffix}.pdf`;
+            outputPath = path.resolve(import.meta.dir, `../ALL/pdf/${outputFile}`);
+        }
+        await sleep(1000);
+
+        const converter = TxtToPdf.create();
+        await converter.convertTxtToPdf(txtPath, outputPath);
+        spin.stop(`PDF successfully generated: ${pc.green(outputFile)}`);
+        await sleep(1000);
+    } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        spin.error(`Error generating PDF: ${errorMessage}`);
+        await sleep(1000);
+        process.exit(1);
+    }
 };
 
 // Allow direct execution
 if (import.meta.main) {
     await main();
+    line();
 }
 
 export default main;
