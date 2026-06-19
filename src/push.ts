@@ -35,7 +35,7 @@ async function main() {
     }
 
     // Execute 'git push'
-    log.step('Pushing to origin main (git push origin main)...');
+    log.step(`Pushing to origin main (${pc.cyan('git push origin main')})...`);
     if (!runCommand('git', ['push', 'origin', 'main'])) {
         log.stop('Failed to push changes to remote.\n', 1);
         process.exit(1);
