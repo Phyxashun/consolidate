@@ -3,6 +3,7 @@
 // ~ FILE-PATH: src/push.ts
 
 import { intro, outro, log, note } from '@clack/prompts';
+import boxen from 'boxen';
 import pc from 'picocolors';
 import { spawnSync } from 'child_process';
 
@@ -23,8 +24,14 @@ async function main() {
     const args = Bun.argv.slice(2);
     const msg = args[0] ? args[0] : MESSAGE;
     const formattedMsg = pc.bold(msg);
-
-    intro(`${pc.magenta(pc.inverse(' 󰊢 Git Automation Script '))}`);
+    intro(
+        boxen(`${pc.magenta(pc.inverse(' 󰊢 Git Automation Script '))}`, {
+            padding: 1,
+            borderStyle: 'round',
+            borderColor: 'magenta',
+            dimBorder: true,
+        }),
+    );
 
     // 1. Fetch current changes before staging them
     const status = runCommand('git', ['status', '--short']);
