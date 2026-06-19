@@ -7,8 +7,8 @@ import pc from 'picocolors';
 import { spawnSync } from 'child_process';
 
 const MESSAGE: string = 'Update';
-const lPill = pc.magenta('');
-const rPill = pc.magenta('');
+const lPill = pc.black('');
+const rPill = pc.black('');
 
 // Modified to return both success status and terminal output
 function runCommand(command: string, args: string[]): { success: boolean; output: string } {
