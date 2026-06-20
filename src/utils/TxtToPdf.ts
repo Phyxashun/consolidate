@@ -5,7 +5,14 @@
 import fontkit from '@pdf-lib/fontkit';
 import type { BunFile } from 'bun';
 import path from 'path';
-import { PageSizes, PDFDocument, PDFFont, PDFPage, rgb, type RGB } from 'pdf-lib';
+import {
+    PageSizes,
+    PDFDocument,
+    PDFFont,
+    PDFPage,
+    rgb,
+    type RGB,
+} from 'pdf-lib';
 import Prism from 'prismjs';
 import loadLanguages from 'prismjs/components/index.js';
 
@@ -38,12 +45,13 @@ export interface Config {
 
 export const DEFAULT_CONFIG: Required<Config> = {
     fontSize: 8,
-    lineHeight: 12, // Standard balanced layout spacing
+    lineHeight: 12,
     marginTop: 50,
     marginBottom: 50,
     marginLeft: 50,
     marginRight: 50,
-    fontFile: '../assets/JetBrainsMono/JetBrainsMonoNLNerdFontPropo-Regular.ttf',
+    fontFile:
+        '../assets/JetBrainsMono/JetBrainsMonoNLNerdFontPropo-Regular.ttf',
     textColor: rgb(0.96, 0.96, 0.94),
     textOpacity: 1.0,
     pageSize: 'Letter',
@@ -52,7 +60,7 @@ export const DEFAULT_CONFIG: Required<Config> = {
     syntaxHighlighting: true,
     language: 'typescript',
     backgroundColor: rgb(0.11, 0.12, 0.13),
-    oneLongPage: false, // Default to standard multi-page pagination behavior
+    oneLongPage: true,
 };
 
 export const SYNTAX_THEME: Record<string, RGB> = {
@@ -89,17 +97,25 @@ export class TxtToPdfConverter {
             try {
                 loadLanguages([this.config.language]);
             } catch (e: unknown) {
-                console.warn(`[TxtToPdf]: Could not load Prism definition for "${this.config.language}". Using standard styling.`);
+                console.warn(
+                    `[TxtToPdf]: Could not load Prism definition for "${this.config.language}". Using standard styling.`,
+                );
             }
         }
     }
 
     // Adjusted to accept a dynamic custom height modifier parameter overrides
-    private createPageWithLayout(pdfDoc: PDFDocument, customHeight?: number): PDFPage {
+    private createPageWithLayout(
+        pdfDoc: PDFDocument,
+        customHeight?: number,
+    ): PDFPage {
         let dimensions: [number, number];
 
         if (typeof this.config.pageSize === 'string') {
-            dimensions = [...PageSizes[this.config.pageSize]] as [number, number];
+            dimensions = [...PageSizes[this.config.pageSize]] as [
+                number,
+                number,
+            ];
         } else {
             dimensions = [...this.config.pageSize] as [number, number];
         }
@@ -111,7 +127,10 @@ export class TxtToPdfConverter {
 
         const page = pdfDoc.addPage(dimensions);
 
-        if (this.config.pageOrientation === 'landscape' && customHeight === undefined) {
+        if (
+            this.config.pageOrientation === 'landscape' &&
+            customHeight === undefined
+        ) {
             const { width, height } = page.getSize();
             page.setSize(height, width);
         }
@@ -128,7 +147,11 @@ export class TxtToPdfConverter {
         return page;
     }
 
-    public async convertTxtToPdf(sourcePath: string, outputPath: string, fontPath: string = this.config.fontFile): Promise<void> {
+    public async convertTxtToPdf(
+        sourcePath: string,
+        outputPath: string,
+        fontPath: string = this.config.fontFile,
+    ): Promise<void> {
         const textContent: string = await this.getText(sourcePath);
         const pdfDoc: PDFDocument = await PDFDocument.create();
         pdfDoc.registerFontkit(fontkit);
@@ -142,7 +165,10 @@ export class TxtToPdfConverter {
         } else {
             initialPageWidth = this.config.pageSize[0];
         }
-        if (this.config.pageOrientation === 'landscape' && !this.config.oneLongPage) {
+        if (
+            this.config.pageOrientation === 'landscape' &&
+            !this.config.oneLongPage
+        ) {
             if (typeof this.config.pageSize === 'string') {
                 initialPageWidth = PageSizes[this.config.pageSize][1];
             } else {
@@ -150,21 +176,25 @@ export class TxtToPdfConverter {
             }
         }
 
-        const maxLineWidth: number = initialPageWidth - (this.config.marginLeft + this.config.marginRight);
+        const maxLineWidth: number =
+            initialPageWidth -
+            (this.config.marginLeft + this.config.marginRight);
 
         // --- 1. PRE-PROCESS TOKENS ---
         const renderingLines: TextAtom[][] = [[]];
         let currentLineIdx = 0;
 
         if (this.config.syntaxHighlighting) {
-            const grammar = Prism.languages[this.config.language] || Prism.languages.clike;
+            const grammar =
+                Prism.languages[this.config.language] || Prism.languages.clike;
             const globalTokens = Prism.tokenize(textContent, grammar);
 
             const parseToken = (token: string | Prism.Token, type?: string) => {
                 if (typeof token === 'string') {
                     const lines = token.split(/\r?\n/);
                     const tokenType = type || 'plain';
-                    const activeColor = SYNTAX_THEME[tokenType] || this.config.textColor;
+                    const activeColor =
+                        SYNTAX_THEME[tokenType] || this.config.textColor;
 
                     lines.forEach((lineText, index) => {
                         if (index > 0) {
@@ -172,12 +202,17 @@ export class TxtToPdfConverter {
                             renderingLines[currentLineIdx] = [];
                         }
                         if (lineText.length > 0) {
-                            renderingLines[currentLineIdx].push({ text: lineText, color: activeColor });
+                            renderingLines[currentLineIdx].push({
+                                text: lineText,
+                                color: activeColor,
+                            });
                         }
                     });
                 } else {
                     if (Array.isArray(token.content)) {
-                        token.content.forEach(subToken => parseToken(subToken, token.type));
+                        token.content.forEach(subToken =>
+                            parseToken(subToken, token.type),
+                        );
                     } else {
                         parseToken(token.content, token.type);
                     }
@@ -187,17 +222,24 @@ export class TxtToPdfConverter {
         } else {
             const rawLines = textContent.split(NEWLINE);
             rawLines.forEach((line, index) => {
-                renderingLines[index] = [{ text: line, color: this.config.textColor }];
+                renderingLines[index] = [
+                    { text: line, color: this.config.textColor },
+                ];
             });
         }
 
         // --- 2. PRE-WRAPPING CALCULATIONS & MEASUREMENTS LAYER ---
         const allFinalWrappedLines: RenderableWrappedLine[] = [];
-        const textWidthFn: TextWidth = (text: string) => font.widthOfTextAtSize(text, this.config.fontSize);
+        const textWidthFn: TextWidth = (text: string) =>
+            font.widthOfTextAtSize(text, this.config.fontSize);
 
         for (const rawLineAtoms of renderingLines) {
             const fullLineText = rawLineAtoms.map(atom => atom.text).join('');
-            const wrappedLineStrings = this.wrapText(fullLineText, maxLineWidth, textWidthFn);
+            const wrappedLineStrings = this.wrapText(
+                fullLineText,
+                maxLineWidth,
+                textWidthFn,
+            );
 
             let atomIndex = 0;
             let atomCharOffset = 0;
@@ -206,14 +248,27 @@ export class TxtToPdfConverter {
                 const lineAtoms: TextAtom[] = [];
                 let remainingCharsToDraw = wrappedString.length;
 
-                while (remainingCharsToDraw > 0 && atomIndex < rawLineAtoms.length) {
+                while (
+                    remainingCharsToDraw > 0 &&
+                    atomIndex < rawLineAtoms.length
+                ) {
                     const currentAtom = rawLineAtoms[atomIndex];
-                    const availableAtomText = currentAtom.text.slice(atomCharOffset);
-                    const takeLength = Math.min(availableAtomText.length, remainingCharsToDraw);
-                    const textChunkToDraw = availableAtomText.slice(0, takeLength);
+                    const availableAtomText =
+                        currentAtom.text.slice(atomCharOffset);
+                    const takeLength = Math.min(
+                        availableAtomText.length,
+                        remainingCharsToDraw,
+                    );
+                    const textChunkToDraw = availableAtomText.slice(
+                        0,
+                        takeLength,
+                    );
 
                     if (textChunkToDraw.length > 0) {
-                        lineAtoms.push({ text: textChunkToDraw, color: currentAtom.color });
+                        lineAtoms.push({
+                            text: textChunkToDraw,
+                            color: currentAtom.color,
+                        });
                     }
 
                     remainingCharsToDraw -= takeLength;
@@ -224,7 +279,10 @@ export class TxtToPdfConverter {
                         atomCharOffset = 0;
                     }
                 }
-                allFinalWrappedLines.push({ atoms: lineAtoms, textStr: wrappedString });
+                allFinalWrappedLines.push({
+                    atoms: lineAtoms,
+                    textStr: wrappedString,
+                });
             }
         }
 
@@ -236,8 +294,12 @@ export class TxtToPdfConverter {
 
         if (this.config.oneLongPage) {
             // Calculate total required vertical canvas height dynamically
-            const contentHeight = allFinalWrappedLines.length * this.config.lineHeight;
-            pageHeight = this.config.marginTop + contentHeight + this.config.marginBottom;
+            const contentHeight =
+                allFinalWrappedLines.length * this.config.lineHeight;
+            pageHeight =
+                this.config.marginTop +
+                contentHeight +
+                this.config.marginBottom;
 
             page = this.createPageWithLayout(pdfDoc, pageHeight);
             currentY = pageHeight - this.config.marginTop;
@@ -249,7 +311,10 @@ export class TxtToPdfConverter {
 
         // --- 4. RENDER TO CANVAS CANVAS SURFACE ---
         for (const wrappedLine of allFinalWrappedLines) {
-            if (!this.config.oneLongPage && currentY - this.config.fontSize < pageBottomThreshold) {
+            if (
+                !this.config.oneLongPage &&
+                currentY - this.config.fontSize < pageBottomThreshold
+            ) {
                 page = this.createPageWithLayout(pdfDoc);
                 currentY = page.getSize().height - this.config.marginTop;
             }
@@ -267,7 +332,10 @@ export class TxtToPdfConverter {
                         opacity: this.config.textOpacity,
                     });
                 }
-                currentX += font.widthOfTextAtSize(chunk.text, this.config.fontSize);
+                currentX += font.widthOfTextAtSize(
+                    chunk.text,
+                    this.config.fontSize,
+                );
             }
 
             currentY -= this.config.lineHeight;
@@ -277,7 +345,11 @@ export class TxtToPdfConverter {
         await Bun.write(outputPath, pdfBytes);
     }
 
-    private wrapText(text: string, maxWidth: number, getTextWidth: TextWidth): string[] {
+    private wrapText(
+        text: string,
+        maxWidth: number,
+        getTextWidth: TextWidth,
+    ): string[] {
         if (this.config.wordWrap === 'none') return [text];
         const normalizedText = text.replace(/\t/g, '    ');
 
@@ -303,8 +375,11 @@ export class TxtToPdfConverter {
         const lines: string[] = [];
         let currentLine: string = leadingSpaces;
         for (const word of words) {
-            const isLineStart = currentLine === '' || currentLine === leadingSpaces;
-            const testLine: string = isLineStart ? `${currentLine}${word}` : `${currentLine} ${word}`;
+            const isLineStart =
+                currentLine === '' || currentLine === leadingSpaces;
+            const testLine: string = isLineStart
+                ? `${currentLine}${word}`
+                : `${currentLine} ${word}`;
             if (getTextWidth(testLine) > maxWidth) {
                 if (currentLine !== leadingSpaces) {
                     lines.push(currentLine);
@@ -318,27 +393,37 @@ export class TxtToPdfConverter {
                 currentLine = testLine;
             }
         }
-        if (currentLine && currentLine !== leadingSpaces) lines.push(currentLine);
+        if (currentLine && currentLine !== leadingSpaces)
+            lines.push(currentLine);
         return lines.length > 0 ? lines : [''];
     }
-    private async getFontSafely(fontPath: string, pdfDoc: PDFDocument): Promise<PDFFont> {
+    private async getFontSafely(
+        fontPath: string,
+        pdfDoc: PDFDocument,
+    ): Promise<PDFFont> {
         try {
             const absoluteFontPath = path.resolve(import.meta.dir, fontPath);
             const fontFile: BunFile = Bun.file(absoluteFontPath);
             if (!(await fontFile.exists())) {
-                throw new Error(`File not found at target resolution layout: "${absoluteFontPath}"`);
+                throw new Error(
+                    `File not found at target resolution layout: "${absoluteFontPath}"`,
+                );
             }
             const fontBytes: ArrayBuffer = await fontFile.arrayBuffer();
             return await pdfDoc.embedFont(fontBytes);
         } catch (e: unknown) {
-            console.warn(`🚨 [TxtToPdf Warning]: Fallback to standard Monospace Courier used.`);
+            console.warn(
+                `🚨 [TxtToPdf Warning]: Fallback to standard Monospace Courier used.`,
+            );
             return await pdfDoc.embedFont('Courier');
         }
     }
     private async getText(sourcePath: string): Promise<string> {
         const sourceFile: BunFile = Bun.file(sourcePath);
         if (!(await sourceFile.exists())) {
-            throw new Error(`Input text source file completely missing at path: "${sourcePath}"`);
+            throw new Error(
+                `Input text source file completely missing at path: "${sourcePath}"`,
+            );
         }
         return await sourceFile.text();
     }
