@@ -5,8 +5,6 @@ import tsParser from '@typescript-eslint/parser';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import prettierConfig from 'eslint-config-prettier/flat';
-import prettierPlugin from 'eslint-plugin-prettier/recommended';
 
 export default defineConfig([
     // Global ignores
@@ -48,6 +46,6 @@ export default defineConfig([
         },
     },
     // PRETTIER MUST BE LAST
-    prettierConfig,
-    prettierPlugin,
+    //prettierConfig,
+    //prettierPlugin,
 ]);

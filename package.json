@@ -26,13 +26,15 @@
     "author": "Dustin Dew",
     "license": "MIT",
     "dependencies": {
-        "typescript": "latest",
         "@clack/prompts": "latest",
         "@pdf-lib/fontkit": "latest",
+        "@types/prismjs": "^1.26.6",
         "bun": "latest",
         "glob": "latest",
         "pdf-lib": "latest",
-        "picocolors": "latest"
+        "picocolors": "latest",
+        "prismjs": "^1.30.0",
+        "typescript": "latest"
     },
     "devDependencies": {
         "@eslint/js": "latest",
