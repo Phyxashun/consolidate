@@ -24,11 +24,7 @@ const CONFIG_FILE = `${process.cwd()}/.config/config.json`;
 
 // 2. Load/Save with typed returns
 async function loadSettings(): Promise<AppConfig> {
-    const file = Bun.file(CONFIG_FILE);
-    if (await file.exists()) {
-        return (await file.json()) as AppConfig;
-    }
-    return {
+    const defaults: AppConfig = {
         appName: 'My Bun CLI App',
         version: '1.0.0',
         port: 3000,
@@ -39,6 +35,24 @@ async function loadSettings(): Promise<AppConfig> {
         theme: 'dark',
         notifications: true,
     };
+
+    const file = Bun.file(CONFIG_FILE);
+
+    if (!(await file.exists())) {
+        return defaults;
+    }
+
+    try {
+        const savedData = await file.json();
+        // Merge the saved data into defaults to ensure all properties exist
+        return {
+            ...defaults,
+            ...savedData,
+            database: { ...defaults.database, ...savedData.database },
+        };
+    } catch {
+        return defaults;
+    }
 }
 
 async function saveSettings(config: AppConfig): Promise<void> {
