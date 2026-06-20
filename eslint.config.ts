@@ -14,7 +14,7 @@ export default defineConfig([
     {
         files: ['**/*.{js,mjs,cjs,jsx,ts,tsx}'],
 
-        extends: [js.configs.recommended, ...tseslint.configs.recommended],
+        extends: [js.configs.recommended, ...tseslint.configs.recommended, prettierConfig],
 
         languageOptions: {
             parser: tsParser,

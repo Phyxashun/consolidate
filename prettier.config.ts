@@ -1,11 +1,9 @@
-// ~ FILE-PATH: prettier.config.ts
-
 import { type Config } from 'prettier';
 
 const config: Config = {
     arrowParens: 'avoid',
     bracketSameLine: false,
-    objectWrap: 'preserve',
+    objectWrap: 'collapse',
     bracketSpacing: true,
     semi: true,
     experimentalOperatorPosition: 'end',
@@ -20,7 +18,7 @@ const config: Config = {
     proseWrap: 'preserve',
     endOfLine: 'lf',
     insertPragma: false,
-    printWidth: 140,
+    printWidth: 80, // This will now successfully trigger line wraps
     requirePragma: false,
     tabWidth: 4,
     useTabs: false,

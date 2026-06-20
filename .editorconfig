@@ -19,7 +19,6 @@ indent_brace_style = K&R
 
 # TypeScript
 [*.{ts}]
-max_line_length = 80
 quote_type = single
 insert_pragmas = false
 
@@ -32,6 +31,5 @@ trim_trailing_whitespace = false
 
 # TOML
 [*.{toml}]
-max_line_length = 80
 quote_type = single
 insert_pragmas = false

@@ -9,8 +9,8 @@
         "typecheck": "tsc --noEmit",
         "build": "bun run typecheck && bun build --compile --outfile=./dist/consolidate ./src/index.ts",
         "start": "bun run ./src/index.ts",
-        "consolidate": "bun run ./src/consolidate.ts",
-        "deconsolidate": "bun run ./src/deconsolidate.ts",
+        "consolidate": "bun run ./src/components/consolidate.ts",
+        "deconsolidate": "bun run ./src/components/deconsolidate.ts",
         "push": "bun run ./src/push.ts"
     },
     "bin": {
