@@ -527,17 +527,17 @@
     // Token	        Hex	        Usage
     // -------------------------------------------------------------------------
     // Background	    #282A36	    Main background
-    // Current Line	  #6272A4	    Semantic current line highlight token
+    // Current Line	    #6272A4	    Semantic current line highlight token
     // Selection	    #44475A	    Text selection
     // Foreground	    #F8F8F2	    Default text
-    // Comment	      #6272A4	    Comments, disabled code
-    // Red	          #FF5555	    Errors, warnings, deletion
+    // Comment	        #6272A4	    Comments, disabled code
+    // Red	            #FF5555	    Errors, warnings, deletion
     // Orange	        #FFB86C	    Numbers, constants, booleans
     // Yellow	        #F1FA8C	    Strings, text content
     // Green	        #50FA7B	    Functions, methods, inherited classes
-    // Cyan	          #8BE9FD	    Classes, types, support, regex
+    // Cyan	            #8BE9FD	    Classes, types, support, regex
     // Purple	        #BD93F9	    Instance reserved words, constants
-    // Pink	          #FF79C6	    Keywords, storage types
+    // Pink	            #FF79C6	    Keywords, storage types
     //
     //
     "highlight.decorations": {},
@@ -546,12 +546,12 @@
         //$ Highlight file paths in comments with a specific format, e.g.:
         // FILE-PATH: src/styles.css
         // file-path: test/test
-        // # file-path: test/test
+        // #~ file-path: test/test
         //
         //   2         3        4     5
-        "([\\s\\t]?(//|#)\\s?(FILE-PATH)\\s?(:)\\s?(.*)\\h?)": {
+        "([^\\s\\t]?(\/\/|#~)\\s?(FILE-PATH)\\s?(:)\\s?(.*)\\h?)": {
             "regexFlags": "gim",
-            "filterLanguageRegex": "markdown|javascript|typescript|js|ts|json|jsonc",
+            "filterLanguageRegex": "markdown|javascript|typescript|js|ts|json|jsonc|ignore",
             "decorations": [
                 { // Group 1 - entire match
                     "borderRadius": "4px",
@@ -601,7 +601,7 @@
             ]
         },
         //$ Highlight comments that start with '#'
-        "/^[ \\t]*(#.*)$/gm": {
+        "/^[ \\t]*(#(?!~).*)$/gm": {
             "filterLanguageRegex": "ignore|toml|yaml|ini",
             "decorations": [
                 {
