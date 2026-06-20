@@ -1,108 +1,125 @@
 #!/usr/bin/env bun
-//
 // ~ FILE-PATH: src/choose.ts
 
-import { intro, outro, select, confirm, isCancel, cancel, spinner } from '@clack/prompts';
+import { cancel, groupMultiselect, intro, isCancel, outro, select, spinner, text } from '@clack/prompts';
 import pc from 'picocolors';
-import * as fs from 'node:fs';
-import * as path from 'node:path';
 
-// 1. Define your interface for combined settings
+// 1. Precise Interface
 interface AppConfig {
     appName: string;
     version: string;
+    port: number;
+    host: string;
+    mode: 'development' | 'production';
+    features: string[];
+    database: {
+        type: 'postgres' | 'mysql' | 'mongodb';
+        url: string;
+    };
     theme: string;
     notifications: boolean;
 }
 
-// 2. Application specific defaults (these won't be overwritten)
-const APP_DEFAULTS: Omit<AppConfig, 'theme' | 'notifications'> = {
-    appName: 'My Bun CLI App',
-    version: '1.0.0',
-};
+const CONFIG_FILE = `${process.cwd()}/.config/config.json`;
 
-// 3. Setup paths
-const CONFIG_DIR = path.join(process.cwd(), '.config');
-const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
-
-// 4. Helper to load or initialize settings
-function loadSettings(): AppConfig {
-    if (!fs.existsSync(CONFIG_DIR)) {
-        fs.mkdirSync(CONFIG_DIR, { recursive: true });
+// 2. Load/Save with typed returns
+async function loadSettings(): Promise<AppConfig> {
+    const file = Bun.file(CONFIG_FILE);
+    if (await file.exists()) {
+        return (await file.json()) as AppConfig;
     }
-
-    if (fs.existsSync(CONFIG_FILE)) {
-        try {
-            const rawData = fs.readFileSync(CONFIG_FILE, 'utf-8');
-            return JSON.parse(rawData) as AppConfig;
-        } catch (e: unknown) {
-            console.error(pc.red(`Error parsing config.json; resetting to defaults. ${e}`));
-        }
-    }
-
-    // Default configuration if the file doesn't exist
-    const defaultSettings: AppConfig = {
-        ...APP_DEFAULTS,
+    return {
+        appName: 'My Bun CLI App',
+        version: '1.0.0',
+        port: 3000,
+        host: 'localhost',
+        mode: 'development',
+        features: [],
+        database: { type: 'postgres', url: 'postgresql://user:pass@localhost:5432/db' },
         theme: 'dark',
         notifications: true,
     };
-
-    // Save the initial config file
-    fs.writeFileSync(CONFIG_FILE, JSON.stringify(defaultSettings, null, 2));
-    return defaultSettings;
 }
 
-// 5. Main CLI flow
+async function saveSettings(config: AppConfig): Promise<void> {
+    await Bun.write(CONFIG_FILE, JSON.stringify(config, null, 2));
+}
+
 async function main() {
     console.clear();
+    intro(pc.bgCyan(pc.black(' Configuration Builder ')));
 
-    intro(pc.bgCyan(pc.black(' Welcome to the Config Builder ')));
+    const currentConfig = await loadSettings();
 
-    const currentConfig = loadSettings();
+    // 3. Strict Exit Handler
+    const exit = (): never => {
+        cancel(pc.red('Operation cancelled.'));
+        process.exit(0);
+    };
 
-    // 6. Prompt menu
-    console.log(pc.yellow('\n--- User Settings ---'));
+    // 4. Prompting with explicit typing
+    const portInput = await text({ message: 'Port:', initialValue: String(currentConfig.port) });
+    if (isCancel(portInput)) exit();
 
-    const theme = await select({
-        message: 'Pick a UI theme:',
-        initialValue: currentConfig.theme,
+    const host = await text({ message: 'Host:', initialValue: currentConfig.host });
+    if (isCancel(host)) exit();
+
+    const mode = (await select({
+        message: 'Select mode:',
+        initialValue: currentConfig.mode,
         options: [
-            { value: 'dark', label: 'Dark Mode' },
-            { value: 'light', label: 'Light Mode' },
-            { value: 'matrix', label: 'Matrix' },
+            { value: 'development', label: 'Development' },
+            { value: 'production', label: 'Production' },
         ],
-    });
-    if (isCancel(theme)) {
-        cancel('Operation cancelled.');
-        process.exit(0);
-    }
+    })) as 'development' | 'production' | symbol;
+    if (isCancel(mode)) exit();
 
-    const notifications = await confirm({
-        message: 'Enable push notifications?',
-        initialValue: currentConfig.notifications,
-    });
-    if (isCancel(notifications)) {
-        cancel('Operation cancelled.');
-        process.exit(0);
-    }
+    const dbType = (await select({
+        message: 'Database:',
+        initialValue: currentConfig.database.type,
+        options: [
+            { value: 'postgres', label: 'PostgreSQL' },
+            { value: 'mysql', label: 'MySQL' },
+            { value: 'mongodb', label: 'MongoDB' },
+        ],
+    })) as 'postgres' | 'mysql' | 'mongodb' | symbol;
+    if (isCancel(dbType)) exit();
 
-    // 7. Save Settings
+    const dbUrl = await text({ message: 'DB URL:', initialValue: currentConfig.database.url });
+    if (isCancel(dbUrl)) exit();
+
+    const features = (await groupMultiselect({
+        message: 'Features:',
+        initialValues: currentConfig.features,
+        options: {
+            Security: [
+                { value: 'auth', label: 'Auth' },
+                { value: 'cors', label: 'CORS' },
+            ],
+            Monitoring: [
+                { value: 'logging', label: 'Logging' },
+                { value: 'metrics', label: 'Metrics' },
+            ],
+        },
+    })) as string[] | symbol;
+    if (isCancel(features)) exit();
+
+    // 5. Build config with strict types
     const updatedConfig: AppConfig = {
         ...currentConfig,
-        theme: theme as string,
-        notifications: notifications as boolean,
+        port: parseInt(portInput as string),
+        host: host as string,
+        mode: mode as 'development' | 'production',
+        database: { type: dbType as 'postgres' | 'mysql' | 'mongodb', url: dbUrl as string },
+        features: features as string[],
     };
 
     const s = spinner();
-    s.start('Saving your configuration');
+    s.start(pc.blue('Saving settings...'));
+    await saveSettings(updatedConfig);
+    s.stop(pc.green('Saved!'));
 
-    // Write using native Bun IO or Node's fs
-    fs.writeFileSync(CONFIG_FILE, JSON.stringify(updatedConfig, null, 2));
-
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate work
-    s.stop('Configuration saved successfully!');
-
-    outro(pc.green('You are all set! Goodbye.'));
+    outro(pc.cyan('Done.'));
 }
 
 main();

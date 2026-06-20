@@ -35,18 +35,19 @@
         "picocolors": "latest"
     },
     "devDependencies": {
-        "@types/glob": "latest",
-        "prettier": "latest",
         "@eslint/js": "latest",
         "@types/bun": "latest",
+        "@types/glob": "latest",
         "@types/node": "latest",
         "@typescript-eslint/parser": "latest",
+        "@typescript/native-preview": "^7.0.0-dev.20260619.1",
         "eslint": "latest",
         "eslint-config-prettier": "latest",
         "eslint-plugin-eslint-plugin": "latest",
         "eslint-plugin-prettier": "latest",
         "globals": "latest",
         "jiti": "latest",
+        "prettier": "latest",
         "typescript-eslint": "latest"
     }
 }

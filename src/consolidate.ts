@@ -19,13 +19,13 @@
  */
 
 import * as p from '@clack/prompts';
-import { file, write, sleep } from 'bun';
+import { file, sleep, write } from 'bun';
 import { mkdir, rm } from 'fs/promises';
 import { glob } from 'glob';
 import path from 'path';
 import pc from 'picocolors';
-import { generateShortId } from './utils/utils';
 import TxtToPdf from './utils/TxtToPdf';
+import { generateShortId } from './utils/utils';
 
 //* === CONSTANTS ===
 
@@ -167,11 +167,11 @@ const consolidateJobs = {
         await p.tasks(
             jobs.map(job => ({
                 title: job.description,
-                task: async (message: (msg: string) => void): Promise<string | null> => {
+                task: async (message: (msg: string) => void): Promise<string> => {
                     const fileCount = await consolidateJobs.process(job, ignoreList, message);
                     if (fileCount === 0) {
                         skippedJobs++;
-                        return null;
+                        return '';
                     }
                     totalFiles += fileCount;
                     processedJobs++;
@@ -233,11 +233,10 @@ const convertToPdf = async (): Promise<void> => {
 
     try {
         spin.start('Processing files...');
-        await sleep(1000);
-        await sleep(1000);
+        await sleep(400);
 
         const txtPath = path.resolve(import.meta.dir, '../ALL/txt/1_ALL_SOURCE_FILES.txt');
-        await sleep(1000);
+        await sleep(400);
 
         let suffix = generateShortId();
         let outputFile = `output-${suffix}.pdf`;
@@ -251,30 +250,27 @@ const convertToPdf = async (): Promise<void> => {
             outputPath = path.resolve(import.meta.dir, `../ALL/pdf/${outputFile}`);
         }
 
-        await sleep(1000);
+        await sleep(400);
 
         const converter = TxtToPdf.create();
         await converter.convertTxtToPdf(txtPath, outputPath);
 
         spin.stop(`Conversion complete`);
-        await sleep(1000);
-        const styledFile = `${pc.yellow(pc.bold(outputFile))}`;
+        await sleep(400);
+        const styledLogo = pc.red(``);
 
-        p.box(
-            styledFile,
-            pc.green(`  PDF file generated: `, {
-                contentAlign: 'center',
-                titleAlign: 'left',
-                width: 25,
-                rounded: true,
-            }),
-        );
+        p.box(`\n${pc.yellow(pc.bold(outputFile))}\n`, pc.green(` ${styledLogo} PDF file generated: `), {
+            contentAlign: 'center',
+            titleAlign: 'left',
+            width: 'auto',
+            rounded: true,
+        });
 
         p.outro(`Complete!`);
     } catch (err: unknown) {
         const errorMessage = err instanceof Error ? err.message : String(err);
         spin.error(`Error generating PDF: ${errorMessage}`);
-        await sleep(1000);
+        await sleep(400);
         return;
     }
 };

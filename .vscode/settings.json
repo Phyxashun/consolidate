@@ -1,715 +1,718 @@
 {
-    // ~ FILE-PATH: .vscode/settings.json
-    // ==========================================================================
-    //      ⚙️ GENERAL SETTINGS
-    // ==========================================================================
-    "explorer.confirmDelete": false,
-    "explorer.confirmDragAndDrop": false,
-    "files.trimTrailingWhitespaceInRegexAndStrings": false,
-    "files.associations": {
-        "*.json": "jsonc",
-        "*.editorconfig": "editorconfig",
-        "*.psm1": "powershell",
-        "*.psd1": "powershell",
-        "*.ps1": "powershell"
+  // ~ FILE-PATH: .vscode/settings.json
+  // ==========================================================================
+  //      ⚙️ GENERAL SETTINGS
+  // ==========================================================================
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "files.trimTrailingWhitespaceInRegexAndStrings": false,
+  "files.associations": {
+    "*.json": "jsonc",
+    "*.editorconfig": "editorconfig",
+    "*.psm1": "powershell",
+    "*.psd1": "powershell",
+    "*.ps1": "powershell"
+  },
+  // ==========================================================================
+  //      🎨 WORKBENCH & APPEARANCE
+  // ==========================================================================
+  "workbench.colorTheme": "Theme Darker",
+  "workbench.iconTheme": "flow-deep",
+  "workbench.productIconTheme": "material-product-icons",
+  "workbench.panel.defaultLocation": "right",
+  // ==========================================================================
+  //      📝 EDITOR CORE SETTINGS
+  // ==========================================================================
+  "editor.fontFamily": "'JetBrainsMono NFM Regular'",
+  "editor.fontSize": 14,
+  "editor.lineHeight": 1.4,
+  "editor.fontLigatures": true,
+  "editor.smoothScrolling": true,
+  "editor.minimap.enabled": false,
+  "editor.tabSize": 2,
+  "editor.indentSize": 2,
+  "editor.inlineSuggest.enabled": true,
+  "editor.suggest.preview": true,
+  "editor.tabCompletion": "on",
+  "editor.showDeprecated": true,
+  "editor.autoIndent": "full",
+  "editor.wordWrapColumn": 100,
+  "editor.rulers": [
+    100
+  ],
+  "editor.semanticHighlighting.enabled": true,
+  "editor.semanticTokenColorCustomizations": {
+    "enabled": true
+  },
+  "editor.stickyScroll.enabled": true,
+  "editor.stickyScroll.defaultModel": "indentationModel",
+  "editor.cursorBlinking": "expand",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.guides.highlightActiveBracketPair": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+  "editor.guides.bracketPairs": "active",
+  "editor.guides.indentation": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "always",
+    "source.addMissingImports": "always"
+  },
+  "editor.wordWrap": "on",
+  "editor.defaultFoldingRangeProvider": "EditorConfig.EditorConfig",
+  "editor.foldingStrategy": "auto",
+  "editor.folding": true,
+  "editor.detectIndentation": false,
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.formatOnType": false,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.glyphMargin": true,
+  "files.autoSave": "onFocusChange",
+  // ==========================================================================
+  //      🖥️ TERMINAL SETTINGS
+  // ==========================================================================
+  "terminal.integrated.fontFamily": "'JetBrainsMono NFM Regular'",
+  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.lineHeight": 1,
+  "terminal.integrated.enablePersistentSessions": false,
+  "terminal.integrated.shellIntegration.enabled": true,
+  "terminal.integrated.suggest.enabled": true,
+  "terminal.integrated.profiles.linux": {
+    "fish-host": {
+      "path": "host-spawn",
+      "args": [
+        "fish"
+      ],
+      "icon": "terminal-linux"
+    }
+  },
+  "terminal.integrated.defaultProfile.linux": "fish",
+  //***************************************************************************
+  //*
+  //*      💻 LANGUAGE SPECIFIC SETTINGS
+  //*
+  //***************************************************************************
+  // ==========================================================================
+  //      ⚙️ HTML/CSS SETTINGS
+  // ==========================================================================
+  "css.styleSheets": [
+    "node_modules/bulma/css/bulma.min.css",
+    "src/**/*.css"
+  ],
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "less.lint.unknownAtRules": "ignore",
+  "tailwindTranspiler.savePath": "/public/css",
+  // ==========================================================================
+  //      ⚙️ JAVASCRIPT/TYPESCRIPT SETTINGS
+  // ==========================================================================
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "betterTypeScriptErrors.prettify": true,
+  "js/ts.inlayHints.parameterNames.enabled": "all",
+  "js/ts.inlayHints.variableTypes.enabled": true,
+  "js/ts.inlayHints.parameterTypes.enabled": true,
+  "js/ts.inlayHints.functionLikeReturnTypes.enabled": true,
+  "js/ts.format.semicolons": "insert",
+  "js/ts.preferences.quoteStyle": "single",
+  "js/ts.referencesCodeLens.enabled": true,
+  "js/ts.suggest.autoImports": false,
+  "js/ts.updateImportsOnPaste.enabled": true,
+  "js/ts.updateImportsOnFileMove.enabled": "always",
+  "js/ts.suggest.paths": false,
+  "js/ts.suggestionActions.enabled": true,
+  "js/ts.tsserver.log": "off",
+  "js/ts.tsserver.useSyntaxServer": "always",
+  "extensions.experimental.affinity": {
+    "better-ts-errors.better-ts-errors": 1
+  },
+  "editor.experimental.preferTreeSitter.typescript": true,
+  "js/ts.tsserver.experimental.enableProjectDiagnostics": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  // ==========================================================================
+  //      ⚙️ MARKDOWN SETTINGS
+  // ==========================================================================
+  "markdown.validate.enabled": true,
+  "[markdown]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "markdownlint.config": {
+    "default": true,
+    "MD033": {
+      "allowed_elements": [
+        "span"
+      ]
     },
-    // ==========================================================================
-    //      🎨 WORKBENCH & APPEARANCE
-    // ==========================================================================
-    "workbench.colorTheme": "Theme Darker",
-    "workbench.iconTheme": "flow-deep",
-    "workbench.productIconTheme": "material-product-icons",
-    "workbench.panel.defaultLocation": "right",
-    // ==========================================================================
-    //      📝 EDITOR CORE SETTINGS
-    // ==========================================================================
-    "editor.fontFamily": "'JetBrainsMono NFM Regular'",
-    "editor.fontSize": 14,
-    "editor.lineHeight": 1.4,
-    "editor.fontLigatures": true,
-    "editor.smoothScrolling": true,
-    "editor.minimap.enabled": false,
-    "editor.tabSize": 2,
-    "editor.indentSize": 2,
-    "editor.inlineSuggest.enabled": true,
-    "editor.suggest.preview": true,
-    "editor.tabCompletion": "on",
-    "editor.showDeprecated": true,
-    "editor.autoIndent": "full",
-    "editor.wordWrapColumn": 100,
-    "editor.rulers": [
-        100
-    ],
-    "editor.semanticHighlighting.enabled": true,
-    "editor.semanticTokenColorCustomizations": {
-        "enabled": true
-    },
-    "editor.stickyScroll.enabled": true,
-    "editor.stickyScroll.defaultModel": "indentationModel",
-    "editor.cursorBlinking": "expand",
-    "editor.cursorSmoothCaretAnimation": "on",
-    "editor.guides.highlightActiveBracketPair": true,
-    "editor.bracketPairColorization.enabled": true,
-    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
-    "editor.guides.bracketPairs": "active",
-    "editor.guides.indentation": true,
-    "editor.codeActionsOnSave": {
-        "source.fixAll": "explicit",
-        "source.fixAll.eslint": "explicit",
-        "source.organizeImports": "always",
-        "source.addMissingImports": "always"
-    },
-    "editor.wordWrap": "on",
-    "editor.defaultFoldingRangeProvider": "EditorConfig.EditorConfig",
-    "editor.foldingStrategy": "auto",
-    "editor.folding": true,
-    "editor.detectIndentation": false,
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnType": false,
-    "editor.formatOnPaste": true,
-    "editor.formatOnSave": true,
-    "editor.formatOnSaveMode": "file",
-    "editor.glyphMargin": true,
-    "files.autoSave": "onFocusChange",
-    // ==========================================================================
-    //      🖥️ TERMINAL SETTINGS
-    // ==========================================================================
-    "terminal.integrated.fontFamily": "'JetBrainsMono NFM Regular'",
-    "terminal.integrated.fontSize": 14,
-    "terminal.integrated.lineHeight": 1,
-    "terminal.integrated.enablePersistentSessions": false,
-    "terminal.integrated.shellIntegration.enabled": true,
-    "terminal.integrated.suggest.enabled": true,
-    "terminal.integrated.profiles.linux": {
-        "fish-host": {
-            "path": "host-spawn",
-            "args": [
-                "fish"
-            ],
-            "icon": "terminal-linux"
-        }
-    },
-    "terminal.integrated.defaultProfile.linux": "fish",
-    //***************************************************************************
-    //*
-    //*      💻 LANGUAGE SPECIFIC SETTINGS
-    //*
-    //***************************************************************************
-    // ==========================================================================
-    //      ⚙️ HTML/CSS SETTINGS
-    // ==========================================================================
-    "css.styleSheets": [
-        "node_modules/bulma/css/bulma.min.css",
-        "src/**/*.css"
-    ],
-    "css.lint.unknownAtRules": "ignore",
-    "scss.lint.unknownAtRules": "ignore",
-    "less.lint.unknownAtRules": "ignore",
-    "tailwindTranspiler.savePath": "/public/css",
-    // ==========================================================================
-    //      ⚙️ JAVASCRIPT/TYPESCRIPT SETTINGS
-    // ==========================================================================
-    "[javascript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
-    },
-    "[javascriptreact]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    "betterTypeScriptErrors.prettify": true,
-    "js/ts.inlayHints.parameterNames.enabled": "all",
-    "js/ts.inlayHints.variableTypes.enabled": true,
-    "js/ts.inlayHints.parameterTypes.enabled": true,
-    "js/ts.inlayHints.functionLikeReturnTypes.enabled": true,
-    "js/ts.format.semicolons": "insert",
-    "js/ts.preferences.quoteStyle": "single",
-    "js/ts.referencesCodeLens.enabled": true,
-    "js/ts.suggest.autoImports": false,
-    "js/ts.updateImportsOnPaste.enabled": true,
-    "js/ts.updateImportsOnFileMove.enabled": "always",
-    "js/ts.suggest.paths": false,
-    "js/ts.suggestionActions.enabled": true,
-    "js/ts.tsserver.log": "off",
-    "js/ts.tsserver.useSyntaxServer": "always",
-    "extensions.experimental.affinity": {
-        "better-ts-errors.better-ts-errors": 1
-    },
-    "editor.experimental.preferTreeSitter.typescript": true,
-    "js/ts.tsserver.experimental.enableProjectDiagnostics": true,
-    "[typescript]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    // ==========================================================================
-    //      ⚙️ MARKDOWN SETTINGS
-    // ==========================================================================
-    "markdown.validate.enabled": true,
-    "[markdown]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    "markdownlint.config": {
-        "default": true,
-        "MD033": {
-            "allowed_elements": [
-                "span"
-            ]
-        },
-        "MD041": false,
-        "MD026": false
-    },
-    // ==========================================================================
-    //      ⚙️ JSON/JSONC SETTINGS
-    // ==========================================================================
-    "json.schemaDownload.enable": false,
+    "MD041": false,
+    "MD026": false
+  },
+  // ==========================================================================
+  //      ⚙️ JSON/JSONC SETTINGS
+  // ==========================================================================
+  "json.schemaDownload.enable": false,
+  "[json]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  // ==========================================================================
+  //      ⚙️ BUN SETTINGS
+  // ==========================================================================
+  "bun.runtime": "%USERPROFILE%/.bun/bin/bun",
+  "bun.debugTerminal.enabled": true,
+  "bun.debugTerminal.stopOnEntry": false,
+  "bun.test.filePattern": "**/*{.test.,.spec.,_test_,_spec_}{js,ts,tsx,jsx,mts,cts,cjs,mjs}",
+  "bun.test.customScript": "bun test",
+  // ==========================================================================
+  //      ⚙️ GIT SETTINGS
+  // ==========================================================================
+  "git.enableSmartCommit": true,
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.openRepositoryInParentFolders": "always",
+  // ==========================================================================
+  //      ⚙️ POWERSHELL SETTINGS
+  // ==========================================================================
+  // Integrated Console Settings
+  "powershell.integratedConsole.focusConsoleOnExecute": false,
+  "powershell.integratedConsole.suppressStartupBanner": false,
+  // Code Formatting Settings (some example defaults)
+  "powershell.codeFormatting.preset": "Stroustrup",
+  "powershell.codeFormatting.openBraceOnSameLine": true,
+  "powershell.codeFormatting.newLineAfterOpenBrace": true,
+  // Pester Settings
+  "powershell.pester.useLegacyCodeLens": false,
+  // Script Analysis & Linting Settings
+  "powershell.scriptAnalysis.enable": true,
+  "powershell.scriptAnalysis.settingsPath": "",
+  "[powershell]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  //***************************************************************************
+  //*
+  //*         ➕ EXTENSION-SPECIFIC SETTINGS
+  //*
+  //***************************************************************************
+  // ==========================================================================
+  //      ⚙️ TOML AND EDITORCONFIG SETTINGS
+  // ==========================================================================
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
+  },
+  "[editorconfig]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  // ==========================================================================
+  //      ⚙️ PRETTIER/ESLINT SETTINGS
+  // ==========================================================================
+  //"prettier.useEditorConfig": true,
+  "eslint.useFlatConfig": true,
+  "eslint.format.enable": true,
+  "eslint.enable": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.codeAction.showDocumentation": {
+    "enable": true
+  },
+  "eslint.codeAction.disableRuleComment": {
+    "enable": true,
+    "location": "sameLine"
+  },
+  "eslint.options": {
+    "overrideConfigFile": "eslint.config.ts"
+  },
+  // ==========================================================================
+  //      ⚙️ REGION FOLDING SETTINGS
+  // ==========================================================================
+  // #region maptz.regionfolder
+  "maptz.regionfolder": {
     "[json]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+      "foldEnd": "/* #endregion */",
+      "foldEndRegex": "/\\*[\\s]*#endregion",
+      "foldStart": "/* #region [NAME] */",
+      "foldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*(.*)[\\s]*\\*/[\\s]*$",
+      "defaultFoldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*default\\s(.*)[\\s]*\\*/[\\s]*$",
+      "foldDefinitions": [
+        {
+          "foldEndRegex": "\\*+/[\\s]*$",
+          "foldStartRegex": "^[\\s]*/\\*\\*+",
+          "isFoldedByDefault": true
+        }
+      ]
     },
     "[jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
-    },
-    // ==========================================================================
-    //      ⚙️ BUN SETTINGS
-    // ==========================================================================
-    "bun.runtime": "%USERPROFILE%/.bun/bin/bun",
-    "bun.debugTerminal.enabled": true,
-    "bun.debugTerminal.stopOnEntry": false,
-    "bun.test.filePattern": "**/*{.test.,.spec.,_test_,_spec_}{js,ts,tsx,jsx,mts,cts,cjs,mjs}",
-    "bun.test.customScript": "bun test",
-    // ==========================================================================
-    //      ⚙️ GIT SETTINGS
-    // ==========================================================================
-    "git.enableSmartCommit": true,
-    "git.autofetch": true,
-    "git.confirmSync": false,
-    "git.openRepositoryInParentFolders": "always",
-    // ==========================================================================
-    //      ⚙️ POWERSHELL SETTINGS
-    // ==========================================================================
-    // Integrated Console Settings
-    "powershell.integratedConsole.focusConsoleOnExecute": false,
-    "powershell.integratedConsole.suppressStartupBanner": false,
-    // Code Formatting Settings (some example defaults)
-    "powershell.codeFormatting.preset": "Stroustrup",
-    "powershell.codeFormatting.openBraceOnSameLine": true,
-    "powershell.codeFormatting.newLineAfterOpenBrace": true,
-    // Pester Settings
-    "powershell.pester.useLegacyCodeLens": false,
-    // Script Analysis & Linting Settings
-    "powershell.scriptAnalysis.enable": true,
-    "powershell.scriptAnalysis.settingsPath": "",
-    "[powershell]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    //***************************************************************************
-    //*
-    //*         ➕ EXTENSION-SPECIFIC SETTINGS
-    //*
-    //***************************************************************************
-    // ==========================================================================
-    //      ⚙️ TOML AND EDITORCONFIG SETTINGS
-    // ==========================================================================
-    "[toml]": {
-        "editor.defaultFormatter": "tamasfe.even-better-toml"
-    },
-    "[editorconfig]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    // ==========================================================================
-    //      ⚙️ PRETTIER/ESLINT SETTINGS
-    // ==========================================================================
-    //"prettier.useEditorConfig": true,
-    "eslint.useFlatConfig": true,
-    "eslint.format.enable": true,
-    "eslint.enable": true,
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact"
-    ],
-    "eslint.codeAction.showDocumentation": {
-        "enable": true
-    },
-    "eslint.codeAction.disableRuleComment": {
-        "enable": true,
-        "location": "sameLine"
-    },
-    "eslint.options": {
-        "overrideConfigFile": "eslint.config.ts"
-    },
-    // ==========================================================================
-    //      ⚙️ REGION FOLDING SETTINGS
-    // ==========================================================================
-    // #region maptz.regionfolder
-    "maptz.regionfolder": {
-        "[json]": {
-            "foldEnd": "/* #endregion */",
-            "foldEndRegex": "/\\*[\\s]*#endregion",
-            "foldStart": "/* #region [NAME] */",
-            "foldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*(.*)[\\s]*\\*/[\\s]*$",
-            "defaultFoldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*default\\s(.*)[\\s]*\\*/[\\s]*$",
-            "foldDefinitions": [
-                {
-                    "foldEndRegex": "\\*+/[\\s]*$",
-                    "foldStartRegex": "^[\\s]*/\\*\\*+",
-                    "isFoldedByDefault": true
-                }
-            ]
-        },
-        "[jsonc]": {
-            "foldEnd": "/* #endregion */",
-            "foldEndRegex": "/\\*[\\s]*#endregion",
-            "foldStart": "/* #region [NAME] */",
-            "foldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*(.*)[\\s]*\\*/[\\s]*$",
-            "defaultFoldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*default\\s(.*)[\\s]*\\*/[\\s]*$",
-            "foldDefinitions": [
-                {
-                    "foldEndRegex": "\\*+/[\\s]*$",
-                    "foldStartRegex": "^[\\s]*/\\*\\*+",
-                    "isFoldedByDefault": true
-                }
-            ]
-        },
-        "[javascript]": {
-            "foldEnd": "/* #endregion */",
-            "foldEndRegex": "/\\*[\\s]*#endregion",
-            "foldStart": "/* #region [NAME] */",
-            "foldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*(.*)[\\s]*\\*/[\\s]*$",
-            "defaultFoldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*default\\s(.*)[\\s]*\\*/[\\s]*$",
-            "foldDefinitions": [
-                {
-                    "foldEndRegex": "\\*+/[\\s]*$",
-                    "foldStartRegex": "^[\\s]*/\\*\\*+",
-                    "isFoldedByDefault": true
-                }
-            ]
-        },
-        "[javascriptreact]": {
-            "foldEnd": "/* #endregion */",
-            "foldEndRegex": "/\\*[\\s]*#endregion",
-            "foldStart": "/* #region [NAME] */",
-            "foldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*(.*)[\\s]*\\*/[\\s]*$",
-            "defaultFoldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*default\\s(.*)[\\s]*\\*/[\\s]*$",
-            "foldDefinitions": [
-                {
-                    "foldEndRegex": "\\*+/[\\s]*$",
-                    "foldStartRegex": "^[\\s]*/\\*\\*+",
-                    "isFoldedByDefault": true
-                }
-            ]
-        },
-        "[typescript]": {
-            "foldEnd": "/* #endregion */",
-            "foldEndRegex": "/\\*[\\s]*#endregion",
-            "foldStart": "/* #region [NAME] */",
-            "foldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*(.*)[\\s]*\\*/[\\s]*$",
-            "defaultFoldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*default\\s(.*)[\\s]*\\*/[\\s]*$",
-            "foldDefinitions": [
-                {
-                    "foldEndRegex": "\\*+/[\\s]*$",
-                    "foldStartRegex": "^[\\s]*/\\*\\*+",
-                    "isFoldedByDefault": true
-                }
-            ]
-        },
-        "[typescriptreact]": {
-            "foldEnd": "/* #endregion */",
-            "foldEndRegex": "/\\*[\\s]*#endregion",
-            "foldStart": "/* #region [NAME] */",
-            "foldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*(.*)[\\s]*\\*/[\\s]*$",
-            "defaultFoldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*default\\s(.*)[\\s]*\\*/[\\s]*$",
-            "foldDefinitions": [
-                {
-                    "foldEndRegex": "\\*+/[\\s]*$",
-                    "foldStartRegex": "^[\\s]*/\\*\\*+",
-                    "isFoldedByDefault": true
-                }
-            ]
+      "foldEnd": "/* #endregion */",
+      "foldEndRegex": "/\\*[\\s]*#endregion",
+      "foldStart": "/* #region [NAME] */",
+      "foldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*(.*)[\\s]*\\*/[\\s]*$",
+      "defaultFoldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*default\\s(.*)[\\s]*\\*/[\\s]*$",
+      "foldDefinitions": [
+        {
+          "foldEndRegex": "\\*+/[\\s]*$",
+          "foldStartRegex": "^[\\s]*/\\*\\*+",
+          "isFoldedByDefault": true
         }
+      ]
     },
-    // #endregion
-    // ==========================================================================
-    //      ⚙️ BETTER COMMENTS SETTINGS
-    // ==========================================================================
-    "better-comments.multilineComments": true,
-    "better-comments.highlightPlainText": false,
-    "better-comments.tags": [
+    "[javascript]": {
+      "foldEnd": "/* #endregion */",
+      "foldEndRegex": "/\\*[\\s]*#endregion",
+      "foldStart": "/* #region [NAME] */",
+      "foldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*(.*)[\\s]*\\*/[\\s]*$",
+      "defaultFoldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*default\\s(.*)[\\s]*\\*/[\\s]*$",
+      "foldDefinitions": [
         {
-            "tag": "!",
-            "color": "#FF6E6E",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": true,
-            "italic": false
-        },
-        {
-            "tag": "?",
-            "color": "#8be9fd",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": false,
-            "italic": false
-        },
-        {
-            "tag": "//",
-            "color": "#50fa7b",
-            "strikethrough": true,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": false,
-            "italic": false
-        },
-        {
-            "tag": "$",
-            "color": "#50fa7b",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": false,
-            "italic": false
-        },
-        {
-            "tag": "@",
-            "color": "#ffb86c",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": false,
-            "italic": false
-        },
-        {
-            "tag": "fixme",
-            "color": "#6272a4",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": false,
-            "italic": false
-        },
-        {
-            "tag": "fixit",
-            "color": "#6272a4",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": false,
-            "italic": false
-        },
-        {
-            "tag": "fix",
-            "color": "#6272a4",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": false,
-            "italic": false
-        },
-        {
-            "tag": "#",
-            "color": "#ff5555",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": false,
-            "italic": false
-        },
-        {
-            "tag": "*",
-            "color": "#ff79c6",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": true,
-            "italic": false
-        },
-        {
-            "tag": "&",
-            "color": "#D6ACFF",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": true,
-            "italic": true
-        },
-        {
-            "tag": "region",
-            "color": "#BD93F9",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": false,
-            "italic": false
-        },
-        {
-            "tag": "endregion",
-            "color": "#BD93F9",
-            "strikethrough": false,
-            "underline": false,
-            "backgroundColor": "transparent",
-            "bold": false,
-            "italic": false
+          "foldEndRegex": "\\*+/[\\s]*$",
+          "foldStartRegex": "^[\\s]*/\\*\\*+",
+          "isFoldedByDefault": true
         }
-    ],
-    // ==========================================================================
-    //      ⚙️ INDENT RAINBOW SETTINGS
-    // ==========================================================================
-    "indentRainbow.indicatorStyle": "classic",
-    "indentRainbow.lightIndicatorStyleLineWidth": 1,
-    "indentRainbow.colorOnWhiteSpaceOnly": true,
-    "indentRainbow.updateDelay": 100,
-    "indentRainbow.ignoreErrorLanguages": [
-        "haskell"
-    ],
-    "indentRainbow.errorColor": "rgba(128,32,32,0.6)",
-    "indentRainbow.tabmixColor": "rgba(128,32,96,0.6)",
-    "indentRainbow.colors": [
-        "rgba(255,255,64,0.07)",
-        "rgba(127,255,127,0.07)",
-        "rgba(255,127,255,0.07)",
-        "rgba(79,236,236,0.07)"
-    ],
-    // ==========================================================================
-    //      🎨 COLORIZE SETTINGS
-    // ==========================================================================
-    "colorize.decoration_type": "background", // "background", "underline", "outline", "dot", "square-dot"
-    "colorize.enable_search_variables": true,
-    "colorize.hide_current_line_decorations": true,
-    "colorize.colorized_colors": [
-        "HEXA", // hexadecimal colors: #RGB, #RGBA, #RRGGBB, #RRGGBBAA, 0xRGB, 0xRGBA, 0xRRGGBB or 0xRRGGBBAA
-        "ARGB", // argb colors: #RGB, #ARGB, #RRGGBB or #AARRGGBB
-        "RGB", // rgb colors: rgb(r,g,b) or rgba(r,g,b,a)
-        "HSL", // HSL colors
-        //"BROWSERS_COLORS", // native browser's colors like white, red, blue...
-        "OKLAB", // oklab colors
-        "OKLCH" // oklch colors
-    ],
-    "colorize.languages": [
-        "css",
-        "scss",
-        "sass",
-        "less",
-        "html",
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact",
-        "json",
-        "jsonc",
-        "toml",
-        "python",
-        "java",
-        "powershell",
-        "ps1",
-        "psd1",
-        "markdown",
-        "md",
-        "mdx"
-    ],
-    "colorize.include": [
-        "**/src/**",
-        "*.html"
-    ],
-    "colorize.exclude": [
-        "**/node_modules/**",
-        "**/ALL/**"
-    ],
-    "colorize.colorized_variables": [
-        "LESS"
-    ],
-    // ==========================================================================
-    //      🎨 HIGHLIGHT SETTINGS
-    // ==========================================================================
-    //
-    // Dracula Classic:
-    // Token	        Hex	        Usage
-    // --------------------------------------------------------------------------------------------
-    // Background	    #282A36	    Main background
-    // Current Line	  #6272A4	    Semantic current line highlight token
-    // Selection	    #44475A	    Text selection
-    // Foreground	    #F8F8F2	    Default text
-    // Comment	      #6272A4	    Comments, disabled code
-    // Red	          #FF5555	    Errors, warnings, deletion
-    // Orange	        #FFB86C	    Numbers, constants, booleans
-    // Yellow	        #F1FA8C	    Strings, text content
-    // Green	        #50FA7B	    Functions, methods, inherited classes
-    // Cyan	          #8BE9FD	    Classes, types, support, regex
-    // Purple	        #BD93F9	    Instance reserved words, constants
-    // Pink	          #FF79C6	    Keywords, storage types
-    //
-    //
-    "highlight.decorations": {},
-    "highlight.regexFlags": "gim",
-    "highlight.regexes": {
-        //$ Highlight file paths in comments with a specific format, e.g.:
-        // ~ FILE-PATH: src/styles.css
-        //
-        //  2          3              4          5      6
-        "((\/\/|#)(\\s{1}~\\s{1})(file-path\\s{0})(:)(\\s{1}.*))": {
-            "regexFlags": "gi",
-            "decorations": [
-                //& Group 1: the entire match: ((//)\s{1}~\s{1}(file-path\s{0})(:)(\s{1}.*))
-                {
-                    "borderRadius": "4px",
-                    "border": "1px solid #FFB86C",
-                    "backgroundColor": "#44475A",
-                    "gutterIconPath": "/home/phyxashun/Projects/unicode-cheat-sheet/.vscode/arrow.svg",
-                    "gutterIconSize": "contain"
-                },
-                //& Group 2: (//) comment syntax: (//)
-                {
-                    "color": "#FFB86C"
-                },
-                //& Group 3: (~) symbol: (\\s{1}~\\s{1})
-                {
-                    "color": "#FFB86C"
-                },
-                //& Group 4: (file-path) tag: (file-path\\s{0})
-                {
-                    "color": "#FF79C6",
-                    "fontWeight": "bold"
-                },
-                //& Group 5: (:) colon: (:)
-                {
-                    "color": "#FFB86C"
-                },
-                //& Group 6: (.*) the actual file path text: (\\s{1}.*)
-                {
-                    "color": "#BD93F9"
-                }
-            ]
-        },
-        //$ Highlight web URLs in comments with a specific format, e.g.:
-        // https://www.example.com
-        // http://localhost
-        // https://localhost:8080/dashboard#metrics
-        // http://127.0.0.1:3000
-        // https://cspell.org
-        // ftp://files.local/shared/data.csv
-        "([a-zA-Z0-9+.-]+:\\/\\/[a-zA-Z0-9@:%._\\+~#=\\-]{1,256}(?::\\d+)?(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*))": {
-            "decorations": [
-                {
-                    "color": "#6272a4",
-                    "backgroundColor": "transparent",
-                    "fontWeight": "bold",
-                    "textDecoration": "underline"
-                }
-            ]
-        },
-        //$ Highlight top-level and nested comments that start with '#'
-        "(^?\\s*#{2}.*$)|(^\\s*#{1}.*$)|(?:^.*[^\\s#].*)(#{1}.*$)": {
-            "regexFlags": "gi",
-            "filterLanguageRegex": "(plaintext|ignore|shellscript)",
-            "decorations": [
-                {
-                    "color": "#FFB86C"
-                },
-                {
-                    "color": "#2EBD59"
-                },
-                {
-                    "color": "#145227",
-                    "fontWeight": "400"
-                }
-            ]
-        },
-        // //$ Top-Level "##" -> Dracula Yellow (#FFB86C)
-        // "(^\\s*##.*$)": {
-        //   "filterLanguageRegex": "(plaintext|ignore|shellscript)",
-        //   "decorations": [
-        //     {
-        //       "color": "#FFB86C"
-        //     }
-        //   ]
-        // },
-        // //$ Top-Level Single "#" -> Bright Green (#2EBD59)
-        // "(^\\s*#[^#].*$)": {
-        //   "filterLanguageRegex": "(plaintext|ignore|shellscript)",
-        //   "decorations": [
-        //     {
-        //       "color": "#2EBD59"
-        //     }
-        //   ]
-        // },
-        // //$ Nested "#" Comments (Code occurs before it) -> Ultra-Dark Green (#145227)
-        // "(?:^.*[^\\s#].*)(#.*$)": {
-        //   "filterLanguageRegex": "(plaintext|ignore|shellscript)",
-        //   "decorations": [
-        //     {
-        //       "color": "#145227",
-        //       "fontWeight": "400"
-        //     }
-        //   ]
-        // }
+      ]
     },
-    // ==========================================================================
-    //      📖 CSPELL DICTIONARY SETTINGS
-    // ==========================================================================
-    "cSpell.language": "en_US",
-    "cSpell.dictionaries": [
-        "en_US",
-        "typescript",
-        "javascript",
-        "html",
-        "css",
-        "markdown",
-        "npm",
-        "node",
-        "react-components",
-        "software-terms"
-    ],
-    "cSpell.customDictionaries": {
-        "cspell-dictionary": {
-            "name": "cspell-dictionary",
-            "path": "${workspaceFolder:unicode-cheat-sheet}/.vscode/cspell-dictionary.txt",
-            "addWords": true,
-            "scope": "workspace"
+    "[javascriptreact]": {
+      "foldEnd": "/* #endregion */",
+      "foldEndRegex": "/\\*[\\s]*#endregion",
+      "foldStart": "/* #region [NAME] */",
+      "foldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*(.*)[\\s]*\\*/[\\s]*$",
+      "defaultFoldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*default\\s(.*)[\\s]*\\*/[\\s]*$",
+      "foldDefinitions": [
+        {
+          "foldEndRegex": "\\*+/[\\s]*$",
+          "foldStartRegex": "^[\\s]*/\\*\\*+",
+          "isFoldedByDefault": true
         }
+      ]
     },
-    "[svg]": {
-        "editor.tabSize": 4,
-        "editor.formatOnSave": false,
-        "editor.defaultFormatter": "jock.svg"
+    "[typescript]": {
+      "foldEnd": "/* #endregion */",
+      "foldEndRegex": "/\\*[\\s]*#endregion",
+      "foldStart": "/* #region [NAME] */",
+      "foldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*(.*)[\\s]*\\*/[\\s]*$",
+      "defaultFoldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*default\\s(.*)[\\s]*\\*/[\\s]*$",
+      "foldDefinitions": [
+        {
+          "foldEndRegex": "\\*+/[\\s]*$",
+          "foldStartRegex": "^[\\s]*/\\*\\*+",
+          "isFoldedByDefault": true
+        }
+      ]
     },
-    "svg.preview.autoShow": true,
-    "[html]": {
-        "editor.formatOnSave": false
+    "[typescriptreact]": {
+      "foldEnd": "/* #endregion */",
+      "foldEndRegex": "/\\*[\\s]*#endregion",
+      "foldStart": "/* #region [NAME] */",
+      "foldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*(.*)[\\s]*\\*/[\\s]*$",
+      "defaultFoldStartRegex": "^[\\s]*/\\*[\\s]*#region[\\s]*default\\s(.*)[\\s]*\\*/[\\s]*$",
+      "foldDefinitions": [
+        {
+          "foldEndRegex": "\\*+/[\\s]*$",
+          "foldStartRegex": "^[\\s]*/\\*\\*+",
+          "isFoldedByDefault": true
+        }
+      ]
+    }
+  },
+  // #endregion
+  // ==========================================================================
+  //      ⚙️ BETTER COMMENTS SETTINGS
+  // ==========================================================================
+  "better-comments.multilineComments": true,
+  "better-comments.highlightPlainText": false,
+  "better-comments.tags": [
+    {
+      "tag": "!",
+      "color": "#FF6E6E",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
     },
-    "html.format.wrapAttributes": "force-expand-multiline",
-    "splitHTMLAttributes.tabSize": 4,
-    "splitHTMLAttributes.useSpacesForTabs": true,
-    "splitHTMLAttributes.closingBracketOnNewLine": true,
-    "splitHTMLAttributes.sortOrder": [
-        "^xmlns",
-        "^role",
-        "^viewBox",
-        "^key",
-        "^:",
-        "^id$",
-        "^class$",
-        "^x1?$",
-        "^y1?$",
-        "^x2$",
-        "^y2$",
-        "^cx$",
-        "^cy$",
-        "^r$",
-        "^width$",
-        "^height$",
-        "^fill",
-        "^stroke",
-        "^style",
-        "^d$",
-        "^points$",
-        "^.*=\""
-    ],
-    "todo-tree.ripgrep": "/usr/bin/rg",
-    "svg.preview.background": "dark-transparent",
-    "js/ts.tsdk.path": "node_modules/typescript/lib",
-    "terminal.integrated.initialHintCopilotCli": false,
-    "chat.extensionUnification.enabled": false,
-    "terminal.integrated.tabs.allowAgentCliTitle": false,
-    "chat.titleBar.signIn.enabled": false
+    {
+      "tag": "?",
+      "color": "#8be9fd",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "//",
+      "color": "#50fa7b",
+      "strikethrough": true,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "$",
+      "color": "#50fa7b",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "@",
+      "color": "#ffb86c",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "fixme",
+      "color": "#6272a4",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "fixit",
+      "color": "#6272a4",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "fix",
+      "color": "#6272a4",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "#",
+      "color": "#ff5555",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "*",
+      "color": "#ff79c6",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "tag": "&",
+      "color": "#D6ACFF",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": true
+    },
+    {
+      "tag": "region",
+      "color": "#BD93F9",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "endregion",
+      "color": "#BD93F9",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    }
+  ],
+  // ==========================================================================
+  //      ⚙️ INDENT RAINBOW SETTINGS
+  // ==========================================================================
+  "indentRainbow.indicatorStyle": "classic",
+  "indentRainbow.lightIndicatorStyleLineWidth": 1,
+  "indentRainbow.colorOnWhiteSpaceOnly": true,
+  "indentRainbow.updateDelay": 100,
+  "indentRainbow.ignoreErrorLanguages": [
+    "haskell"
+  ],
+  "indentRainbow.errorColor": "rgba(128,32,32,0.6)",
+  "indentRainbow.tabmixColor": "rgba(128,32,96,0.6)",
+  "indentRainbow.colors": [
+    "rgba(255,255,64,0.07)",
+    "rgba(127,255,127,0.07)",
+    "rgba(255,127,255,0.07)",
+    "rgba(79,236,236,0.07)"
+  ],
+  // ==========================================================================
+  //      🎨 COLORIZE SETTINGS
+  // ==========================================================================
+  "colorize.decoration_type": "background", // "background", "underline", "outline", "dot", "square-dot"
+  "colorize.enable_search_variables": true,
+  "colorize.hide_current_line_decorations": true,
+  "colorize.colorized_colors": [
+    "HEXA", // hexadecimal colors: #RGB, #RGBA, #RRGGBB, #RRGGBBAA, 0xRGB, 0xRGBA, 0xRRGGBB or 0xRRGGBBAA
+    "ARGB", // argb colors: #RGB, #ARGB, #RRGGBB or #AARRGGBB
+    "RGB", // rgb colors: rgb(r,g,b) or rgba(r,g,b,a)
+    "HSL", // HSL colors
+    //"BROWSERS_COLORS", // native browser's colors like white, red, blue...
+    "OKLAB", // oklab colors
+    "OKLCH" // oklch colors
+  ],
+  "colorize.languages": [
+    "css",
+    "scss",
+    "sass",
+    "less",
+    "html",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "json",
+    "jsonc",
+    "toml",
+    "python",
+    "java",
+    "powershell",
+    "ps1",
+    "psd1",
+    "markdown",
+    "md",
+    "mdx"
+  ],
+  "colorize.include": [
+    "**/src/**",
+    "*.html"
+  ],
+  "colorize.exclude": [
+    "**/node_modules/**",
+    "**/ALL/**"
+  ],
+  "colorize.colorized_variables": [
+    "LESS"
+  ],
+  // ==========================================================================
+  //      🎨 HIGHLIGHT SETTINGS
+  // ==========================================================================
+  //
+  // Dracula Classic:
+  // Token	        Hex	        Usage
+  // --------------------------------------------------------------------------------------------
+  // Background	    #282A36	    Main background
+  // Current Line	  #6272A4	    Semantic current line highlight token
+  // Selection	    #44475A	    Text selection
+  // Foreground	    #F8F8F2	    Default text
+  // Comment	      #6272A4	    Comments, disabled code
+  // Red	          #FF5555	    Errors, warnings, deletion
+  // Orange	        #FFB86C	    Numbers, constants, booleans
+  // Yellow	        #F1FA8C	    Strings, text content
+  // Green	        #50FA7B	    Functions, methods, inherited classes
+  // Cyan	          #8BE9FD	    Classes, types, support, regex
+  // Purple	        #BD93F9	    Instance reserved words, constants
+  // Pink	          #FF79C6	    Keywords, storage types
+  //
+  //
+  "highlight.decorations": {},
+  "highlight.regexFlags": "gim",
+  "highlight.regexes": {
+    //$ Highlight file paths in comments with a specific format, e.g.:
+    // ~ FILE-PATH: src/styles.css
+    //
+    //  2          3              4          5      6
+    "((\/\/|#)(\\s{1}~\\s{1})(file-path\\s{0})(:)(\\s{1}.*))": {
+      "regexFlags": "gi",
+      "decorations": [
+        //& Group 1: the entire match: ((//)\s{1}~\s{1}(file-path\s{0})(:)(\s{1}.*))
+        {
+          "borderRadius": "4px",
+          "border": "1px solid #FFB86C",
+          "backgroundColor": "#44475A",
+          "gutterIconPath": "/home/phyxashun/Projects/unicode-cheat-sheet/.vscode/arrow.svg",
+          "gutterIconSize": "contain"
+        },
+        //& Group 2: (//) comment syntax: (//)
+        {
+          "color": "#FFB86C"
+        },
+        //& Group 3: (~) symbol: (\\s{1}~\\s{1})
+        {
+          "color": "#FFB86C"
+        },
+        //& Group 4: (file-path) tag: (file-path\\s{0})
+        {
+          "color": "#FF79C6",
+          "fontWeight": "bold"
+        },
+        //& Group 5: (:) colon: (:)
+        {
+          "color": "#FFB86C"
+        },
+        //& Group 6: (.*) the actual file path text: (\\s{1}.*)
+        {
+          "color": "#BD93F9"
+        }
+      ]
+    },
+    //$ Highlight web URLs in comments with a specific format, e.g.:
+    // https://www.example.com
+    // http://localhost
+    // https://localhost:8080/dashboard#metrics
+    // http://127.0.0.1:3000
+    // https://cspell.org
+    // ftp://files.local/shared/data.csv
+    "([a-zA-Z0-9+.-]+:\\/\\/[a-zA-Z0-9@:%._\\+~#=\\-]{1,256}(?::\\d+)?(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*))": {
+      "decorations": [
+        {
+          "color": "#6272a4",
+          "backgroundColor": "transparent",
+          "fontWeight": "bold",
+          "textDecoration": "underline"
+        }
+      ]
+    },
+    //$ Highlight top-level and nested comments that start with '#'
+    "(^?\\s*#{2}.*$)|(^\\s*#{1}.*$)|(?:^.*[^\\s#].*)(#{1}.*$)": {
+      "regexFlags": "gi",
+      "filterLanguageRegex": "(plaintext|ignore|shellscript)",
+      "decorations": [
+        {
+          "color": "#FFB86C"
+        },
+        {
+          "color": "#2EBD59"
+        },
+        {
+          "color": "#145227",
+          "fontWeight": "400"
+        }
+      ]
+    },
+    // //$ Top-Level "##" -> Dracula Yellow (#FFB86C)
+    // "(^\\s*##.*$)": {
+    //   "filterLanguageRegex": "(plaintext|ignore|shellscript)",
+    //   "decorations": [
+    //     {
+    //       "color": "#FFB86C"
+    //     }
+    //   ]
+    // },
+    // //$ Top-Level Single "#" -> Bright Green (#2EBD59)
+    // "(^\\s*#[^#].*$)": {
+    //   "filterLanguageRegex": "(plaintext|ignore|shellscript)",
+    //   "decorations": [
+    //     {
+    //       "color": "#2EBD59"
+    //     }
+    //   ]
+    // },
+    // //$ Nested "#" Comments (Code occurs before it) -> Ultra-Dark Green (#145227)
+    // "(?:^.*[^\\s#].*)(#.*$)": {
+    //   "filterLanguageRegex": "(plaintext|ignore|shellscript)",
+    //   "decorations": [
+    //     {
+    //       "color": "#145227",
+    //       "fontWeight": "400"
+    //     }
+    //   ]
+    // }
+  },
+  // ==========================================================================
+  //      📖 CSPELL DICTIONARY SETTINGS
+  // ==========================================================================
+  "cSpell.language": "en_US",
+  "cSpell.dictionaries": [
+    "en_US",
+    "typescript",
+    "javascript",
+    "html",
+    "css",
+    "markdown",
+    "npm",
+    "node",
+    "react-components",
+    "software-terms"
+  ],
+  "cSpell.customDictionaries": {
+    "cspell-dictionary": {
+      "name": "cspell-dictionary",
+      "path": "${workspaceFolder:unicode-cheat-sheet}/.vscode/cspell-dictionary.txt",
+      "addWords": true,
+      "scope": "workspace"
+    }
+  },
+  "[svg]": {
+    "editor.tabSize": 4,
+    "editor.formatOnSave": false,
+    "editor.defaultFormatter": "jock.svg"
+  },
+  "svg.preview.autoShow": true,
+  "[html]": {
+    "editor.formatOnSave": false
+  },
+  "html.format.wrapAttributes": "force-expand-multiline",
+  "splitHTMLAttributes.tabSize": 4,
+  "splitHTMLAttributes.useSpacesForTabs": true,
+  "splitHTMLAttributes.closingBracketOnNewLine": true,
+  "splitHTMLAttributes.sortOrder": [
+    "^xmlns",
+    "^role",
+    "^viewBox",
+    "^key",
+    "^:",
+    "^id$",
+    "^class$",
+    "^x1?$",
+    "^y1?$",
+    "^x2$",
+    "^y2$",
+    "^cx$",
+    "^cy$",
+    "^r$",
+    "^width$",
+    "^height$",
+    "^fill",
+    "^stroke",
+    "^style",
+    "^d$",
+    "^points$",
+    "^.*=\""
+  ],
+  "todo-tree.ripgrep": "/usr/bin/rg",
+  "svg.preview.background": "dark-transparent",
+  "js/ts.tsdk.path": "node_modules/typescript/native-preview/lib",
+  "terminal.integrated.initialHintCopilotCli": false,
+  "chat.extensionUnification.enabled": false,
+  "terminal.integrated.tabs.allowAgentCliTitle": false,
+  "chat.titleBar.signIn.enabled": false,
+  "js/ts.experimental.useTsgo": true,
+  "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview",
+  "editor.codeLens": false
 }
