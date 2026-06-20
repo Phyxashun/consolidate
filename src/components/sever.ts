@@ -3,11 +3,11 @@
 import pc from 'picocolors';
 import { FileExtractor } from '../utils/FileExtractor';
 import { Settings } from '../utils/Settings';
-import { CliUI } from './TUI';
+import { TUI } from './TUI';
 
 export async function runDeconsolidate(args: string[]): Promise<void> {
     const settings = await Settings.Instance.load();
-    const ui = new CliUI(settings);
+    const ui = new TUI(settings);
     const dConfig = settings.deconsolidate;
     const msg = settings.messages.deconsolidate;
 
@@ -72,7 +72,7 @@ export async function runDeconsolidate(args: string[]): Promise<void> {
                     ui.traceAction(
                         'deconsolidate',
                         'dryRun',
-                        msg.traces.dryRun,
+                        'TEST', //msg.traces.dryRun,
                         block.filePath,
                     );
                 written++;
@@ -89,7 +89,7 @@ export async function runDeconsolidate(args: string[]): Promise<void> {
                     ui.traceAction(
                         'deconsolidate',
                         'skipped',
-                        msg.traces.skipped,
+                        'TEST', //msg.traces.skipped,
                         block.filePath,
                     );
                 skipped++;
@@ -101,7 +101,7 @@ export async function runDeconsolidate(args: string[]): Promise<void> {
                 ui.traceAction(
                     'deconsolidate',
                     'writing',
-                    msg.traces.writing,
+                    'TEST', //msg.traces.writing,
                     block.filePath,
                 );
             written++;
@@ -114,7 +114,7 @@ export async function runDeconsolidate(args: string[]): Promise<void> {
     ui.renderSummaryBox(
         'deconsolidate',
         'Deconsolidation Complete',
-        summaryMsg,
+        summaryMsg as string,
     );
-    ui.renderFooter(msg.done || 'Finished!');
+    ui.renderFooter((msg.done as string) || 'Finished!');
 }

@@ -4,11 +4,11 @@ import pc from 'picocolors';
 import { FileProcessor } from '../utils/FileProcessor';
 import { FileScanner } from '../utils/FileScanner';
 import { Settings } from '../utils/Settings';
-import { CliUI } from './TUI';
+import { TUI } from './TUI';
 
 export async function runConsolidate(): Promise<void> {
     const settings = await Settings.Instance.load();
-    const ui = new CliUI(settings);
+    const ui = new TUI(settings);
     const msg = settings.messages.consolidate;
 
     ui.renderHeader('consolidate', pc.bgMagenta);

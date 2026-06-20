@@ -1,12 +1,14 @@
 // FILE-PATH: src/utils/FileScanner.ts
 
 import { Glob } from 'bun';
-import type { AppConfig } from '../types';
+import type { Config } from '../types';
 
 export class FileScanner {
-    private config: AppConfig['consolidate'];
+    private config: Config['consolidate'];
 
-    constructor() {}
+    constructor(config: Config['consolidate']) {
+        this.config = config;
+    }
 
     public async getIgnorePatterns(): Promise<string[]> {
         const patterns = [...this.config.baseIgnorePatterns];

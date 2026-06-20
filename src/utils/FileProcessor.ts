@@ -1,12 +1,18 @@
 // FILE-PATH: src/utils/FileProcessor.ts
 
-import type { AppConfig } from '../types';
+import type { Config } from '../types';
 
 export class FileProcessor {
-    private config: AppConfig['consolidate'];
-    private layouts: AppConfig['ui']['layouts'];
+    private config: Config['consolidate'];
+    private layouts: Config['ui']['layouts'];
 
-    constructor() {}
+    constructor(
+        config: Config['consolidate'],
+        layouts: Config['ui']['layouts'],
+    ) {
+        this.config = config;
+        this.layouts = layouts;
+    }
 
     public async createBlock(filePath: string): Promise<string> {
         const file = Bun.file(filePath);

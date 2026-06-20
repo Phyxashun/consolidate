@@ -2,7 +2,7 @@
 
 import { Glob } from 'bun';
 import path from 'path';
-import type { AppConfig } from '../types';
+import type { Config } from '../types';
 
 export interface ExtractedFile {
     filePath: string;
@@ -10,9 +10,11 @@ export interface ExtractedFile {
 }
 
 export class FileExtractor {
-    private config: AppConfig['consolidate'];
+    private config: Config['consolidate'];
 
-    constructor() {}
+    constructor(config: Config['consolidate']) {
+        this.config = config;
+    }
 
     public async scanInputPatterns(patterns: string[]): Promise<string[]> {
         const matchingFiles: string[] = [];
