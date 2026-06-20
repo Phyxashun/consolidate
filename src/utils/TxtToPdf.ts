@@ -1,9 +1,9 @@
 // ~ FILE-PATH: src/utils/TxtToPdf.ts
 
-import { resolve } from 'path';
-import { PDFDocument, PDFFont, PDFPage, rgb, RGB, PageSizes, StandardFonts } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 import type { BunFile } from 'bun';
+import { resolve } from 'path';
+import { PageSizes, PDFDocument, PDFFont, PDFPage, rgb, StandardFonts, type RGB } from 'pdf-lib';
 
 export interface PDFDimensions {
     width: number;
@@ -37,7 +37,7 @@ export const DEFAULT_CONFIG: Required<Config> = {
     fontFile: '../assets/JetBrainsMono/JetBrainsMonoNLNerdFontPropo-Regular.ttf',
     textColor: rgb(0, 0, 0),
     textOpacity: 1.0,
-    pageSize: 'LETTER',
+    pageSize: 'Letter',
     pageOrientation: 'portrait',
     wordWrap: 'word',
 };
@@ -116,10 +116,13 @@ export class TxtToPdfConverter {
     private wrapText(text: string, maxWidth: number, getTextWidth: TextWidth): string[] {
         if (this.config.wordWrap === 'none') return [text];
 
+        // 1. Convert tabs to spaces so width calculations work predictably
+        const normalizedText = text.replace(/\t/g, '    ');
+
         if (this.config.wordWrap === 'char') {
             const lines: string[] = [];
             let currentLine = '';
-            for (const char of text) {
+            for (const char of normalizedText) {
                 if (getTextWidth(currentLine + char) > maxWidth) {
                     lines.push(currentLine);
                     currentLine = char;
@@ -131,20 +134,41 @@ export class TxtToPdfConverter {
             return lines.length > 0 ? lines : [''];
         }
 
-        const words: string[] = text.split(' ');
+        // 2. Extract leading spaces to protect indentation from getting swallowed
+        const leadingSpaceMatch = normalizedText.match(/^ +/);
+        const leadingSpaces = leadingSpaceMatch ? leadingSpaceMatch[0] : '';
+        const remainingText = normalizedText.slice(leadingSpaces.length);
+
+        // 3. Process the remaining words normally
+        const words: string[] = remainingText.split(' ');
         const lines: string[] = [];
-        let currentLine: string = '';
+        let currentLine: string = leadingSpaces; // Start the very first line with the preserved indentation
 
         for (const word of words) {
-            const testLine: string = currentLine ? `${currentLine} ${word}` : word;
+            // Check if we are at the start of a new wrapped line or still adding to the current line
+            const isLineStart = currentLine === '' || currentLine === leadingSpaces;
+            const testLine: string = isLineStart ? `${currentLine}${word}` : `${currentLine} ${word}`;
+
             if (getTextWidth(testLine) > maxWidth) {
-                lines.push(currentLine);
+                // If the current line has content beyond just the indentation, push it
+                if (currentLine !== leadingSpaces) {
+                    lines.push(currentLine);
+                } else if (currentLine === leadingSpaces && word !== '') {
+                    // Handle edge case: a single massive word longer than maxWidth gets forced onto its own line
+                    lines.push(testLine);
+                    currentLine = leadingSpaces;
+                    continue;
+                }
+
+                // Subdued lines (wrapped chunks) can either inherit indentation or reset.
+                // Resetting to '' is standard for text paragraphs; keep 'leadingSpaces' if it's code block alignment.
                 currentLine = word;
             } else {
                 currentLine = testLine;
             }
         }
-        if (currentLine) lines.push(currentLine);
+
+        if (currentLine && currentLine !== leadingSpaces) lines.push(currentLine);
         return lines.length > 0 ? lines : [''];
     }
 
@@ -164,9 +188,9 @@ export class TxtToPdfConverter {
 
             const fontBytes: ArrayBuffer = await fontFile.arrayBuffer();
             return await pdfDoc.embedFont(fontBytes);
-        } catch (error: Error) {
+        } catch (error: unknown) {
             console.warn(
-                `🚨 [TxtToPdf Warning]: Custom font loading failed ("${error.message}"). ` + `Falling back to standard Monospace Courier.`,
+                `🚨 [TxtToPdf Warning]: Custom font loading failed ("${error}"). ` + `Falling back to standard Monospace Courier.`,
             );
             // Default to Courier to maintain consistent grid alignments if user font is missing
             return await pdfDoc.embedFont(StandardFonts.Courier);

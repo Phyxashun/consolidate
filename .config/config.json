@@ -1,6 +1,17 @@
 {
-  "appName": "consolidate.js",
-  "version": "1.0.0",
-  "theme": "light",
-  "notifications": true
+    "appName": "consolidate.js",
+    "version": "1.0.0",
+    "port": 3000,
+    "host": "localhost",
+    "mode": "development",
+    "features": [
+        "auth",
+        "logging"
+    ],
+    "database": {
+        "type": "mysql",
+        "url": "postgresql://user:pass@localhost:5432/db"
+    },
+    "theme": "light",
+    "notifications": true
 }

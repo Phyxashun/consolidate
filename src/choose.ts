@@ -56,7 +56,7 @@ async function loadSettings(): Promise<AppConfig> {
 }
 
 async function saveSettings(config: AppConfig): Promise<void> {
-    await Bun.write(CONFIG_FILE, JSON.stringify(config, null, 2));
+    await Bun.write(CONFIG_FILE, JSON.stringify(config, null, 4));
 }
 
 async function main() {
