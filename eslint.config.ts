@@ -2,8 +2,8 @@
 
 import js from '@eslint/js';
 import tsParser from '@typescript-eslint/parser';
-import prettierConfig from 'eslint-config-prettier/flat';
-import prettierPlugin from 'eslint-plugin-prettier/recommended';
+//import prettierConfig from 'eslint-config-prettier/flat';
+//import prettierPlugin from 'eslint-plugin-prettier/recommended';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
@@ -21,11 +21,7 @@ export default defineConfig([
     {
         files: ['**/*.{js,mjs,cjs,jsx,ts,tsx}'],
 
-        extends: [
-            js.configs.recommended,
-            ...tseslint.configs.recommended,
-            prettierConfig,
-        ],
+        extends: [js.configs.recommended, ...tseslint.configs.recommended],
 
         languageOptions: {
             parser: tsParser,
@@ -69,6 +65,6 @@ export default defineConfig([
         },
     },
     // PRETTIER MUST BE LAST
-    prettierConfig,
-    prettierPlugin,
+    //prettierConfig,
+    //prettierPlugin,
 ]);

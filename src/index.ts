@@ -2,105 +2,60 @@
 
 // FILE-PATH: src/index.ts
 
-/**
- * @file index.ts
- * @description Entry point for the consolidate/deconsolidate CLI toolkit.
- *              Presents an interactive menu (via @clack/prompts) and
- *              dispatches to the selected operation.
- * @copyright 2026 Dustin Dew
- * @license MIT
- * @author Dustin Dew <phyxashun@gmail.com>
- */
+import { isCancel, outro, select } from '@clack/prompts';
+import pc from 'picocolors';
+import { runConsolidate } from './components/graft';
+import { runSettingsApp } from './components/settingsMenu';
+import { runDeconsolidate } from './components/sever';
+import { TUI } from './components/TUI';
+import type { ColorFunction } from './types.d.ts';
+import { Settings } from './utils/Settings';
 
-import { cancel, intro, isCancel, log, select } from '@clack/prompts';
-import { bgYellow, black, cyan, dim, italic } from 'picocolors';
+async function main() {
+    while (true) {
+        const settings = await Settings.Instance.load();
+        const ui = new TUI(settings);
+        const indexTheme = settings.ui.theme.index;
+        const indexPrompts = settings.messages.index;
 
-import consolidate from './components/consolidate';
-import deconsolidate from './components/deconsolidate';
+        const bg: ColorFunction =
+            pc[indexTheme.bannerBg as keyof typeof pc] || pc.bgYellow;
 
-/**
- * @type MenuChoice
- * @description Defines the structure of the userInput menu
- * @property {'consolidate' | 'deconsolidate' | 'exit'}
- */
-type MenuChoice = 'consolidate' | 'deconsolidate' | 'exit';
+        ui.renderHeader('consolidate', bg);
 
-const TITLE = bgYellow(black(' CONSOLIDATE '));
-const SUBTITLE = dim(italic('Project File Toolkit'));
+        const choice = await select({
+            message: indexPrompts.menuMessage,
+            options: Object.entries(indexPrompts.choices).map(
+                ([key, value]) => ({
+                    value: key,
+                    label: value.label,
+                    hint: value.hint,
+                }),
+            ),
+        });
 
-/**
- * @function displayTitle
- * @description Displays the main app title and subtitle.
- */
-const displayTitle = (): void => {
-    console.clear();
-    intro(`${TITLE}  ${SUBTITLE}`);
-};
+        if (isCancel(choice) || choice === 'exit') {
+            outro(pc.yellow(settings.messages.shared.aborted));
+            break;
+        }
 
-/**
- * @function mainMenu(): symbol | MenuChoice | null
- * @description Displays the main app title and subtitle.
- * @returns userInput The user's selection from the menu
- */
-const mainMenu = async (): Promise<symbol | MenuChoice | null> => {
-    const userInput = await select<MenuChoice>({
-        message: `${cyan('Pick an option:')}`,
-        options: [
-            {
-                value: 'consolidate',
-                label: 'Consolidate',
-                hint: 'merge project files into ALL/',
-            },
-            {
-                value: 'deconsolidate',
-                label: 'Deconsolidate',
-                hint: 'rebuild files from ALL/',
-            },
-            {
-                value: 'exit',
-                label: 'Exit',
-            },
-        ],
-    });
-
-    if (isCancel(userInput) || userInput === 'exit') {
-        return null;
-    }
-
-    return userInput;
-};
-
-/**
- * @function main
- * @description Displays the main menu and routes to the chosen operation.
- */
-export const main = async (): Promise<void> => {
-    let keepAsking = true;
-    displayTitle();
-
-    while (keepAsking) {
-        const action = await mainMenu();
-
-        switch (action) {
+        switch (choice) {
             case 'consolidate':
-                await consolidate();
+                await runConsolidate();
                 break;
             case 'deconsolidate':
-                await deconsolidate();
+                await runDeconsolidate(process.argv.slice(2));
                 break;
-            case null:
-            default:
-                cancel('Aborted.');
-                keepAsking = false;
+            case 'settings':
+                await runSettingsApp();
+                break;
         }
-    }
-};
 
-if (import.meta.main) {
-    try {
-        await main();
-    } catch (err: unknown) {
-        log.error(`Error: ${err}`);
-        process.exit(1);
+        console.log('\n');
     }
 }
+
+main().catch(err => {
+    console.error(pc.red('Fatal runtime exception encountered:'), err);
+    process.exit(1);
+});

@@ -1,0 +1,54 @@
+{
+    "messages": {
+        "shared": {
+            "confirmActive": "Yes",
+            "confirmInactive": "No",
+            "aborted": "Aborted."
+        },
+        "index": {
+            "menuMessage": "Pick an option:",
+            "choices": {
+                "consolidate": {
+                    "label": "Consolidate",
+                    "hint": "merge project files into ALL/"
+                },
+                "deconsolidate": {
+                    "label": "Deconsolidate",
+                    "hint": "rebuild files from ALL/"
+                },
+                "exit": {
+                    "label": "Exit"
+                }
+            }
+        },
+        "consolidate": {
+            "subTitle": "Project File Consolidator",
+            "boxHeader": "Ignored Patterns",
+            "proceedPrompt": "Do you want to proceed?",
+            "spinnerStart": "Processing files...",
+            "appendTrace": "Appending ",
+            "spinnerCancel": "Process cancelled",
+            "spinnerError": "Process failed",
+            "spinnerSuccess": "Conversion complete",
+            "boxSuccessTitle": " PDF file generated: ",
+            "done": "Complete!",
+            "jobSkippedText": "job(s) skipped — no matching files.",
+            "noFilesFound": "No matching files found for any job — nothing to consolidate."
+        },
+        "deconsolidate": {
+            "subTitle": "Project File Rebuilder",
+            "scanning": "Scanning for input files...",
+            "scanFound": "Found {count} file(s).",
+            "dryRunWarning": "DRY-RUN mode — no files will be written.",
+            "noInputFiles": "No input files found. Nothing to do.",
+            "overwritePrompt": "Output directory \"{dir}\" has content. Continue?",
+            "missingEndBanner": "No End-of-file banner found for \"{path}\". Segment discarded.",
+            "writeError": "Error writing {path}: ",
+            "traces": {
+                "dryRun": " DRY-RUN would write: ",
+                "writing": " Writing: ",
+                "skipped": " Skipped (exists): "
+            }
+        }
+    }
+}

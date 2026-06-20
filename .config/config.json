@@ -1,17 +1,80 @@
 {
-    "appName": "consolidate.js",
-    "version": "1.0.0",
-    "port": 3000,
-    "host": "localhost",
-    "mode": "development",
-    "features": [
-        "auth",
-        "logging"
-    ],
-    "database": {
-        "type": "mysql",
-        "url": "postgresql://user:pass@localhost:5432/db"
+    "cli": {
+        "title": " CONSOLIDATE ",
+        "subtitle": "Project File Toolkit"
     },
-    "theme": "light",
-    "notifications": true
+    "consolidate": {
+        "outputPath": "./ALL",
+        "subDirs": {
+            "text": "txt",
+            "ts": "ts"
+        },
+        "baseIgnorePatterns": [
+            "**/*.lock",
+            "coverage/**/*",
+            "node_modules/**/*",
+            "ALL/**/*",
+            ".env"
+        ],
+        "bannerSpacer": "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■",
+        "jobs": [
+            {
+                "name": "SOURCE_FILES",
+                "description": "Source Files (ts, js, etc.)",
+                "include": [
+                    "src/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}",
+                    "index.ts"
+                ],
+                "exclude": [
+                    "**/*.config.{ts,mts,js,mjs}",
+                    "**/*.test.ts"
+                ]
+            },
+            {
+                "name": "HTML_FILES",
+                "description": "HTML Files",
+                "include": [
+                    "**/*.html"
+                ]
+            },
+            {
+                "name": "STYLE_FILES",
+                "description": "Style Files (css, scss, etc.)",
+                "include": [
+                    "**/*.css,scss, sass, less}"
+                ]
+            },
+            {
+                "name": "CONFIG_FILES",
+                "description": "Configuration Files",
+                "include": [
+                    ".gitignore",
+                    "*.json",
+                    " .config.{ts,mts,js,mjs}",
+                    ".editorconfig",
+                    ".prettierrc",
+                    ".vscode/**/*.json"
+                ]
+            },
+            {
+                "name": "TEST_FILES",
+                "description": "Test Files",
+                "include": [
+                    "**/*.test.ts"
+                ]
+            },
+            {
+                "name": "DOC_FILES",
+                "description": "Documentation Files",
+                "include": [
+                    "**/*.{md,txt}",
+                    "LICENSE"
+                ]
+            }
+        ]
+    },
+    "deconsolidate": {
+        "defaultOutputDir": "./ALL_REBUILT",
+        "defaultInputPathPattern": "ALL/txt/**/*.txt"
+    }
 }

@@ -1,0 +1,49 @@
+{
+    "ui": {
+        "symbols": {
+            "headerGlyphs": "  󰽜  󰕘 ",
+            "dryRun": "~",
+            "writing": "→",
+            "skipped": "⊘",
+            "success": "✓"
+        },
+        "layouts": {
+            "boxAlignment": "center",
+            "boxWidth": "auto",
+            "boxRounded": true,
+            "fileDivider": "\n//████████████████████████████████████████████████████████████████████████████████████████████████████\n//████████████████████████████████████████████████████████████████████████████████████████████████████"
+        },
+        "prompts": {
+            "confirmActive": "Yes",
+            "confirmInactive": "No"
+        },
+        "theme": {
+            "index": {
+                "bannerBg": "bgYellow",
+                "bannerFg": "black",
+                "subtitle": "dim,italic",
+                "menuPrompt": "cyan"
+            },
+            "consolidate": {
+                "bannerBg": "bgMagenta",
+                "bannerFg": "black",
+                "subtitle": "dim",
+                "boxHeader": "dim",
+                "success": "green,bold",
+                "warning": "yellow,bold",
+                "empty": "yellow"
+            },
+            "deconsolidate": {
+                "bannerBg": "bgCyan",
+                "bannerFg": "black",
+                "subtitle": "dim",
+                "dryRunIndicator": "gray",
+                "writingIndicator": "blue",
+                "skippedIndicator": "yellow",
+                "successText": "green",
+                "errorText": "red",
+                "pathHighlight": "cyan"
+            }
+        }
+    }
+}

@@ -27,7 +27,15 @@
         "src/**/*",
         "*.ts",
         "prettier.config.ts",
-        "eslint.config.ts"
+        "eslint.config.ts",
+        "OLD/deconsolidate.ts",
+        "OLD/consolidate.ts",
+        "OLD/utils.ts",
+        "OLD/TxtToPdf.ts",
+        "OLD/Settings.ts",
+        "OLD/push.ts",
+        "OLD/config.ts",
+        "OLD/choose.ts"
     ],
     "exclude": [
         "node_modules",
