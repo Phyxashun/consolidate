@@ -1,19 +1,19 @@
-# ~ FILE-PATH: .gitignore
+# FILE-PATH: .gitignore
 
 # dependencies (bun install)
 node_modules
 
 # output
-out
-dist
+out/
+dist/
 *.tgz
 
 # code coverage
-coverage
+coverage/
 *.lcov
 
 # logs
-logs
+logs/
 _.log
 report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
@@ -30,10 +30,10 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 *.tsbuildinfo
 
 # IntelliJ based IDEs
-.idea
+.idea/
 
 # Finder (MacOS) folder config
-.DS_Store
+.DS_Store/
 
 # ALL
 ALL/**/*
@@ -49,13 +49,13 @@ ALL_REBUILT/**/*
 
 
 # Logs
-logs
+logs/
 *.log
 
 # Dependencies and Builds
-node_modules
-build
-dist
+node_modules/
+build/
+dist/
 *.local
 *.lock
 

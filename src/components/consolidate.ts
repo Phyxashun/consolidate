@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
-//
-//~ FILE-PATH:  src/consolidate.ts
+
+// FILE-PATH:  src/consolidate.ts
 
 /**
  * @file consolidate.ts
@@ -24,8 +24,8 @@ import { mkdir, rm } from 'fs/promises';
 import { glob } from 'glob';
 import path from 'path';
 import pc from 'picocolors';
-import TxtToPdf from './utils/TxtToPdf';
-import { generateShortId } from './utils/utils';
+import TxtToPdf from '../utils/TxtToPdf';
+import { generateShortId } from '../utils/utils';
 
 //* === CONSTANTS ===
 

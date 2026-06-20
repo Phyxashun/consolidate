@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 
-//~ FILE-PATH: src/deconsolidate.ts
+// FILE-PATH: src/deconsolidate.ts
 
 /**
  * @file deconsolidate.ts
@@ -174,7 +174,7 @@ const writer = {
     async writeFile(
         extracted: ExtractedFile,
         outputDir: string,
-        opts: { force: boolean; verbose: boolean; dryRun: boolean },
+        opts: { force: boolean; verbose: boolean; dryRun: boolean; }, // eslint-disable-line prettier/prettier
     ): Promise<'written' | 'skipped' | 'errors'> {
         const dest = path.join(outputDir, extracted.filePath);
         if (opts.dryRun) {

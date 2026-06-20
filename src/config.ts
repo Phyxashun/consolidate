@@ -1,4 +1,4 @@
-//~ FILE-PATH: src/config.ts
+// FILE-PATH: src/config.ts
 
 import { Glob } from 'bun';
 import { homedir } from 'os';

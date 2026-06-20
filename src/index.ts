@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 
-// ~ FILE-PATH: src/index.ts
+// FILE-PATH: src/index.ts
 
 /**
  * @file index.ts

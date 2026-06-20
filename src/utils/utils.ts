@@ -1,10 +1,10 @@
-// ~ FILE-PATH: src/utils/utils.ts
+// FILE-PATH: src/utils/utils.ts
 
-import { PDFDocument, rgb } from 'pdf-lib';
-import type { PDFFont, PDFPage, RGB } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
-import { resolve } from 'path';
 import { type BunFile } from 'bun';
+import { resolve } from 'path';
+import type { PDFFont, PDFPage, RGB } from 'pdf-lib';
+import { PDFDocument, rgb } from 'pdf-lib';
 
 export interface PDFDimensions {
     width: number;

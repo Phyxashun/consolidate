@@ -1,17 +1,17 @@
 #!/usr/bin/env bun
-//
-// ~ FILE-PATH: src/push.ts
 
-import { intro, outro, log, note } from '@clack/prompts';
-import pc from 'picocolors';
+// FILE-PATH: src/push.ts
+
+import { intro, log, note, outro } from '@clack/prompts';
 import { spawnSync } from 'child_process';
+import pc from 'picocolors';
 
 const MESSAGE: string = 'Update';
 const lPill = pc.magenta('');
 const rPill = pc.magenta('');
 
 // Modified to return both success status and terminal output
-function runCommand(command: string, args: string[]): { success: boolean; output: string } {
+function runCommand(command: string, args: string[]): { success: boolean; output: string; } { // eslint-disable-line prettier/prettier
     const result = spawnSync(command, args, { encoding: 'utf-8' });
     return {
         success: result.status === 0,

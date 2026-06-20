@@ -1,4 +1,7 @@
-// ~ FILE-PATH: src/utils/TxtToPdf.ts
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+// FILE-PATH: src/utils/TxtToPdf.ts
+
 import fontkit from '@pdf-lib/fontkit';
 import type { BunFile } from 'bun';
 import path from 'path';
@@ -85,7 +88,7 @@ export class TxtToPdfConverter {
         if (this.config.syntaxHighlighting) {
             try {
                 loadLanguages([this.config.language]);
-            } catch (e: unknown) { // eslint-disable-line @typescript-eslint/no-unused-vars
+            } catch (e: unknown) {
                 console.warn(`[TxtToPdf]: Could not load Prism definition for "${this.config.language}". Using standard styling.`);
             }
         }
@@ -327,7 +330,7 @@ export class TxtToPdfConverter {
             }
             const fontBytes: ArrayBuffer = await fontFile.arrayBuffer();
             return await pdfDoc.embedFont(fontBytes);
-        } catch (e: unknown) { // eslint-disable-line @typescript-eslint/no-unused-vars
+        } catch (e: unknown) {
             console.warn(`🚨 [TxtToPdf Warning]: Fallback to standard Monospace Courier used.`);
             return await pdfDoc.embedFont('Courier');
         }
@@ -340,6 +343,7 @@ export class TxtToPdfConverter {
         return await sourceFile.text();
     }
 }
+
 export default class TxtToPdf {
     public static create(options?: Config): TxtToPdfConverter {
         const mergedConfig: Required<Config> = {
