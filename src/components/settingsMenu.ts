@@ -63,7 +63,7 @@ export async function runSettingsApp(): Promise<void> {
                 ],
             });
             if (!isCancel(align)) {
-                config.ui.layouts.boxAlignment = align as any;
+                config.ui.layouts.boxAlignment = align;
                 await store.save(config);
             }
         }

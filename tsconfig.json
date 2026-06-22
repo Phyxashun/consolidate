@@ -1,10 +1,14 @@
 {
     "compilerOptions": {
-        "target": "es2023",
-        "lib": [
-            "ES2023"
-        ],
+        /* File Layout */
+        "rootDir": "./src",
+        "outDir": "./dist",
+        /* Environment Settings */
         "module": "esnext",
+        "target": "esnext",
+        "lib": [
+            "esnext"
+        ],
         "types": [
             "bun"
         ],
@@ -16,31 +20,25 @@
         "verbatimModuleSyntax": true,
         "moduleDetection": "force",
         /* Linting */
+        "strict": true,
+        "jsx": "react-jsx",
+        "isolatedModules": true,
+        //"noPropertyAccessFromIndexSignature": true
+        //"noImplicitReturns": true,
+        //"noImplicitOverride": true,
+        "erasableSyntaxOnly": true,
+        "noUncheckedSideEffectImports": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "erasableSyntaxOnly": true,
         "noFallthroughCasesInSwitch": true,
-        "outDir": "./dist",
-        "rootDir": "."
     },
     "include": [
         "src/**/*",
-        "*.ts",
-        "prettier.config.ts",
-        "eslint.config.ts",
-        "OLD/deconsolidate.ts",
-        "OLD/consolidate.ts",
-        "OLD/utils.ts",
-        "OLD/TxtToPdf.ts",
-        "OLD/Settings.ts",
-        "OLD/push.ts",
-        "OLD/config.ts",
-        "OLD/choose.ts"
+        //"prettier.config.ts",
+        //"eslint.config.ts"
     ],
     "exclude": [
-        "node_modules",
         "ALL/**/*",
         "ALL_REBUILT/**/*",
-        "dist"
     ]
 }

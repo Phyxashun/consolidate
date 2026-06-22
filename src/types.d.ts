@@ -1,15 +1,12 @@
 // FILE-PATH: src/types.d.ts
 
-import type { BoxAlignment } from '@clack/prompts';
-import type { Colors } from 'picocolors';
-
-export interface BaseConfig {
+interface BaseConfig {
     title: string;
     subTitle: string;
     version: string;
 }
 
-export interface Theme {
+interface ThemeConfig {
     index: {
         bannerBg: string;
         bannerFg: string;
@@ -34,7 +31,7 @@ export interface Theme {
     };
 }
 
-export interface Prompts {
+interface PromptsConfig {
     shared: { confirmActive: string; confirmInactive: string; aborted: string };
     index: {
         menuMessage: string;
@@ -44,19 +41,22 @@ export interface Prompts {
     deconsolidate: { [key: string]: string | object };
 }
 
-export type BoxWidth = 'auto' | number;
-export interface SubDirNames {
+type BoxWidth = 'auto' | number;
+
+interface SubDirNames {
     text: string;
     ts: string;
     //pdf?: string;
 }
-export interface Job {
+
+interface Job {
     name: string;
     description: string;
     include: string[];
     exclude?: string[];
 }
-export interface Config {
+
+interface Config {
     cli: BaseConfig;
     ui: {
         symbols: {
@@ -88,8 +88,4 @@ export interface Config {
     messages: Prompts;
 }
 
-export type ColorFunction = Colors & {
-    createColors: (enabled?: boolean) => Colors;
-};
-
-export default {};
+type ColorFunction = Colors & { createColors: (enabled?: boolean) => Colors };

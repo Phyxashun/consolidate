@@ -8,15 +8,13 @@ import { runConsolidate } from './components/graft';
 import { runSettingsApp } from './components/settingsMenu';
 import { runDeconsolidate } from './components/sever';
 import { TUI } from './components/TUI';
-import type { ColorFunction } from './types.d.ts';
 import { Settings } from './utils/Settings';
 
-async function main() {
+async function main(settings: Config) {
     while (true) {
-        const settings = await Settings.Instance.load();
         const ui = new TUI(settings);
-        const indexTheme = settings.ui.theme.index;
-        const indexPrompts = settings.messages.index;
+        const indexTheme: ThemeConfig['index'] = settings.ui.theme.index;
+        const indexPrompts: PromptsConfig['index'] = settings.messages.index;
 
         const bg: ColorFunction =
             pc[indexTheme.bannerBg as keyof typeof pc] || pc.bgYellow;
@@ -55,7 +53,9 @@ async function main() {
     }
 }
 
-main().catch(err => {
+const SETTINGS = await Settings.Instance.load();
+
+main(SETTINGS).catch(err => {
     console.error(pc.red('Fatal runtime exception encountered:'), err);
     process.exit(1);
 });

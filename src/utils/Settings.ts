@@ -1,43 +1,5 @@
 // FILE-PATH: src/utils/Settings.ts
 
-import type { Config, Prompts } from '../types';
-
-const DEFAULT_CONFIG: Omit<Config, 'ui' | 'messages'> = {
-    cli: { title: 'graft.js', subTitle: '', version: '1.0.0' },
-    consolidate: {
-        outputPath: './ALL',
-        subDirs: { text: 'txt', ts: 'ts' },
-        baseIgnorePatterns: [
-            '**/*.lock',
-            'coverage/**/*',
-            'node_modules/**/*',
-            'ALL/**/*',
-            '.env',
-        ],
-        bannerSpacer: '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
-        jobs: [
-            {
-                name: 'SOURCE_FILES',
-                description: 'Source Files (ts, js, etc.)',
-                include: [
-                    'src/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}',
-                    'index.ts',
-                ],
-                exclude: ['**/*.config.{ts,mts,js,mjs}', '**/*.test.ts'],
-            },
-            {
-                name: 'DOC_FILES',
-                description: 'Documentation Files',
-                include: ['**/*.{md,txt}', 'LICENSE'],
-            },
-        ],
-    },
-    deconsolidate: {
-        defaultOutputDir: './ALL_REBUILT',
-        defaultInputPathPattern: 'ALL/txt/**/*.txt',
-    },
-};
-
 const DEFAULT_THEME: Config['ui'] = {
     symbols: {
         headerGlyphs: '  󰽜  󰕘 ',
@@ -78,7 +40,7 @@ const DEFAULT_THEME: Config['ui'] = {
     },
 };
 
-const DEFAULT_PROMPTS: Prompts = {
+const DEFAULT_PROMPTS: Config['messages'] = {
     shared: {
         confirmActive: 'Yes',
         confirmInactive: 'No',
@@ -115,11 +77,49 @@ const DEFAULT_PROMPTS: Prompts = {
     },
 };
 
+const DEFAULT_CONFIG: Config = {
+    cli: { title: 'graft.js', subTitle: '', version: '1.0.0' },
+    ui: DEFAULT_THEME,
+    consolidate: {
+        outputPath: './ALL',
+        subDirs: { text: 'txt', ts: 'ts' },
+        baseIgnorePatterns: [
+            '**/*.lock',
+            'coverage/**/*',
+            'node_modules/**/*',
+            'ALL/**/*',
+            '.env',
+        ],
+        bannerSpacer: '■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■',
+        jobs: [
+            {
+                name: 'SOURCE_FILES',
+                description: 'Source Files (ts, js, etc.)',
+                include: [
+                    'src/**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs}',
+                    'index.ts',
+                ],
+                exclude: ['**/*.config.{ts,mts,js,mjs}', '**/*.test.ts'],
+            },
+            {
+                name: 'DOC_FILES',
+                description: 'Documentation Files',
+                include: ['**/*.{md,txt}', 'LICENSE'],
+            },
+        ],
+    },
+    deconsolidate: {
+        defaultOutputDir: './ALL_REBUILT',
+        defaultInputPathPattern: 'ALL/txt/**/*.txt',
+    },
+    messages: DEFAULT_PROMPTS,
+};
+
 export class Settings {
     private static instance: Settings;
-    private readonly APP_PATH = `${process.cwd()}/.config/appconfig.json`;
-    private readonly THEME_PATH = `${process.cwd()}/.config/theme.json`;
-    private readonly PROMPTS_PATH = `${process.cwd()}/.config/prompts.json`;
+    private readonly CONFIG_PATH = `${process.cwd()}/.config/config.json`;
+
+    private constructor() {}
 
     static get Instance(): Settings {
         if (!this.instance) this.instance = new Settings();
@@ -127,30 +127,31 @@ export class Settings {
     }
 
     async load(): Promise<Config> {
-        const appFile = Bun.file(this.APP_PATH);
-        const themeFile = Bun.file(this.THEME_PATH);
-        const promptsFile = Bun.file(this.PROMPTS_PATH);
+        const file = Bun.file(this.CONFIG_PATH);
+        if (!(await file.exists())) return DEFAULT_CONFIG;
 
-        const appData = (await appFile.exists())
-            ? await appFile.json()
-            : DEFAULT_CONFIG;
-        const themeData = (await themeFile.exists())
-            ? await themeFile.json()
-            : DEFAULT_THEME;
-        const promptsData = (await promptsFile.exists())
-            ? await promptsFile.json()
-            : DEFAULT_PROMPTS;
-
-        return { ...appData, ui: themeData, messages: promptsData };
+        try {
+            const saved = await file.json();
+            return {
+                ...DEFAULT_CONFIG,
+                ...saved,
+                consolidate: {
+                    ...DEFAULT_CONFIG.consolidate,
+                    ...saved.consolidate,
+                },
+            };
+        } catch {
+            return DEFAULT_CONFIG;
+        }
     }
 
     async save(updates: Partial<Config>): Promise<void> {
         const current = await this.load();
-        const merged = { ...current, ...updates };
-        const { ui, messages, ...appconfig } = merged;
-
-        await Bun.write(this.APP_PATH, JSON.stringify(appconfig, null, 2));
-        await Bun.write(this.THEME_PATH, JSON.stringify(ui, null, 2));
-        await Bun.write(this.PROMPTS_PATH, JSON.stringify(messages, null, 2));
+        const merged = {
+            ...current,
+            ...updates,
+            consolidate: { ...current.consolidate, ...updates.consolidate },
+        };
+        await Bun.write(this.CONFIG_PATH, JSON.stringify(merged, null, 2));
     }
 }
