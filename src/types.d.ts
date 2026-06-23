@@ -1,19 +1,19 @@
 // FILE-PATH: src/types.d.ts
 
-interface BaseConfig {
+export interface BaseConfig {
     title: string;
     subTitle: string;
     version: string;
 }
 
-interface ThemeConfig {
+export interface ThemeConfig {
     index: {
         bannerBg: string;
         bannerFg: string;
         subtitle: string;
         menuPrompt: string;
     };
-    consolidate: {
+    graft: {
         bannerBg: string;
         bannerFg: string;
         boxHeader: string;
@@ -21,7 +21,7 @@ interface ThemeConfig {
         warning: string;
         empty: string;
     };
-    deconsolidate: {
+    sever: {
         bannerBg: string;
         bannerFg: string;
         boxHeader: string;
@@ -31,32 +31,25 @@ interface ThemeConfig {
     };
 }
 
-interface PromptsConfig {
+export interface PromptsConfig {
     shared: { confirmActive: string; confirmInactive: string; aborted: string };
     index: {
         menuMessage: string;
         choices: { [key: string]: { label: string; hint?: string } };
     };
-    consolidate: { [key: string]: string | object };
-    deconsolidate: { [key: string]: string | object };
+    graft: { [key: string]: string | object };
+    sever: { [key: string]: string | object };
 }
 
-type BoxWidth = 'auto' | number;
+export type BoxWidth = 'auto' | number;
 
-interface SubDirNames {
+export interface SubDirNames {
     text: string;
     ts: string;
     //pdf?: string;
 }
 
-interface Job {
-    name: string;
-    description: string;
-    include: string[];
-    exclude?: string[];
-}
-
-interface Config {
+export interface Config {
     cli: BaseConfig;
     ui: {
         symbols: {
@@ -74,18 +67,125 @@ interface Config {
         };
         theme: Theme;
     };
-    consolidate: {
+    graft: {
         outputPath: string;
         subDirs: SubDirNames;
         baseIgnorePatterns: string[];
         bannerSpacer: string;
         jobs: Job[];
     };
-    deconsolidate: {
-        defaultOutputDir: string;
-        defaultInputPathPattern: string;
-    };
+    sever: { defaultOutputDir: string; defaultInputPathPattern: string };
     messages: Prompts;
 }
 
-type ColorFunction = Colors & { createColors: (enabled?: boolean) => Colors };
+// FILE-PATH: src/types.d.ts
+
+export interface BaseConfig {
+    id: string;
+    name: string;
+    description: string;
+}
+
+export interface MetaData extends BaseConfig {
+    type: string;
+}
+
+export type ColorFunction = Colors & {
+    createColors: (enabled?: boolean) => Colors;
+};
+
+export interface ExtractedFile {
+    filePath: string;
+    contents: string;
+}
+
+export interface PathInfo {
+    filename: string;
+    name: string;
+    ext: string;
+}
+
+export type List = Record<string, string[]>;
+
+export interface Job extends BaseConfig {
+    include: string[];
+    exclude: string[];
+}
+
+export interface JobDefinition extends Job {
+    extends: string[];
+}
+
+export interface Corpus extends BaseConfig {
+    includes: List;
+    excludes: List;
+    job: JobDefinition[];
+}
+
+export interface ThemeTypography {
+    color: string;
+    style: 'none' | 'bold' | 'italic' | 'dim';
+}
+
+export interface ThemeColors {
+    primary: string;
+    secondary: string;
+    success: string;
+    warning: string;
+    error: string;
+    muted: string;
+    text: string;
+    [key: string]: string;
+}
+
+export interface ThemeUI {
+    promptPrefix: string;
+    activeOption: string;
+    selectedOption: string;
+    inactiveOption: string;
+    submittedText: string;
+    [key: string]: string;
+}
+export interface Theme extends BaseConfig {
+    type: 'dark' | 'light';
+    colors: ThemeColors;
+    ui: ThemeUI;
+    symbols: {
+        pointer: string;
+        checked: string;
+        unchecked: string;
+        success: string;
+        error: string;
+        info: string;
+        [key: string]: string;
+    };
+    typography: {
+        header: ThemeTypography;
+        description: ThemeTypography;
+        code: ThemeTypography;
+        [key: string]: ThemeTypography;
+    };
+}
+
+export interface IgnoreConfig {
+    global: string[];
+    dependencies?: string[];
+    build?: string[];
+    media?: string[];
+    secrets?: string[];
+    [category: string]: string[] | undefined;
+}
+
+export interface PromptParameter {
+    [key: string]: string;
+}
+
+export interface PromptDefinition extends BaseConfig {
+    category?: string;
+    prompt: string;
+    parameters?: PromptParameter;
+}
+
+export type PromptsConfig = UiPromptDefinition[];
+
+export {};

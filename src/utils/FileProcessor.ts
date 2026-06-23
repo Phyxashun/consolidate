@@ -1,15 +1,10 @@
 // FILE-PATH: src/utils/FileProcessor.ts
 
-import type { Config } from '../types';
-
 export class FileProcessor {
-    private config: Config['consolidate'];
+    private config: Config['graft'];
     private layouts: Config['ui']['layouts'];
 
-    constructor(
-        config: Config['consolidate'],
-        layouts: Config['ui']['layouts'],
-    ) {
+    constructor(config: Config['graft'], layouts: Config['ui']['layouts']) {
         this.config = config;
         this.layouts = layouts;
     }
@@ -25,7 +20,7 @@ export class FileProcessor {
         return `${banner}${content}${footer}${this.layouts.fileDivider}`;
     }
 
-    public async writeConsolidatedFile(
+    public async writeGraftedFile(
         outputPath: string,
         blocks: string[],
     ): Promise<void> {

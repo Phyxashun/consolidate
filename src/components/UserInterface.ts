@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// FILE-PATH: src/components/TUI.ts
+
+// FILE-PATH: src/components/UserInterface.ts
 
 import { box, confirm, intro, isCancel, outro, spinner } from '@clack/prompts';
 import pc from 'picocolors';
-import type { ColorFunction, Config } from '../types';
+import type { Config } from 'prettier';
+import type { ColorFunction } from '../types';
 
-export class TUI {
+export class UserInterface {
     private currentSpinner?: ReturnType<typeof spinner>;
     private symbols: Config['ui']['symbols'];
     private layouts: Config['ui']['layouts'];
@@ -18,7 +20,7 @@ export class TUI {
     }
 
     private getModifier(
-        moduleKey: 'consolidate' | 'deconsolidate',
+        moduleKey: 'graft' | 'sever',
         themeKey: string,
         fallback: ColorFunction,
     ): ColorFunction {
@@ -28,7 +30,7 @@ export class TUI {
     }
 
     public renderHeader(
-        moduleKey: 'consolidate' | 'deconsolidate',
+        moduleKey: 'graft' | 'sever',
         defaultBg: ColorFunction,
     ): void {
         const bg = this.getModifier(moduleKey, 'bannerBg', defaultBg);
@@ -62,7 +64,7 @@ export class TUI {
     }
 
     public traceAction(
-        moduleKey: 'consolidate' | 'deconsolidate',
+        moduleKey: 'graft' | 'sever',
         actionKey: 'dryRun' | 'writing' | 'skipped',
         labelPrefix: string,
         targetPath: string,
@@ -84,7 +86,7 @@ export class TUI {
     }
 
     public renderSummaryBox(
-        moduleKey: 'consolidate' | 'deconsolidate',
+        moduleKey: 'graft' | 'sever',
         title: string,
         message: string,
     ): void {

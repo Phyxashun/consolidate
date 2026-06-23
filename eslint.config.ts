@@ -19,7 +19,7 @@ export default defineConfig([
         'dist/**',
     ]),
     {
-        files: ['**/*.{js,mjs,cjs,jsx,ts,tsx}'],
+        files: ['**/*.{js,mjs,cjs,jsx,ts,tsx}', './src/types.d.ts'],
 
         extends: [js.configs.recommended, ...tseslint.configs.recommended],
 
@@ -29,7 +29,7 @@ export default defineConfig([
                 ecmaVersion: 'latest',
                 sourceType: 'module',
                 projectService: true,
-                tsconfigRootDir: import.meta.dirname,
+                tsconfigRootDir: import.meta.dir,
             },
             globals: {
                 ...globals.browser,

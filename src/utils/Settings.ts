@@ -21,7 +21,7 @@ const DEFAULT_THEME: Config['ui'] = {
             subtitle: 'dim,italic',
             menuPrompt: 'cyan',
         },
-        consolidate: {
+        graft: {
             bannerBg: 'bgMagenta',
             bannerFg: 'black',
             boxHeader: 'dim',
@@ -29,7 +29,7 @@ const DEFAULT_THEME: Config['ui'] = {
             warning: 'yellow',
             empty: 'yellow',
         },
-        deconsolidate: {
+        sever: {
             bannerBg: 'bgCyan',
             bannerFg: 'black',
             boxHeader: 'dim',
@@ -49,13 +49,13 @@ const DEFAULT_PROMPTS: Config['messages'] = {
     index: {
         menuMessage: 'Pick an option:',
         choices: {
-            consolidate: { label: 'Consolidate', hint: 'merge project files' },
-            deconsolidate: { label: 'Deconsolidate', hint: 'rebuild files' },
+            graft: { label: 'Graft', hint: 'merge project files' },
+            sever: { label: 'Sever', hint: 'rebuild files' },
             settings: { label: 'Settings', hint: 'configure toolkit' },
             exit: { label: 'Exit' },
         },
     },
-    consolidate: {
+    graft: {
         proceedPrompt: 'Do you want to proceed?',
         spinnerStart: 'Processing files...',
         appendTrace: 'Appending ',
@@ -63,7 +63,7 @@ const DEFAULT_PROMPTS: Config['messages'] = {
         spinnerError: 'Process failed',
         done: 'Complete!',
     },
-    deconsolidate: {
+    sever: {
         scanning: 'Scanning for input files...',
         scanFound: 'Found {count} file(s).',
         dryRunWarning: 'DRY-RUN mode active.',
@@ -80,7 +80,7 @@ const DEFAULT_PROMPTS: Config['messages'] = {
 const DEFAULT_CONFIG: Config = {
     cli: { title: 'graft.js', subTitle: '', version: '1.0.0' },
     ui: DEFAULT_THEME,
-    consolidate: {
+    graft: {
         outputPath: './ALL',
         subDirs: { text: 'txt', ts: 'ts' },
         baseIgnorePatterns: [
@@ -108,7 +108,7 @@ const DEFAULT_CONFIG: Config = {
             },
         ],
     },
-    deconsolidate: {
+    sever: {
         defaultOutputDir: './ALL_REBUILT',
         defaultInputPathPattern: 'ALL/txt/**/*.txt',
     },
@@ -135,10 +135,7 @@ export class Settings {
             return {
                 ...DEFAULT_CONFIG,
                 ...saved,
-                consolidate: {
-                    ...DEFAULT_CONFIG.consolidate,
-                    ...saved.consolidate,
-                },
+                graft: { ...DEFAULT_CONFIG.graft, ...saved.graft },
             };
         } catch {
             return DEFAULT_CONFIG;
@@ -150,7 +147,7 @@ export class Settings {
         const merged = {
             ...current,
             ...updates,
-            consolidate: { ...current.consolidate, ...updates.consolidate },
+            graft: { ...current.graft, ...updates.graft },
         };
         await Bun.write(this.CONFIG_PATH, JSON.stringify(merged, null, 2));
     }

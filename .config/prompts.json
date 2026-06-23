@@ -8,12 +8,12 @@
         "index": {
             "menuMessage": "Pick an option:",
             "choices": {
-                "consolidate": {
-                    "label": "Consolidate",
+                "graft": {
+                    "label": "Graft",
                     "hint": "merge project files into ALL/"
                 },
-                "deconsolidate": {
-                    "label": "Deconsolidate",
+                "sever": {
+                    "label": "Sever",
                     "hint": "rebuild files from ALL/"
                 },
                 "exit": {
@@ -21,7 +21,7 @@
                 }
             }
         },
-        "consolidate": {
+        "graft": {
             "subTitle": "Project File Consolidator",
             "boxHeader": "Ignored Patterns",
             "proceedPrompt": "Do you want to proceed?",
@@ -33,9 +33,9 @@
             "boxSuccessTitle": " PDF file generated: ",
             "done": "Complete!",
             "jobSkippedText": "job(s) skipped — no matching files.",
-            "noFilesFound": "No matching files found for any job — nothing to consolidate."
+            "noFilesFound": "No matching files found for any job — nothing to graft."
         },
-        "deconsolidate": {
+        "sever": {
             "subTitle": "Project File Rebuilder",
             "scanning": "Scanning for input files...",
             "scanFound": "Found {count} file(s).",

@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         /* File Layout */
-        "rootDir": "./src",
+        "rootDir": "./",
         "outDir": "./dist",
         /* Environment Settings */
         "module": "esnext",
@@ -10,6 +10,7 @@
             "esnext"
         ],
         "types": [
+            "node",
             "bun"
         ],
         "skipLibCheck": true,
@@ -34,8 +35,10 @@
     },
     "include": [
         "src/**/*",
-        //"prettier.config.ts",
-        //"eslint.config.ts"
+        "tests/**/*",
+        "prettier.config.ts",
+        "eslint.config.ts",
+        "./src/types.d.ts"
     ],
     "exclude": [
         "ALL/**/*",

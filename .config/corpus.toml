@@ -1,0 +1,328 @@
+
+[[jobs]]
+id = 'SOURCE_FILES'
+name = 'Source Files (ts, js, etc.)'
+description = ''
+extends = []
+include = [
+    # JavaScript, TypeScript, and Ecosystem Frameworks
+    '**/*.js',
+    '**/*.jsx',
+    '**/*.mjs',
+    '**/*.cjs',
+    '**/*.ts',
+    '**/*.tsx',
+    '**/*.mts',
+    '**/*.cts',
+    '**/*.vue',
+    '**/*.svelte',
+    '**/*.astro',
+
+    # Python and Scripting
+    '**/*.py',
+    '**/*.pyw',
+    '**/*.sh',
+    '**/*.bash',
+    '**/*.ps1',
+
+    # Systems Programming (C, C++, Rust, Zig)
+    '**/*.c',
+    '**/*.h',
+    '**/*.cpp',
+    '**/*.hpp',
+    '**/*.cc',
+    '**/*.hh',
+    '**/*.rs',
+    '**/*.zig',
+
+    # JVM Languages (Java, Kotlin, Scala, Groovy)
+    '**/*.java',
+    '**/*.kt',
+    '**/*.kts',
+    '**/*.scala',
+    '**/*.groovy',
+
+    # .NET and Enterprise Languages
+    '**/*.cs',
+    '**/*.fs',
+    '**/*.vb',
+
+    # Apple & Mobile Ecosystems
+    '**/*.swift',
+    '**/*.m',
+    '**/*.mm',
+    '**/*.dart',
+
+    # Go, Ruby, and PHP
+    '**/*.go',
+    '**/*.rb',
+    '**/*.rbw',
+    '**/*.php',
+
+    # Functional & Data Languages
+    '**/*.hs',
+    '**/*.ex',
+    '**/*.exs',
+    '**/*.erl',
+    '**/*.clj',
+    '**/*.sql',
+]
+exclude = [
+    # Stop configurations from hijacking source jobs
+    '**/*.config.*',
+    '**/config.*',
+    # Comprehensive isolation from testing directories/files
+    '**/*.test.*',
+    '**/*.spec.*',
+    '**/*_test.*',
+    '**/*_spec.*',
+    '**/__tests__/**/*',
+    '**/__snapshots__/**/*',
+    '**/__mocks__/**/*',
+    '**/tests/**/*',
+    '**/specs/**/*',
+    '**/test/**/*',
+]
+
+[[jobs]]
+id = 'WEB_FILES'
+name = 'Webpage Files'
+description = ''
+extends = []
+include = [
+    # Standard and Legacy Web Formats
+    '**/*.html',
+    '**/*.htm',
+    '**/*.xhtml',
+    '**/*.xht',
+    '**/*.mhtml',
+
+    # Modern Frontend Framework & Component Templates
+    '**/*.vue',
+    '**/*.svelte',
+    '**/*.astro',
+    '**/*.riot',
+
+    # JavaScript/TypeScript Web Templates (Non-Hydrated Formats)
+    '**/*.jsx',
+    '**/*.tsx',
+
+    # JavaScript/Node.js Templating Engines
+    '**/*.ejs',
+    '**/*.pug',
+    '**/*.jade',
+    '**/*.handlebars',
+    '**/*.hbs',
+    '**/*.mustache',
+    '**/*.twig',
+    '**/*.nunjucks',
+    '**/*.njk',
+
+    # Backend and Server-Side Web Pages
+    '**/*.php',
+    '**/*.phtml',
+    '**/*.jsp',
+    '**/*.jspx',
+    '**/*.asp',
+    '**/*.aspx',
+    '**/*.cshtml',
+    '**/*.vbhtml',
+
+    # Python and Ruby Web Templates
+    '**/*.j2',
+    '**/*.jinja',
+    '**/*.jinja2',
+    '**/*.erb',
+
+    # Web Components & App Manifests
+    '**/*.webmanifest',
+]
+# Prevent web layout components from matching test templates
+exclude = ['**/__tests__/**/*', '**/tests/**/*', '**/*.test.*', '**/*.spec.*']
+
+[[jobs]]
+id = 'STYLE_FILES'
+name = 'Style Files (css, scss, etc.)'
+description = ''
+extends = []
+include = [
+    '**/*.css',
+    '**/*.scss',
+    '**/*.sass',
+    '**/*.less',
+    '**/*.styl',
+    '**/*.pcss',
+    '**/*.sss',
+    '**/*.wxss',
+    '**/*.acss',
+]
+exclude = ['**/.stylelintrc*', '**/stylelint.config.*']
+
+[[jobs]]
+id = 'CONFIG_FILES'
+name = 'Configuration Files'
+description = ''
+extends = []
+include = [
+    # Generic Configuration Extensions
+    '**/*.json',
+    '**/*.jsonc',
+    '**/*.yaml',
+    '**/*.yml',
+    '**/*.toml',
+    '**/*.config.*',
+    '**/config.*',
+
+    # Tool-Specific and Dotfiles
+    '**/.editorconfig',
+    '**/.browserslistrc',
+    '**/browserslist',
+
+    # Version Control, Environments, and DevOps
+    '**/*ignore',
+    '**/.gitattributes',
+    '**/.gitmodules',
+    '**/.env*',
+    '**/Dockerfile*',
+    '**/docker-compose*.yml',
+    '**/.github/workflows/*.yml',
+
+    # Package Managers
+    '**/package.json',
+    '**/package-lock.json',
+    '**/yarn.lock',
+    '**/pnpm-lock.yaml',
+    '**/bun.lockb',
+    '**/composer.json',
+    '**/composer.lock',
+    '**/Cargo.toml',
+    '**/Cargo.lock',
+    '**/Gemfile',
+    '**/Gemfile.lock',
+
+    # Linter and Formatter Configurations
+    '**/.eslintrc*',
+    '**/eslint.config.*',
+    '**/.prettierrc*',
+    '**/prettier.config.*',
+    '**/.stylelintrc*',
+    '**/stylelint.config.*',
+
+    # TypeScript and Babel
+    '**/tsconfig*.json',
+    '**/.babelrc*',
+    '**/babel.config.*',
+
+    # Bundlers and Task Runners
+    '**/webpack.config.*',
+    '**/vite.config.*',
+    '**/rollup.config.*',
+    '**/next.config.*',
+    '**/nuxt.config.*',
+    '**/gatsby-config.*',
+    '**/gulpfile.*',
+
+    # IDE Settings (Fixed base path roots)
+    '**/*/settings.json',
+    '**/.vscode/**/*.json',
+    '**/.idea/**/*.xml',
+]
+exclude = [
+    '**/package.js', # Safeguard if someone ids a helper package.js
+]
+
+[[jobs]]
+id = 'TEST_FILES'
+name = 'Test Files'
+description = ''
+extends = []
+include = [
+    # Standard Test and Spec Files
+    '**/*.test.*',
+    '**/*.spec.*',
+    '**/*_test.*',
+    '**/*_spec.*',
+    '**/*.test.*',
+    '**/*-test.*',
+    '**/test-*.*',
+    '**/test.*',
+    '**/test/**/*.*',
+
+    # Ecosystem-Specific Naming Conventions
+    '**/test_*.py',
+    '**/*Test.php',
+    '**/*Spec.scala',
+
+    # Dedicated Test and Mock Directories
+    '**/__tests__/**/*',
+    '**/__snapshots__/**/*',
+    '**/__mocks__/**/*',
+    '**/tests/**/*',
+    '**/specs/**/*',
+    '**/test/**/*',
+
+    # Test Framework Configurations
+    '**/jest.config.*',
+    '**/vitest.config.*',
+    '**/playwright.config.*',
+    '**/cypress.config.*',
+    '**/karma.conf.*',
+
+    # Test Helpers and Setup Files
+    '**/setupTests.*',
+    '**/test-setup.*',
+    '**/test.setup.*',
+]
+
+[[jobs]]
+id = 'DOC_FILES'
+name = 'Documentation Files'
+description = ''
+extends = []
+include = [
+    # Readme and Core Guides
+    '**/README*',
+    '**/readme*',
+    '**/README.*',
+    '**/readme.*',
+
+    # Licensing and Legal
+    '**/LICENSE*',
+    '**/license*',
+    '**/LICENSE.*',
+    '**/license.*',
+    '**/COPYING*',
+    '**/NOTICE*',
+
+    # Versioning and History
+    '**/CHANGELOG*',
+    '**/changelog*',
+    '**/CHANGELOG.*',
+    '**/changelog.*',
+    '**/HISTORY*',
+    '**/RELEASES*',
+
+    # Standard Technical Documentation Formats
+    '**/*.md',
+    '**/*.markdown',
+    '**/*.mdx',
+    '**/*.rst',
+    '**/*.adoc',
+    '**/*.asciidoc',
+    '**/*.txt',
+
+    # Community and Governance Guidelines
+    '**/CONTRIBUTING*',
+    '**/contributing*',
+    '**/CODE_OF_CONDUCT*',
+    '**/code_of_conduct*',
+    '**/SECURITY*',
+    '**/SUPPORT*',
+
+    # Dedicated Documentation Directories
+    '**/docs/**/*',
+    '**/doc/**/*',
+    '**/.github/ISSUE_TEMPLATE/**/*',
+    '**/.github/PULL_REQUEST_TEMPLATE/**/*',
+]
+exclude = ['**/node_modules/**/*']

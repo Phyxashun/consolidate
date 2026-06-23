@@ -4,7 +4,7 @@ import { intro, isCancel, outro, select, text } from '@clack/prompts';
 import pc from 'picocolors';
 import { Settings } from '../utils/Settings';
 
-export async function runSettingsApp(): Promise<void> {
+const settingsMenu = async (): Promise<void> => {
     const store = Settings.Instance;
     const config = await store.load();
 
@@ -17,7 +17,7 @@ export async function runSettingsApp(): Promise<void> {
                 {
                     value: 'outputPath',
                     label: 'Output Directory Path',
-                    hint: config.consolidate.outputPath,
+                    hint: config.graft.outputPath,
                 },
                 {
                     value: 'bannerSpacer',
@@ -38,10 +38,10 @@ export async function runSettingsApp(): Promise<void> {
         if (choice === 'outputPath') {
             const val = await text({
                 message: 'Enter new consolidation output directory:',
-                placeholder: config.consolidate.outputPath,
+                placeholder: config.graft.outputPath,
             });
             if (!isCancel(val) && val.trim()) {
-                config.consolidate.outputPath = val.trim();
+                config.graft.outputPath = val.trim();
                 await store.save(config);
             }
         } else if (choice === 'bannerSpacer') {
@@ -50,7 +50,7 @@ export async function runSettingsApp(): Promise<void> {
                 placeholder: 'e.g. ■■■■',
             });
             if (!isCancel(val) && val.trim()) {
-                config.consolidate.bannerSpacer = val.trim();
+                config.graft.bannerSpacer = val.trim();
                 await store.save(config);
             }
         } else if (choice === 'boxAlignment') {
@@ -69,4 +69,6 @@ export async function runSettingsApp(): Promise<void> {
         }
     }
     outro(pc.blue('Configuration modifications written to disk files.'));
-}
+};
+
+export default settingsMenu;

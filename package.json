@@ -1,48 +1,54 @@
 {
-    "name": "consolidate",
-    "version": "2.5.0",
-    "description": "A utility script to consolidate project files into single, combined output files. Also provides deconsolidate to rebuild the project files.",
+    "name": "corpus.ts",
+    "version": "3.0.1",
+    "description": "A utility script to graft project files into a single text file. Also provides the ability to sever the text file to rebuild the project files.",
     "main": "./src/index.ts",
     "module": "index.ts",
     "type": "module",
     "scripts": {
-        "typecheck": "tsc --noEmit",
-        "build": "bun run typecheck && bun build --compile --outfile=./dist/consolidate ./src/index.ts",
+        "typecheck": "tsgo --noEmit",
+        "build": "bun run typecheck && bun build --compile --outfile=./dist/corpus ./src/index.ts",
         "start": "bun run ./src/index.ts",
-        "consolidate": "bun run ./src/components/consolidate.ts",
-        "deconsolidate": "bun run ./src/components/deconsolidate.ts",
-        "push": "bun run ./src/push.ts"
+        "graft": "bun run ./src/components/graft.ts",
+        "sever": "bun run ./src/components/sever.ts",
+        "test": "bun test ./tests/*.test.ts"
     },
     "bin": {
-        "consolidate": "./src/index.ts"
+        "corpus": "./src/index.ts"
     },
     "keywords": [
-        "consolidate",
-        "deconsolidate",
+        "corpus-cli",
+        "corpus",
+        "graft",
+        "sever",
+        "graft",
+        "sever",
         "merge",
         "project",
         "rebuild"
     ],
     "author": "Dustin Dew",
     "license": "MIT",
+    "peerDependencies": {
+        "@types/bun": "latest",
+        "@types/prismjs": "latest",
+        "typescript": "latest",
+        "@typescript/native-preview": "latest"
+    },
     "dependencies": {
-        "@clack/prompts": "latest",
+        "@clack/prompts": "^1.6.0",
+        "@crustjs/core": "latest",
+        "@crustjs/crust": "latest",
+        "@crustjs/plugins": "latest",
         "@pdf-lib/fontkit": "latest",
-        "@types/prismjs": "^1.26.6",
         "bun": "latest",
-        "glob": "latest",
         "pdf-lib": "latest",
-        "picocolors": "latest",
-        "prismjs": "^1.30.0",
-        "typescript": "latest"
+        "picocolors": "^1.1.1",
+        "prismjs": "latest"
     },
     "devDependencies": {
         "@eslint/js": "latest",
-        "@types/bun": "latest",
-        "@types/glob": "latest",
-        "@types/node": "latest",
         "@typescript-eslint/parser": "latest",
-        "@typescript/native-preview": "^7.0.0-dev.20260619.1",
         "eslint": "latest",
         "eslint-config-prettier": "latest",
         "eslint-plugin-eslint-plugin": "latest",

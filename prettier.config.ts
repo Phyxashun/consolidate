@@ -20,7 +20,7 @@ const config: Config = {
     proseWrap: 'preserve',
     endOfLine: 'lf',
     insertPragma: false,
-    printWidth: 80, // This will now successfully trigger line wraps
+    printWidth: 80,
     requirePragma: false,
     tabWidth: 4,
     useTabs: false,

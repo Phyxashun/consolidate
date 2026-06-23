@@ -4,22 +4,22 @@
 
 import { isCancel, outro, select } from '@clack/prompts';
 import pc from 'picocolors';
-import { runConsolidate } from './components/graft';
+import { runGraft } from './components/graft';
 import { runSettingsApp } from './components/settingsMenu';
-import { runDeconsolidate } from './components/sever';
-import { TUI } from './components/TUI';
+import { runSever } from './components/sever';
+import { UserInterface } from './components/UserInterface';
 import { Settings } from './utils/Settings';
 
 async function main(settings: Config) {
     while (true) {
-        const ui = new TUI(settings);
+        const ui = new UserInterface(settings);
         const indexTheme: ThemeConfig['index'] = settings.ui.theme.index;
         const indexPrompts: PromptsConfig['index'] = settings.messages.index;
 
         const bg: ColorFunction =
             pc[indexTheme.bannerBg as keyof typeof pc] || pc.bgYellow;
 
-        ui.renderHeader('consolidate', bg);
+        ui.renderHeader('graft', bg);
 
         const choice = await select({
             message: indexPrompts.menuMessage,
@@ -38,11 +38,11 @@ async function main(settings: Config) {
         }
 
         switch (choice) {
-            case 'consolidate':
-                await runConsolidate();
+            case 'graft':
+                await runGraft();
                 break;
-            case 'deconsolidate':
-                await runDeconsolidate(process.argv.slice(2));
+            case 'sever':
+                await runSever(process.argv.slice(2));
                 break;
             case 'settings':
                 await runSettingsApp();

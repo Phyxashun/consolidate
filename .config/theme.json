@@ -24,7 +24,7 @@
                 "subtitle": "dim,italic",
                 "menuPrompt": "cyan"
             },
-            "consolidate": {
+            "graft": {
                 "bannerBg": "bgMagenta",
                 "bannerFg": "black",
                 "subtitle": "dim",
@@ -33,7 +33,7 @@
                 "warning": "yellow,bold",
                 "empty": "yellow"
             },
-            "deconsolidate": {
+            "sever": {
                 "bannerBg": "bgCyan",
                 "bannerFg": "black",
                 "subtitle": "dim",

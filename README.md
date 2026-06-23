@@ -1,4 +1,4 @@
-# consolidate
+# graft
 
 A small Bun/TypeScript CLI for merging a project's files into single combined
 output files — and rebuilding the original file tree from them later.
@@ -9,9 +9,9 @@ files instead of a directory tree.
 
 ## Features
 
-- **Consolidate** — scans your project by category (source, HTML, styles,
+- **Graft** — scans your project by category (source, HTML, styles,
   config, tests, docs) and merges each category into a single output file.
-- **Deconsolidate** — parses those merged files back into individual files on
+- **Sever** — parses those merged files back into individual files on
   disk, with `--dry-run`, `--verbose`, and `--force` options.
 - Interactive menu powered by [`@clack/prompts`](https://www.npmjs.com/package/@clack/prompts)
   when run with no arguments.
@@ -36,12 +36,12 @@ bun install
 bun run index.ts
 ```
 
-Pick **Consolidate** or **Deconsolidate** from the menu.
+Pick **Graft** or **Sever** from the menu.
 
-### Consolidate directly
+### Graft directly
 
 ```bash
-bun run src/consolidate.ts
+bun run src/graft.ts
 ```
 
 Walks the job definitions below and writes merged output to:
@@ -60,10 +60,10 @@ Walks the job definitions below and writes merged output to:
 
 A job is skipped silently if no files match its patterns.
 
-### Deconsolidate directly
+### Sever directly
 
 ```bash
-bun run src/deconsolidate.ts [options] [inputPaths...]
+bun run src/sever.ts [options] [inputPaths...]
 ```
 
 | Flag            | Alias | Description                                   | Default               |
@@ -78,18 +78,18 @@ If no `inputPaths` are given, it defaults to `./ALL/txt/**/*.txt`.
 
 ```bash
 # Rebuild everything found under ALL/txt
-bun run src/deconsolidate.ts
+bun run src/sever.ts
 
-# Rebuild a single consolidated file into ./restored, overwriting anything there
-bun run src/deconsolidate.ts ./ALL/txt/1_ALL_SOURCE_FILES.txt -o ./restored -f
+# Rebuild a single graftd file into ./restored, overwriting anything there
+bun run src/sever.ts ./ALL/txt/1_ALL_SOURCE_FILES.txt -o ./restored -f
 
 # Preview a rebuild without touching disk
-bun run src/deconsolidate.ts "./ALL/txt/*.txt" --dry-run --verbose
+bun run src/sever.ts "./ALL/txt/*.txt" --dry-run --verbose
 ```
 
 ## How it works
 
-Each source file is wrapped in a banner when consolidated:
+Each source file is wrapped in a banner when graftd:
 
 ```ts
 //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ Start of file: src/foo.ts ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -103,7 +103,7 @@ Each source file is wrapped in a banner when consolidated:
 //████████████████████████████████████████████████████████████████████████████████████████████████
 ```
 
-`deconsolidate.ts` reads these banners back out with a small state machine
+`sever.ts` reads these banners back out with a small state machine
 and restores each file at its original relative path under the chosen output
 directory.
 
@@ -121,8 +121,8 @@ directory.
 .
 ├── index.ts              # interactive menu entry point
 ├── src/
-│   ├── consolidate.ts     # merges project files → ALL/ts, ALL/txt
-│   └── deconsolidate.ts   # rebuilds files from consolidated output
+│   ├── graft.ts     # merges project files → ALL/ts, ALL/txt
+│   └── sever.ts   # rebuilds files from graftd output
 ├── eslint.config.ts
 ├── prettier.config.ts
 ├── tsconfig.json

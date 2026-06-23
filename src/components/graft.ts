@@ -4,14 +4,14 @@ import pc from 'picocolors';
 import { FileProcessor } from '../utils/FileProcessor';
 import { FileScanner } from '../utils/FileScanner';
 import { Settings } from '../utils/Settings';
-import { TUI } from './TUI';
+import { UserInterface } from './UserInterface';
 
-export async function runConsolidate(): Promise<void> {
+const graft = async (): Promise<void> => {
     const settings = await Settings.Instance.load();
-    const ui = new TUI(settings);
-    const msg = settings.messages.consolidate;
+    const ui = new UserInterface(settings);
+    const msg = settings.messages.graft;
 
-    ui.renderHeader('consolidate', pc.bgMagenta);
+    ui.renderHeader('graft', pc.bgMagenta);
 
     if (!(await ui.askConfirmation(msg.proceedPrompt as string))) {
         ui.renderAborted();
@@ -21,14 +21,14 @@ export async function runConsolidate(): Promise<void> {
     ui.startSpinner(msg.spinnerStart as string);
 
     try {
-        const cConfig = settings.consolidate;
-        const scanner = new FileScanner(cConfig);
-        const processor = new FileProcessor(cConfig, settings.ui.layouts);
+        const config = settings.graft;
+        const scanner = new FileScanner(config);
+        const processor = new FileProcessor(config, settings.ui.layouts);
 
         const globalIgnores = await scanner.getIgnorePatterns();
         let totalFilesProcessed = 0;
 
-        for (const job of cConfig.jobs) {
+        for (const job of config.jobs) {
             const files = await scanner.scanJobFiles(
                 job.include,
                 job.exclude,
@@ -43,19 +43,21 @@ export async function runConsolidate(): Promise<void> {
                 totalFilesProcessed++;
             }
 
-            const targetPath = `${cConfig.outputPath}/${cConfig.subDirs.text}/${job.name.toLowerCase()}.txt`;
-            await processor.writeConsolidatedFile(targetPath, blocks);
+            const targetPath = `${config.outputPath}/${config.subDirs.text}/${job.name.toLowerCase()}.txt`;
+            await processor.writeGraftedFile(targetPath, blocks);
         }
 
         ui.stopSpinner(msg.spinnerSuccess as string, true);
         ui.renderSummaryBox(
-            'consolidate',
+            'graft',
             'Processing Summary',
-            `Total Files Consolidated: ${totalFilesProcessed}`,
+            `Total Files Graftd: ${totalFilesProcessed}`,
         );
         ui.renderFooter(msg.done as string);
     } catch (error) {
         ui.stopSpinner(msg.spinnerError as string, false);
         throw error;
     }
-}
+};
+
+export default graft;

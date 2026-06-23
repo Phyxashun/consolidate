@@ -1,25 +1,16 @@
 // FILE-PATH: src/utils/FileExtractor.ts
 
-import { Glob } from 'bun';
-import path from 'path';
-import type { Config } from '../types';
-
-export interface ExtractedFile {
-    filePath: string;
-    content: string;
-}
-
 export class FileExtractor {
-    private config: Config['consolidate'];
+    private config: Config['graft'];
 
-    constructor(config: Config['consolidate']) {
+    constructor(config: Config['graft']) {
         this.config = config;
     }
 
     public async scanInputPatterns(patterns: string[]): Promise<string[]> {
         const matchingFiles: string[] = [];
         for (const pattern of patterns) {
-            const glob = new Glob(pattern);
+            const glob = new Bun.Glob(pattern);
             for await (const file of glob.scan('.')) {
                 matchingFiles.push(file);
             }
@@ -51,7 +42,7 @@ export class FileExtractor {
                 if (currentFile) {
                     extracted.push({
                         filePath: currentFile,
-                        content: currentContent.join('\n').trimEnd(),
+                        contents: currentContent.join('\n').trimEnd(),
                     });
                     currentFile = null;
                 }
@@ -70,7 +61,7 @@ export class FileExtractor {
         targetDir: string,
         file: ExtractedFile,
     ): Promise<void> {
-        const fullOutputPath = path.join(targetDir, file.filePath);
-        await Bun.write(fullOutputPath, file.content);
+        const fullOutputPath = `${targetDir}/${file.filePath}`;
+        await Bun.write(fullOutputPath, file.contents);
     }
 }

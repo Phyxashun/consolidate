@@ -1,12 +1,9 @@
 // FILE-PATH: src/utils/FileScanner.ts
 
-import { Glob } from 'bun';
-import type { Config } from '../types';
-
 export class FileScanner {
-    private config: Config['consolidate'];
+    private config: Config['graft'];
 
-    constructor(config: Config['consolidate']) {
+    constructor(config: Config['graft']) {
         this.config = config;
     }
 
@@ -37,7 +34,7 @@ export class FileScanner {
         const activeExclusions = new Set([...exclude, ...ignores]);
 
         for (const pattern of include) {
-            const glob = new Glob(pattern);
+            const glob = new Bun.Glob(pattern);
             for await (const file of glob.scan('.')) {
                 if (!this.isIgnored(file, activeExclusions)) {
                     allExplored.push(file);

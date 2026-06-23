@@ -3,13 +3,13 @@
 import pc from 'picocolors';
 import { FileExtractor } from '../utils/FileExtractor';
 import { Settings } from '../utils/Settings';
-import { TUI } from './TUI';
+import { UserInterface } from './UserInterface';
 
-export async function runDeconsolidate(args: string[]): Promise<void> {
+const sever = async (args: string[]): Promise<void> => {
     const settings = await Settings.Instance.load();
-    const ui = new TUI(settings);
-    const dConfig = settings.deconsolidate;
-    const msg = settings.messages.deconsolidate;
+    const ui = new UserInterface(settings);
+    const dConfig = settings.sever;
+    const msg = settings.messages.sever;
 
     const hasFlag = (f: string) => args.includes(f);
     if (hasFlag('-h') || hasFlag('--help')) {
@@ -27,10 +27,10 @@ export async function runDeconsolidate(args: string[]): Promise<void> {
             ? customPaths
             : [dConfig.defaultInputPathPattern];
 
-    ui.renderHeader('deconsolidate', pc.bgCyan);
+    ui.renderHeader('sever', pc.bgCyan);
     ui.startSpinner(msg.scanning as string);
 
-    const extractor = new FileExtractor(settings.consolidate);
+    const extractor = new FileExtractor(settings.graft);
     const combinedFiles = await extractor.scanInputPatterns(inputPatterns);
 
     const scanSummary = (msg.scanFound as string).replace(
@@ -70,7 +70,7 @@ export async function runDeconsolidate(args: string[]): Promise<void> {
             if (isDryRun) {
                 if (isVerbose)
                     ui.traceAction(
-                        'deconsolidate',
+                        'sever',
                         'dryRun',
                         'TEST', //msg.traces.dryRun,
                         block.filePath,
@@ -87,7 +87,7 @@ export async function runDeconsolidate(args: string[]): Promise<void> {
             ) {
                 if (isVerbose)
                     ui.traceAction(
-                        'deconsolidate',
+                        'sever',
                         'skipped',
                         'TEST', //msg.traces.skipped,
                         block.filePath,
@@ -99,7 +99,7 @@ export async function runDeconsolidate(args: string[]): Promise<void> {
             await extractor.writeExtractedFile(dConfig.defaultOutputDir, block);
             if (isVerbose)
                 ui.traceAction(
-                    'deconsolidate',
+                    'sever',
                     'writing',
                     'TEST', //msg.traces.writing,
                     block.filePath,
@@ -112,9 +112,11 @@ export async function runDeconsolidate(args: string[]): Promise<void> {
         ? msg.dryRunWarning
         : `Files Written: ${written}\nFiles Skipped: ${skipped}`;
     ui.renderSummaryBox(
-        'deconsolidate',
+        'sever',
         'Deconsolidation Complete',
         summaryMsg as string,
     );
     ui.renderFooter((msg.done as string) || 'Finished!');
-}
+};
+
+export default sever;
