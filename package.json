@@ -11,7 +11,8 @@
         "start": "bun run ./src/index.ts",
         "graft": "bun run ./src/components/graft.ts",
         "sever": "bun run ./src/components/sever.ts",
-        "test": "bun test ./tests/*.test.ts"
+        "test": "bun test ./tests/*.test.ts",
+        "push": "git add . && git commit -m 'Updates' && git push origin main"
     },
     "bin": {
         "corpus": "./src/index.ts"

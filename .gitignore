@@ -61,7 +61,6 @@ dist/
 
 # Project specific exclusions
 ALL/*
-OLD/*
 *.sqlite
 *.db
 *.txt
