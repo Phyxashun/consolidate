@@ -77,6 +77,7 @@ export class CorpusParser {
                 }
             }
         }
+        excludes.push(...globalExcludes['global']);
         return Array.from(new Set(excludes));
     }
 }

@@ -33,7 +33,7 @@ export const simpleLoadCorpus = async (corpusPath: string): Promise<void> => {
     intro(pc.bgYellow(pc.black(pc.bold(' 📦 LOADING CORPUS  '))));
 
     const parser: CorpusParser = await CorpusParser.load(corpusPath);
-    console.log('\nPARSER:\n', JSON.stringify(parser, null, 4));
+
     for (const job of parser.job) {
         log.step(`${pc.bold('ID Found:')} ${pc.yellow(job.id)}`);
     }
@@ -43,7 +43,7 @@ export const simpleLoadCorpus = async (corpusPath: string): Promise<void> => {
 
 const loadCorpus = async (corpusPath: string): Promise<void> => {
     //console.log('\n');
-    intro(pc.bgBlue(pc.black(' 📦 LOADING CORPUS ')));
+    intro(pc.bgBlue(pc.black(' 📦 LOADING CORPUS  ')));
 
     // Dynamically parsing out the localized file name for cleaner logs
     log.info(
@@ -51,6 +51,8 @@ const loadCorpus = async (corpusPath: string): Promise<void> => {
     );
 
     const parser: CorpusParser = await CorpusParser.load(corpusPath);
+
+    console.log('\nPARSER:\n', JSON.stringify(parser, null, 4));
 
     // Initialize Clack Task Grouping structure
     const myLog = taskLog({

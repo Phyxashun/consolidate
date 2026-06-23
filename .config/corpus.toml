@@ -1,5 +1,32 @@
+[includes]
 
-[[jobs]]
+[excludes]
+global = [
+    "**/node_modules/**",
+    "**/.git/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/*.lockb",
+    "**/*.lock",
+    "**/package-lock.json",
+    "**/*.map",
+    "**/*.png",
+    "**/*.jpg",
+    "**/*.ico",
+    "**/*.gif",
+    "**/*.mp4",
+    "**/*.mp3",
+    "**/*.pnpm-lock.yaml",
+    "**/*.min.js",
+    "**/*.js.map",
+    "**/*.min.css",
+    "coverage/**/*",
+    "node_modules/**/*",
+    "ALL/**/*",
+    "**/.env",
+]
+
+[[job]]
 id = 'SOURCE_FILES'
 name = 'Source Files (ts, js, etc.)'
 description = ''
@@ -68,7 +95,7 @@ include = [
     '**/*.sql',
 ]
 exclude = [
-    # Stop configurations from hijacking source jobs
+    # Stop configurations from hijacking source job
     '**/*.config.*',
     '**/config.*',
     # Comprehensive isolation from testing directories/files
@@ -84,7 +111,7 @@ exclude = [
     '**/test/**/*',
 ]
 
-[[jobs]]
+[[job]]
 id = 'WEB_FILES'
 name = 'Webpage Files'
 description = ''
@@ -140,7 +167,7 @@ include = [
 # Prevent web layout components from matching test templates
 exclude = ['**/__tests__/**/*', '**/tests/**/*', '**/*.test.*', '**/*.spec.*']
 
-[[jobs]]
+[[job]]
 id = 'STYLE_FILES'
 name = 'Style Files (css, scss, etc.)'
 description = ''
@@ -158,7 +185,7 @@ include = [
 ]
 exclude = ['**/.stylelintrc*', '**/stylelint.config.*']
 
-[[jobs]]
+[[job]]
 id = 'CONFIG_FILES'
 name = 'Configuration Files'
 description = ''
@@ -231,7 +258,7 @@ exclude = [
     '**/package.js', # Safeguard if someone ids a helper package.js
 ]
 
-[[jobs]]
+[[job]]
 id = 'TEST_FILES'
 name = 'Test Files'
 description = ''
@@ -274,7 +301,7 @@ include = [
     '**/test.setup.*',
 ]
 
-[[jobs]]
+[[job]]
 id = 'DOC_FILES'
 name = 'Documentation Files'
 description = ''
