@@ -1,6 +1,6 @@
 // FILE-PATH: src/utils/CorpusParser.test.ts
 
-import { intro, log, outro, taskLog } from '@clack/prompts';
+import { intro, log, note, outro } from '@clack/prompts';
 import chalk from 'chalk';
 import path from 'path';
 import { CorpusParser } from '../src/utils/CorpusParser';
@@ -18,58 +18,118 @@ export const simpleLoadCorpus = async (corpusPath: string): Promise<void> => {
     outro(chalk.green('✔ Corpus loaded successfully!'));
 };
 
+export const detailedLoadCorpus = async (corpusPath: string): Promise<void> => {
+    const filename = parsePath(corpusPath).filename;
+    log.info(`${chalk.dim('Path:')} ${chalk.blueBright(filename)}`);
+
+    const parser: CorpusParser = await CorpusParser.load(corpusPath);
+
+    // Using simple formatting prints perfectly without losing text frames
+    console.log(chalk.cyan('\n ✨ Discovered Configuration Job IDs ✨ \n'));
+
+    for (const job of parser.job) {
+        const resolved = parser.resolveJob(job.id);
+
+        // Print the primary Group Header cleanly
+        console.log(
+            `${chalk.green('│')}  ${chalk.green('✔')} ${chalk.bold('ID Found:')} ${chalk.yellow(job.id)}`,
+        );
+
+        // --- Includes Section ---
+        console.log(
+            `${chalk.green('│')}     ${chalk.green('✔')} ${chalk.gray('Includes:')} ${chalk.bold(chalk.yellow(job.id))}`,
+        );
+
+        for (const include of resolved.include) {
+            console.log(
+                `${chalk.green('│')}     \t${chalk.dim('→')} ${chalk.gray(include.toString())}`,
+            );
+        }
+
+        console.log(
+            `${chalk.green('│')}     \t${chalk.dim('→')} ${chalk.gray('Includes count:')} ${chalk.cyan(resolved.include.length.toString())}`,
+        );
+        console.log(`${chalk.green('│')}`);
+
+        // --- Excludes Summary Section ---
+        const localExcludesCount = job.exclude?.length || 0;
+        const totalExcludesCount = resolved.exclude.length;
+
+        console.log(
+            `${chalk.green('│')}     ${chalk.green('✔')} ${chalk.gray('Excludes summary:')}`,
+        );
+        console.log(
+            `${chalk.green('│')}     \t${chalk.dim('→')} ${chalk.gray('Job-specific rules:')} ${chalk.red(localExcludesCount.toString())}`,
+        );
+        console.log(
+            `${chalk.green('│')}     \t${chalk.dim('→')} ${chalk.gray('Total (with Globals):')} ${chalk.red(totalExcludesCount.toString())}`,
+        );
+
+        // Output a clean separation line before the next job item block
+        console.log(`${chalk.green('│')}\n`);
+    }
+
+    outro(chalk.green('Corpus loaded successfully!'));
+};
+
 const loadCorpus = async (corpusPath: string): Promise<void> => {
     const filename = parsePath(corpusPath).filename;
     log.info(`${chalk.dim('Path:')} ${chalk.blueBright(filename)}`);
 
     const parser: CorpusParser = await CorpusParser.load(corpusPath);
 
-    const myLog = taskLog({
-        title: chalk.cyan(' ✨ Discovered Configuration Job IDs ✨ '),
-    });
-
     for (const job of parser.job) {
         const resolved = parser.resolveJob(job.id);
 
-        const thisGroup = myLog.group(
-            `${chalk.green('✔')} ${chalk.bold('ID Found:')} ${chalk.yellow(job.id)}`,
-        );
+        const header = `${chalk.bold('Job Definition:')} ${chalk.yellow(job.id)}`;
+        const lines: string[] = [];
 
-        thisGroup.message(
-            `${chalk.green('✔')} ${chalk.gray('Includes:')} ${chalk.bold(chalk.yellow(job.id))}`,
-        );
+        // Includes Summary Section
+        const localIncludesCount = job.include?.length || 0;
+        const totalIncludesCount = resolved.include.length;
 
-        for (const include of resolved.include) {
-            thisGroup.message(
-                `\t${chalk.dim('→')} ${chalk.gray(include.toString())}`,
+        lines.push(`${chalk.green('✔')} ${chalk.white('Includes summary:')}`);
+        lines.push(
+            `${chalk.gray('Job-specific rules:')} ${chalk.green(localIncludesCount.toString())}`,
+        );
+        if (job.extends && job.extends.length > 0) {
+            lines.push(
+                `${chalk.gray('Total (with Extensions):')} ${chalk.green(totalIncludesCount.toString())}`,
             );
+        } else {
+            lines.push('');
         }
 
-        thisGroup.message(
-            `\t${chalk.dim('→')} ${chalk.gray('Includes count:')} ${chalk.cyan(resolved.include.length.toString())}`,
-        );
-
-        thisGroup.message('');
-
+        // Excludes Summary Section
         const localExcludesCount = job.exclude?.length || 0;
         const totalExcludesCount = resolved.exclude.length;
 
-        thisGroup.message(
-            `${chalk.green('✔')} ${chalk.gray('Excludes summary:')}`,
+        lines.push(`${chalk.green('✔')} ${chalk.white('Excludes summary:')}`);
+        lines.push(
+            `${chalk.gray('Job-specific rules:')} ${chalk.cyan(localExcludesCount.toString())}`,
+        );
+        lines.push(
+            `${chalk.gray('With global rules:')} ${chalk.cyan(totalExcludesCount.toString())}`,
         );
 
-        thisGroup.message(
-            `\t${chalk.dim('→')} ${chalk.gray('Job-specific rules:')} ${chalk.red(localExcludesCount.toString())}`,
-        );
+        const result = lines.map(line => `${line}`).join('\n');
 
-        thisGroup.message(
-            `\t${chalk.dim('→')} ${chalk.gray('Total (with Globals):')} ${chalk.red(totalExcludesCount.toString())}`,
-        );
+        note(result, header, {
+            format: (line: string) => {
+                // Strip styling codes temporarily to perform a safe textual comparison
+                const plainText = line.replace(/\x1B\[[0-9;]*m/g, '').trim();
 
-        thisGroup.message('');
+                // Checks safely if it's an empty line or a summary header block
+                if (plainText === '' || plainText.startsWith('✔')) {
+                    return line;
+                } else {
+                    return `  ${chalk.magentaBright('→')} ${line}`;
+                }
+            },
+        });
     }
 
-    outro(chalk.green('Corpus loaded successfully!'));
+    outro(chalk.green('✔ Corpus loaded successfully!'));
 };
 
 const main = async () => {
