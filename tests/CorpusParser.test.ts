@@ -1,80 +1,64 @@
 // FILE-PATH: src/utils/CorpusParser.test.ts
 
 import { intro, log, outro, taskLog } from '@clack/prompts';
+import chalk from 'chalk';
 import path from 'path';
-import pc from 'picocolors';
-import type { PathInfo } from '../src/types';
 import { CorpusParser } from '../src/utils/CorpusParser';
-
-export const parsePath = (input: string | Bun.BunFile): PathInfo => {
-    let normalizedPath = '';
-    if (typeof input === 'string') {
-        const rawString = input.replace(/\\/g, '/');
-        normalizedPath = Bun.file(rawString).name || rawString;
-    } else {
-        normalizedPath = input.name || '';
-    }
-
-    const filename = normalizedPath.split('/').pop() || '';
-    const lastDot = filename.lastIndexOf('.');
-
-    if (lastDot <= 0) {
-        return { filename, name: filename, ext: '' };
-    }
-
-    return {
-        filename,
-        name: filename.substring(0, lastDot),
-        ext: filename.substring(lastDot),
-    };
-};
+import { parsePath } from '../src/utils/utils';
 
 export const simpleLoadCorpus = async (corpusPath: string): Promise<void> => {
-    intro(pc.bgYellow(pc.black(pc.bold(' 📦 LOADING CORPUS  '))));
+    intro(chalk.bgYellow(chalk.black(chalk.bold(' 📦 LOADING CORPUS  '))));
 
     const parser: CorpusParser = await CorpusParser.load(corpusPath);
 
     for (const job of parser.job) {
-        log.step(`${pc.bold('ID Found:')} ${pc.yellow(job.id)}`);
+        log.step(`${chalk.bold('ID Found:')} ${chalk.yellow(job.id)}`);
     }
 
-    outro(pc.green('✔ Corpus loaded successfully!'));
+    outro(chalk.green('✔ Corpus loaded successfully!'));
 };
 
 const loadCorpus = async (corpusPath: string): Promise<void> => {
-    //console.log('\n');
-    intro(pc.bgBlue(pc.black(' 📦 LOADING CORPUS  ')));
-
-    // Dynamically parsing out the localized file name for cleaner logs
-    log.info(
-        `${pc.dim('Path:')} ${pc.blueBright(parsePath(corpusPath).filename)}`,
-    );
+    const filename = parsePath(corpusPath).filename;
+    log.info(`${chalk.dim('Path:')} ${chalk.blueBright(filename)}`);
 
     const parser: CorpusParser = await CorpusParser.load(corpusPath);
 
-    console.log('\nPARSER:\n', JSON.stringify(parser, null, 4));
-
-    // Initialize Clack Task Grouping structure
     const myLog = taskLog({
-        title: pc.cyan(' ✨ Discovered Configuration Job IDs ✨ '),
+        title: chalk.cyan(' ✨ Discovered Configuration Job IDs ✨ '),
     });
 
     for (const job of parser.job) {
         const resolved = parser.resolveJob(job.id);
+
         const thisGroup = myLog.group(
-            `${pc.green('✔')} ${pc.bold('ID Found:')} ${pc.yellow(job.id)}`,
+            `${chalk.green('✔')} ${chalk.bold('ID Found:')} ${chalk.yellow(job.id)}`,
         );
 
-        // Stringified numbers and removed trailing \n to keep Clack unicode lines intact
         thisGroup.message(
-            `${pc.dim('→')} ${pc.gray('Includes count:')} ${pc.cyan(resolved.include.length.toString())}`,
+            `${chalk.green('✔')} ${chalk.gray('Includes:')} ${chalk.bold(chalk.yellow(job.id))}`,
         );
+
+        for (const include of resolved.include) {
+            thisGroup.message(
+                `\t${chalk.dim('→')} ${chalk.gray(include.toString())}`,
+            );
+        }
+
         thisGroup.message(
-            `${pc.dim('→')} ${pc.gray('Excludes count:')} ${pc.red(resolved.exclude.length.toString())}\n`,
+            `\t${chalk.dim('→')} ${chalk.gray('Includes count:')} ${chalk.cyan(resolved.include.length.toString())}`,
         );
+
+        thisGroup.message('');
+
+        thisGroup.message(
+            `${chalk.green('✔')} ${chalk.gray('Excludes count:')} ${chalk.red(resolved.exclude.length.toString())}`,
+        );
+
+        thisGroup.message('');
     }
 
-    outro(pc.green('Corpus loaded successfully!'));
+    outro(chalk.green('Corpus loaded successfully!'));
 };
 
 const main = async () => {

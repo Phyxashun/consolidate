@@ -41,12 +41,12 @@ ALL_REBUILT/**/*
 
 # Lock files
 *.lock
+bun.lock
 
 # JUST FOR TESTING ***REMOVE/COMMENT OUT FOR PRODUCTION AND GIT PUSH***
 # *.md
 # **/*.ts
 # **/*.json
-
 
 # Logs
 logs/
@@ -57,7 +57,6 @@ node_modules/
 build/
 dist/
 *.local
-*.lock
 
 # Project specific exclusions
 ALL/*

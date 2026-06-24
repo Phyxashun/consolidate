@@ -1,61 +1,72 @@
 // FILE-PATH: src/utils/CorpusParser.ts
-
 import type { BunFile } from 'bun';
-import type { Corpus, Job, JobDefinition, List } from '../types';
+import type { Corpus, Job, JobDefinition } from '../types';
 
 export class CorpusParser {
     private config: Corpus;
 
-    // Private constructor ensures instantiation only happens via the async factory
     private constructor(parsedConfig: Corpus) {
         this.config = parsedConfig;
     }
 
-    // Exposes all loaded jobs from the parsed TOML document configuration.
-    public get job(): Job[] {
+    public get job(): JobDefinition[] {
         return this.config.job || [];
     }
 
-    // Static factory initialization method utilizing Bun's native File API
+    // Expose root config if needed for top-level logging metrics
+    public get corpus(): Corpus {
+        return this.config;
+    }
+
     public static async load(configPath: string): Promise<CorpusParser> {
         const file: BunFile = Bun.file(configPath);
         const exists: boolean = await file.exists();
-
         if (!exists) {
             throw new Error(`File ${configPath} does not exist`);
         }
-
         const text: string = await file.text();
         const parsedData: Corpus = Bun.TOML.parse(text) as Corpus;
         return new CorpusParser(parsedData);
     }
 
-    // Resolve the paths for a job cleanly without mutating original config memory
     public resolveJob(jobId: string): Job {
-        const job: JobDefinition | undefined = this.findJob(jobId);
+        const job = this.findJob(jobId);
         if (!job) throw new Error(`Error: ${jobId} not found.`);
 
+        // Keep track of visited jobs to prevent infinite loops from circular extends
+        const visited = new Set<string>();
+
         return {
-            ...job,
-            include: this.resolveIncludes(job),
-            exclude: this.resolveExcludes(job),
+            id: job.id,
+            name: job.name,
+            description: job.description,
+            include: this.flattenIncludes(job, visited),
+            exclude: this.flattenExcludes(job, new Set<string>()), // Reset for exclusion chain
         };
     }
 
-    // Find a fob by job ID
     private findJob(jobId: string): JobDefinition | undefined {
         return this.config.job?.find((j: JobDefinition) => j.id === jobId);
     }
 
-    // Resolve extended pattern sets
-    private resolveIncludes(job: JobDefinition): string[] {
-        const globalIncludes: List = this.config.includes || {};
+    /**
+     * Recursively crawls the inheritance tree via 'extends' to collect all include globs
+     */
+    private flattenIncludes(
+        job: JobDefinition,
+        visited: Set<string>,
+    ): string[] {
+        if (visited.has(job.id)) return [];
+        visited.add(job.id);
+
         const includes: string[] = [...(job.include || [])];
 
+        // If this job extends other jobs, recursively fetch their includes
         if (job.extends) {
-            for (const item of job.extends) {
-                if (globalIncludes[item]) {
-                    includes.push(...globalIncludes[item]);
+            for (const parentId of job.extends) {
+                const parentJob = this.findJob(parentId);
+                if (parentJob) {
+                    includes.push(...this.flattenIncludes(parentJob, visited));
                 }
             }
         }
@@ -63,21 +74,33 @@ export class CorpusParser {
         return Array.from(new Set(includes));
     }
 
-    // Resolve exclusions and overrides
-    private resolveExcludes(job: JobDefinition): string[] {
-        const globalExcludes: List = this.config.excludes || {};
-        const excludes: string[] = [];
+    /**
+     * Recursively crawls the inheritance tree to inherit parent exclusions,
+     * then appends the global baseline rules.
+     */
+    private flattenExcludes(
+        job: JobDefinition,
+        visited: Set<string>,
+    ): string[] {
+        if (visited.has(job.id)) return [];
+        visited.add(job.id);
 
-        if (job.exclude) {
-            for (const item of job.exclude) {
-                if (globalExcludes[item]) {
-                    excludes.push(...globalExcludes[item]);
-                } else {
-                    excludes.push(item);
+        const excludes: string[] = [...(job.exclude || [])];
+
+        // Inherit exclusions from extended parental jobs
+        if (job.extends) {
+            for (const parentId of job.extends) {
+                const parentJob = this.findJob(parentId);
+                if (parentJob) {
+                    excludes.push(...this.flattenExcludes(parentJob, visited));
                 }
             }
         }
-        excludes.push(...globalExcludes['global']);
+
+        // Always mix in the fallback baseline root global exclusions array
+        const globalExcludes = this.config.excludes?.global || [];
+        excludes.push(...globalExcludes);
+
         return Array.from(new Set(excludes));
     }
 }

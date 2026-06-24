@@ -1,10 +1,10 @@
 // FILE-PATH: src/types.d.ts
 
-export interface BaseConfig {
-    title: string;
-    subTitle: string;
-    version: string;
-}
+// export interface BaseConfig {
+//     title: string;
+//     subTitle: string;
+//     version: string;
+// }
 
 export interface ThemeConfig {
     index: {
@@ -99,7 +99,8 @@ export interface ExtractedFile {
     contents: string;
 }
 
-export interface PathInfo {
+export interface FileInfo {
+    path: string;
     filename: string;
     name: string;
     ext: string;
@@ -186,6 +187,6 @@ export interface PromptDefinition extends BaseConfig {
     parameters?: PromptParameter;
 }
 
-export type PromptsConfig = UiPromptDefinition[];
+export type PromptsConfig = PromptDefinition[];
 
 export {};

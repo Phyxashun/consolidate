@@ -44,6 +44,7 @@
         "@crustjs/plugins": "latest",
         "@pdf-lib/fontkit": "latest",
         "bun": "latest",
+        "chalk": "^5.6.2",
         "pdf-lib": "latest",
         "picocolors": "^1.1.1",
         "prismjs": "latest"
