@@ -57,8 +57,8 @@ max_file_size_kb = 500
 follow_symlinks = false                                   # Prevents infinite directory scanning loops
 preserve_timestamps = true                                # Retains original metadata inside the output corpus
 
-[additional]
+[append]
 ignore = "./ignore.toml"
 theme = "./theme.toml"
-corpus = "./corpus.toml"
+files = "./files.toml"
 prompts = "./prompts.toml"

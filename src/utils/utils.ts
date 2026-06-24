@@ -1,10 +1,11 @@
 // FILE-PATH: src/utils/utils.ts
 
 import path, { dirname, join } from 'path';
+import type { CorpusConfig, OutputTemplate, Theme } from '../config';
 import themeToml from '../config/theme.toml';
-import type { CorpusConfig, FileInfo, OutputTemplate, Theme } from '../types';
+import type { File } from '../types';
 
-export const parsePath = (inputPath: string | Bun.BunFile): FileInfo => {
+export const parsePath = (inputPath: string | Bun.BunFile): File => {
     const normalized = normalizePath(inputPath);
     const parsed = path.parse(normalized);
 

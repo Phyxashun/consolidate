@@ -1,0 +1,155 @@
+id = "IGNORE"
+name = "ignore.toml"
+description = "Contains directories, globs, and files to ignore globally; no including them in the final consolidated product."
+version = "1"
+
+git = ["**/.git/**"]
+
+dependencies = [
+    "**/node_modules/**",
+    "**/.bun/**",
+    "**/.venv/**",
+    "**/venv/**",
+    "**/env/**",
+    "**/target/**",
+    "**/.gradle/**",
+    "**/build/**",
+]
+
+output = [
+    "**/build/**",
+    "**/dist/**",
+    "**/out/**",
+    "**/*.map",
+    "**/*.min.js",
+    "**/*.min.css",
+    "out/",
+    "dist/",
+    "*.tgz",
+]
+
+test = [
+    "**/coverage/**",
+    "**/*.lcov",
+    "**/*.test.*",
+    "**/*.spec.*",
+    "**/*_test.*",
+    "**/*_spec.*",
+    "**/__tests__/**",
+    "**/__snapshots__/**",
+    "**/__mocks__/**",
+    "**/tests/**",
+    "**/specs/**",
+    "**/test/**",
+]
+
+logs = [
+    "**/logs/**",
+    "**/*.log",
+    "**/report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json",
+    "logs/",
+    "_.log",
+    "report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json",
+    "*.log",
+]
+
+env = ["**/.env", "**/.env.*", "**/*.local"]
+
+caches = [
+    "**/.cache/**",
+    "**/.eslintcache",
+    "**/*.tsbuildinfo",
+    "**/__pycache__/**",
+    "**/*.pyc",
+    "**/.next/**",
+    "**/.nuxt/**",
+    "**/.svelte-kit/**",
+    "**/.turbo/**",
+    ".eslintcache",
+    ".cache",
+    "*.tsbuildinfo",
+]
+
+ide = [
+    "**/.vscode/**",
+    "**/.idea/**",
+    "**/.DS_Store",
+    "**/.ipynb_checkpoints/**",
+    "**/*.swp",
+    "**/*.swo",
+    "**/Thumbs.db",
+    "**/desktop.ini",
+]
+
+grafted = [
+    "**/src/config/**",
+    "**/*config/**",
+    "**/GRAFT/**",
+    "**/SEVER/**",
+    "**/.config/**",
+    "**/ALL/**",
+    "**/ALL_REBUILT/**",
+]
+
+locks = [
+    "**/*.lock",
+    "**/bun.lock",
+    "**/*.lockb",
+    "**/package-lock.json",
+    "**/pnpm-lock.yaml",
+]
+
+other = [
+    "**/*.sqlite",
+    "**/*.db",
+    "**/*.txt",
+    "**/*.pdf",
+    "**/*.docx",
+    "**/*.ttf",
+    "**/*.woff2",
+    "**/*.png",
+    "**/*.jpg",
+    "**/*.webp",
+    "**/*.svg",
+    "**/*.ico",
+    "**/*.gif",
+    "**/*.mp4",
+    "**/*.mov",
+    "**/*.mp3",
+    "**/*.wav",
+]
+
+dependencies_bun_install = ["node_modules"]
+
+code_coverage = ["coverage/", "*.lcov"]
+
+dotenv_environment_variable_files = [
+    ".env",
+    ".env.development.local",
+    ".env.test.local",
+    ".env.production.local",
+    ".env.local",
+]
+
+intellij_based_ides = [".idea/"]
+
+finder_macos_folder_config = [".DS_Store/"]
+
+all = ["ALL/**/*", "ALL_REBUILT/**/*"]
+
+lock_files = ["*.lock", "**/bun.lock"]
+
+dependencies_and_builds = ["node_modules/", "build/", "dist/", "*.local"]
+
+project_specific_exclusions = [
+    "ALL/*",
+    "*.sqlite",
+    "*.db",
+    "*.txt",
+    "*.pdf",
+    "*.docx",
+    "*.ttf",
+    "*.woff2",
+    "*.png",
+    "*.jpg",
+]

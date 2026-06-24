@@ -136,7 +136,7 @@
     "editor.experimental.preferTreeSitter.typescript": true,
     "js/ts.tsserver.experimental.enableProjectDiagnostics": true,
     "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "TypeScriptTeam.native-preview"
     },
     "[typescriptreact]": {
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
