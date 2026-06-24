@@ -1,0 +1,68 @@
+# Theme Configuration
+id = "DRACULA"
+name = "Dracula Theme"
+description = "Dracula is a comprehensive dark/light color scheme designed for code editors, terminal emulators, and applications across multiple platforms. The project delivers a unified visual experience that minimizes context switching and enhances productivity."
+version = "2.0.0"
+author = "Dracula"
+website = "https://draculatheme.com"
+github = "https://github.com/dracula"
+template = "https://github.com/dracula/template"
+samples = "https://github.com/dracula/template/tree/main/sample"
+
+# Reusable Color Palette for Chalk
+[colors]
+background = "#282A36"            # Main background
+current_line = "#6272A4"          # Semantic current line highlight token
+selection = "#44475A"             # Text selection
+foreground = "#F8F8F2"            # Default text
+comment = "#6272A4"               # Comments, disabled code
+red = "#FF5555"                   # Errors, warnings, deletion
+orange = "#FFB86C"                # Numbers, constants, booleans
+yellow = "#F1FA8C"                # Strings, text content
+green = "#50FA7B"                 # Functions, methods, inherited classes
+cyan = "#8BE9FD"                  # Classes, types, support, regex
+purple = "#BD93F9"                # Instance reserved words, constants
+pink = "#FF79C6"                  # Keywords, storage types
+current_line_fallback = "#353747" # If the target editor only supports an opaque line highlight
+
+# For terminal applications, Dracula also defines ANSI colors.
+[ansi]
+red = "#FF5555"
+yellow = "#F1FA8C"
+green = "#50FA7B"
+cyan = "#8BE9FD"
+magenta = "#FF79C6"
+blue = "#BD93F9"
+black = "#21222C"
+white = "#F8F8F2"
+brRed = "#FF6E6E"
+brYellow = "#FFFFA5"
+brGreen = "#69FF94"
+brCyan = "#A4FFFF"
+brMagenta = "#FF92DF"
+brBlue = "#D6ACFF"
+brBlack = "#6272A4"
+brWhite = "#FFFFFF"
+
+# UI Color Palette
+[ui]
+floatingElements = "#343746"
+bgLighter = "#424450"
+bgLight = "#343746"
+bgDark = "#21222C"
+bgDarker = "#191A21"
+
+# Styling input boxes and cursors
+[input]
+cursor = { color = "#f8f8f2", backgroundColor = "#6272a4" }
+completion = { color = "#f8f8f2", backgroundColor = "#44475a", bold = true }
+
+# Styling notification/alert boxes, status logs, and messages
+[notify]
+info = { color = "#50fa7b", backgroundColor = "#282a36" }
+warn = { color = "#f1fa8c", backgroundColor = "#282a36" }
+error = { color = "#ff5555", backgroundColor = "#282a36" }
+debug = { color = "#6272a4", backgroundColor = "#282a36" }
+
+# Key hints displayed at the bottom of menus
+hint_style = { color = "#6272a4", italic = true }

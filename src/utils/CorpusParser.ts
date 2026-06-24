@@ -1,5 +1,5 @@
 // FILE-PATH: src/utils/CorpusParser.ts
-import type { BunFile } from 'bun';
+
 import type { Corpus, Job, JobDefinition } from '../types';
 
 export class CorpusParser {
@@ -18,15 +18,8 @@ export class CorpusParser {
         return this.config;
     }
 
-    public static async load(configPath: string): Promise<CorpusParser> {
-        const file: BunFile = Bun.file(configPath);
-        const exists: boolean = await file.exists();
-        if (!exists) {
-            throw new Error(`File ${configPath} does not exist`);
-        }
-        const text: string = await file.text();
-        const parsedData: Corpus = Bun.TOML.parse(text) as Corpus;
-        return new CorpusParser(parsedData);
+    public static async load(tomlConfig: Corpus): Promise<CorpusParser> {
+        return new CorpusParser(tomlConfig);
     }
 
     public resolveJob(jobId: string): Job {
@@ -40,6 +33,7 @@ export class CorpusParser {
             id: job.id,
             name: job.name,
             description: job.description,
+            version: job.version,
             include: this.flattenIncludes(job, visited),
             exclude: this.flattenExcludes(job, new Set<string>()), // Reset for exclusion chain
         };

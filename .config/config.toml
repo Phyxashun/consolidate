@@ -1,0 +1,64 @@
+# ==============================================================================
+# CORPUS.TS — CENTRAL TOOLKIT CONFIGURATION
+# ==============================================================================
+id = "CONFIG"
+name = "config.toml"
+description = "Contains general application configurations."
+
+[metadata]
+title = "corpus.ts"
+subtitle = "Project Merging Toolkit"
+version = "3.0.1"
+license = "MIT"
+author = "Dustin R. Dew"
+author_email = "phyxashun@gmail.com"
+author_website = "https://phyxashun.github.io/home/"
+root_markers = ["package.json", "tsconfig.json", ".git"]
+
+[commands]
+debug = false
+graft = "graft"
+sever = "sever"
+
+[paths]
+config = "/config/"
+graftIn = "**/*"
+graftOut = "**/GRAFT/"
+severIn = "**/GRAFT/**/*"
+severOut = "**/SEVER/"
+
+[subPaths]
+text = "txt"
+ts = "ts"
+pdf = "pdf"
+markdown = "md"
+
+[auth]
+status = "not implemented"
+
+[banners]
+divider = """
+
+//████████████████████████████████████████████████████████████████████████████████
+//████████████████████████████████████████████████████████████████████████████████
+"""
+spacer = """
+//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+"""
+
+[features]
+output_format = ["text", "typescript", "pdf", "markdown"]
+betaMenu = false
+txtToPdf = false
+inject_banners = true
+include_line_numbers = false
+respect_gitignore = false
+max_file_size_kb = 500
+follow_symlinks = false                                   # Prevents infinite directory scanning loops
+preserve_timestamps = true                                # Retains original metadata inside the output corpus
+
+[additional]
+ignore = "./ignore.toml"
+theme = "./theme.toml"
+corpus = "./corpus.toml"
+prompts = "./prompts.toml"

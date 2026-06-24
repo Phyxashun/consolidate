@@ -4,10 +4,13 @@
 
 import { isCancel, outro, select } from '@clack/prompts';
 import pc from 'picocolors';
-import { runGraft } from './components/graft';
-import { runSettingsApp } from './components/settingsMenu';
-import { runSever } from './components/sever';
 import { UserInterface } from './components/UserInterface';
+import type {
+    ColorFunction,
+    Config,
+    PromptsConfig,
+    ThemeConfig,
+} from './types';
 import { Settings } from './utils/Settings';
 
 async function main(settings: Config) {

@@ -12,11 +12,12 @@ export default defineConfig([
     // Global ignores
     globalIgnores([
         '.vscode/**',
-        'ALL/**',
         '**/node_modules/**',
         'public/**',
         'build/**',
         'dist/**',
+        '**/*.txt',
+        '**/*.pdf',
     ]),
     {
         files: ['**/*.{js,mjs,cjs,jsx,ts,tsx}', './src/types.d.ts'],

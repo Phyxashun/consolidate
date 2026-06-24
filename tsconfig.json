@@ -38,7 +38,8 @@
         "tests/**/*",
         "prettier.config.ts",
         "eslint.config.ts",
-        "./src/types.d.ts"
+        "./src/types.d.ts",
+        "./src/config.d.ts"
     ],
     "exclude": [
         "ALL/**/*",

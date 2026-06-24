@@ -22,7 +22,7 @@ const config: Config = {
     insertPragma: false,
     printWidth: 80,
     requirePragma: false,
-    tabWidth: 4,
+    tabWidth: 2,
     useTabs: false,
     embeddedLanguageFormatting: 'auto',
 };

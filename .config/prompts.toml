@@ -1,0 +1,86 @@
+id = "PROMPTS"
+name = "prompts.toml"
+description = "Contains prompts used by the user interface."
+
+[[prompts]]
+id = "summarize_text"
+name = "Summarize Text"
+description = "Condenses long text into key bullet points."
+category = "General"
+prompt = """
+Summarize the following text into 3-5 bullet points:
+
+{{input}}"""
+
+[prompts.parameters]
+temperature = 0.3
+max_tokens = 150
+
+[[prompts]]
+id = "debug_code"
+name = "Debug Code"
+description = "Analyzes code for errors and suggests fixes."
+category = "Developer"
+prompt = """
+Review the following code for bugs and provide a corrected version with a brief explanation of the issue:
+
+{{input}}"""
+
+[prompts.parameters]
+temperature = 0.1
+max_tokens = 500
+
+# {
+#     "messages": {
+#         "shared": {
+#             "confirmActive": "Yes",
+#             "confirmInactive": "No",
+#             "aborted": "Aborted."
+#         },
+#         "index": {
+#             "menuMessage": "Pick an option:",
+#             "choices": {
+#                 "graft": {
+#                     "label": "Graft",
+#                     "hint": "merge project files into ALL/"
+#                 },
+#                 "sever": {
+#                     "label": "Sever",
+#                     "hint": "rebuild files from ALL/"
+#                 },
+#                 "exit": {
+#                     "label": "Exit"
+#                 }
+#             }
+#         },
+#         "graft": {
+#             "subTitle": "Project File Consolidator",
+#             "boxHeader": "Ignored Patterns",
+#             "proceedPrompt": "Do you want to proceed?",
+#             "spinnerStart": "Processing files...",
+#             "appendTrace": "Appending ",
+#             "spinnerCancel": "Process cancelled",
+#             "spinnerError": "Process failed",
+#             "spinnerSuccess": "Conversion complete",
+#             "boxSuccessTitle": " PDF file generated: ",
+#             "done": "Complete!",
+#             "jobSkippedText": "job(s) skipped — no matching files.",
+#             "noFilesFound": "No matching files found for any job — nothing to graft."
+#         },
+#         "sever": {
+#             "subTitle": "Project File Rebuilder",
+#             "scanning": "Scanning for input files...",
+#             "scanFound": "Found {count} file(s).",
+#             "dryRunWarning": "DRY-RUN mode — no files will be written.",
+#             "noInputFiles": "No input files found. Nothing to do.",
+#             "overwritePrompt": "Output directory \"{dir}\" has content. Continue?",
+#             "missingEndBanner": "No End-of-file banner found for \"{path}\". Segment discarded.",
+#             "writeError": "Error writing {path}: ",
+#             "traces": {
+#                 "dryRun": " DRY-RUN would write: ",
+#                 "writing": " Writing: ",
+#                 "skipped": " Skipped (exists): "
+#             }
+#         }
+#     }
+# }

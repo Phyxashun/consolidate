@@ -1,0 +1,133 @@
+id = "IGNORE"
+name = "ignore.toml"
+description = "Contains directories, globs, and files to ignore globally; no including them in the final consolidated product."
+version = 1.0
+
+# Git Folder
+git = ["**/.git/**"]
+
+# Dependency Folders
+dependencies = [
+    # Nodejs/Bun/Deno
+    "**/node_modules/**",
+    "**/.bun/**",
+    # Python Virtual Environment
+    "**/.venv/**",
+    "**/venv/**",
+    "**/env/**",
+    # Rust Cargo Builds
+    "**/target/**",
+    # Java/Gradle
+    "**/.gradle/**",
+    "**/build/**",
+]
+
+# Output Folders/Files
+output = [
+    "**/build/**",
+    "**/dist/**",
+    "**/out/**",
+    "**/*.map",
+    "**/*.min.js",
+    "**/*.min.css",
+]
+
+# Code Testing Files
+test = [
+    "**/coverage/**",
+    "**/*.lcov",
+    "**/*.test.*",
+    "**/*.spec.*",
+    "**/*_test.*",
+    "**/*_spec.*",
+    "**/__tests__/**",
+    "**/__snapshots__/**",
+    "**/__mocks__/**",
+    "**/tests/**",
+    "**/specs/**",
+    "**/test/**",
+]
+
+# Log Files
+logs = ["**/logs/**", "**/*.log", "**/report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json"]
+
+# dotenv Environment Files
+env = ["**/.env", "**/.env.*", "**/*.local"]
+
+# Cache Folders and Files
+caches = [
+    "**/.cache/**",
+    # ESLint
+    "**/.eslintcache",
+    # TypeScript
+    "**/*.tsbuildinfo",
+    # Python Bytecode
+    "**/__pycache__/**",
+    "**/*.pyc",
+    # Web Frameworks
+    "**/.next/**",
+    "**/.nuxt/**",
+    "**/.svelte-kit/**",
+    # Turborepo Caching
+    "**/.turbo/**",
+
+]
+
+# Integrated Development Environment/OS Folders and Files
+ide = [
+    # Visual Studio Code
+    "**/.vscode/**",
+    # Intellij Products
+    "**/.idea/**",
+    # Finder (MacOS) Files
+    "**/.DS_Store",
+    # Jupyter Notebooks
+    "**/.ipynb_checkpoints/**",
+    # Vim Swap Files
+    "**/*.swp",
+    "**/*.swo",
+    # Windows Explorer Files
+    "**/Thumbs.db",
+    "**/desktop.ini",
+]
+
+# Prior Grafted Files
+grafted = [
+    "**/src/config/**",
+    "**/*config/**",
+    "**/GRAFT/**",
+    "**/SEVER/**",
+    "**/.config/**",
+    "**/ALL/**",
+    "**/ALL_REBUILT/**",
+]
+
+# Lock Files
+locks = [
+    "**/*.lock",
+    "**/bun.lock",
+    "**/*.lockb",
+    "**/package-lock.json",
+    "**/pnpm-lock.yaml",
+]
+
+# Project Specific Exclusions
+other = [
+    "**/*.sqlite",
+    "**/*.db",
+    "**/*.txt",
+    "**/*.pdf",
+    "**/*.docx",
+    "**/*.ttf",
+    "**/*.woff2",
+    "**/*.png",
+    "**/*.jpg",
+    "**/*.webp",
+    "**/*.svg",
+    "**/*.ico",
+    "**/*.gif",
+    "**/*.mp4",
+    "**/*.mov",
+    "**/*.mp3",
+    "**/*.wav",
+]
