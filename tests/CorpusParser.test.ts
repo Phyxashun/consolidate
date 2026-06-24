@@ -51,8 +51,19 @@ const loadCorpus = async (corpusPath: string): Promise<void> => {
 
         thisGroup.message('');
 
+        const localExcludesCount = job.exclude?.length || 0;
+        const totalExcludesCount = resolved.exclude.length;
+
         thisGroup.message(
-            `${chalk.green('✔')} ${chalk.gray('Excludes count:')} ${chalk.red(resolved.exclude.length.toString())}`,
+            `${chalk.green('✔')} ${chalk.gray('Excludes summary:')}`,
+        );
+
+        thisGroup.message(
+            `\t${chalk.dim('→')} ${chalk.gray('Job-specific rules:')} ${chalk.red(localExcludesCount.toString())}`,
+        );
+
+        thisGroup.message(
+            `\t${chalk.dim('→')} ${chalk.gray('Total (with Globals):')} ${chalk.red(totalExcludesCount.toString())}`,
         );
 
         thisGroup.message('');
