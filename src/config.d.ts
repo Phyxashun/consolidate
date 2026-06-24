@@ -24,17 +24,17 @@ export interface BaseConfig {
 }
 
 //@========================================
-//@     files.toml - FILECONFIG TYPES
+//@     files.toml - FILESCONFIG TYPES
 //@========================================
-export interface FileConfig extends BaseConfig {
+export interface FilesConfig extends BaseConfig {
   includes: FilterMap;
   excludes: FilterMap;
-  job: JobDefinition[];
+  jobs: JobDefinition[];
 }
 
 export interface Job extends BaseConfig {
-  includes: FileConfig['includes'][string];
-  excludes: FileConfig['excludes'][string];
+  includes: FilesConfig['includes'][string];
+  excludes: FilesConfig['excludes'][string];
 }
 
 export interface JobDefinition extends Job {

@@ -18,49 +18,49 @@ frameworks = ["**/*.vue", "**/*.svelte", "**/*.astro"]
 
 # Webpage Template Files
 web_templates = [
-    # Standard and Legacy Web Formats
-    "**/*.html",
-    "**/*.htm",
-    "**/*.xhtml",
-    "**/*.xht",
-    "**/*.mhtml",
+  # Standard and Legacy Web Formats
+  "**/*.html",
+  "**/*.htm",
+  "**/*.xhtml",
+  "**/*.xht",
+  "**/*.mhtml",
 
-    # Modern Frontend Framework & Component Templates
-    "**/*.vue",
-    "**/*.svelte",
-    "**/*.astro",
-    "**/*.riot",
+  # Modern Frontend Framework & Component Templates
+  "**/*.vue",
+  "**/*.svelte",
+  "**/*.astro",
+  "**/*.riot",
 
-    # JavaScript/TypeScript Web Templates (Non-Hydrated Formats)
-    "**/*.jsx",
-    "**/*.tsx",
+  # JavaScript/TypeScript Web Templates (Non-Hydrated Formats)
+  "**/*.jsx",
+  "**/*.tsx",
 
-    # JavaScript/Node.js Templating Engines
-    "**/*.ejs",
-    "**/*.pug",
-    "**/*.jade",
-    "**/*.handlebars",
-    "**/*.hbs",
-    "**/*.mustache",
-    "**/*.twig",
-    "**/*.nunjucks",
-    "**/*.njk",
+  # JavaScript/Node.js Templating Engines
+  "**/*.ejs",
+  "**/*.pug",
+  "**/*.jade",
+  "**/*.handlebars",
+  "**/*.hbs",
+  "**/*.mustache",
+  "**/*.twig",
+  "**/*.nunjucks",
+  "**/*.njk",
 
-    # Backend and Server-Side Web Pages
-    "**/*.php",
-    "**/*.phtml",
-    "**/*.jsp",
-    "**/*.jspx",
-    "**/*.asp",
-    "**/*.aspx",
-    "**/*.cshtml",
-    "**/*.vbhtml",
+  # Backend and Server-Side Web Pages
+  "**/*.php",
+  "**/*.phtml",
+  "**/*.jsp",
+  "**/*.jspx",
+  "**/*.asp",
+  "**/*.aspx",
+  "**/*.cshtml",
+  "**/*.vbhtml",
 
-    # Python and Ruby Web Templates
-    "**/*.j2",
-    "**/*.jinja",
-    "**/*.jinja2",
-    "**/*.erb",
+  # Python and Ruby Web Templates
+  "**/*.j2",
+  "**/*.jinja",
+  "**/*.jinja2",
+  "**/*.erb",
 ]
 
 # Python Project Files
@@ -71,14 +71,14 @@ shell = ["**/*.sh", "**/*.bash", "**/*.ps1"]
 
 # Systems Programming (C, C++, Rust, Zig)
 systems = [
-    "**/*.c",
-    "**/*.h",
-    "**/*.cpp",
-    "**/*.hpp",
-    "**/*.cc",
-    "**/*.hh",
-    "**/*.rs",
-    "**/*.zig",
+  "**/*.c",
+  "**/*.h",
+  "**/*.cpp",
+  "**/*.hpp",
+  "**/*.cc",
+  "**/*.hh",
+  "**/*.rs",
+  "**/*.zig",
 ]
 
 # JVM Languages (Java, Kotlin, Scala, Groovy)
@@ -92,16 +92,16 @@ mobile = ["**/*.swift", "**/*.m", "**/*.mm", "**/*.dart"]
 
 # Go, Ruby, PHP, Functional & Data Languages
 other = [
-    "**/*.go",
-    "**/*.rb",
-    "**/*.rbw",
-    "**/*.php",
-    "**/*.hs",
-    "**/*.ex",
-    "**/*.exs",
-    "**/*.erl",
-    "**/*.clj",
-    "**/*.sql",
+  "**/*.go",
+  "**/*.rb",
+  "**/*.rbw",
+  "**/*.php",
+  "**/*.hs",
+  "**/*.ex",
+  "**/*.exs",
+  "**/*.erl",
+  "**/*.clj",
+  "**/*.sql",
 ]
 
 #
@@ -110,16 +110,16 @@ other = [
 [excludes]
 # Comprehensive isolation from testing directories/files
 testing = [
-    "**/*.test.*",
-    "**/*.spec.*",
-    "**/*_test.*",
-    "**/*_spec.*",
-    "**/__tests__/***",
-    "**/__snapshots__/***",
-    "**/__mocks__/***",
-    "**/tests/***",
-    "**/specs/***",
-    "**/test/***",
+  "**/*.test.*",
+  "**/*.spec.*",
+  "**/*_test.*",
+  "**/*_spec.*",
+  "**/__tests__/***",
+  "**/__snapshots__/***",
+  "**/__mocks__/***",
+  "**/tests/***",
+  "**/specs/***",
+  "**/test/***",
 ]
 
 # Tool Specific Files
@@ -128,26 +128,26 @@ tooling = ["**/node_modules/**/*"]
 #
 # CORPUS PIPELINE RUNTIME JOBS
 #
-[[job]]
+[[jobs]]
 id = "SOURCE"
 name = "Source Code Parsing"
 description = "Compiles raw logic and application scripts."
 extends = [
-    "javascript",
-    "typescript",
-    "frameworks",
-    "python",
-    "shell",
-    "systems",
-    "jvm",
-    "dotnet",
-    "mobile",
-    "other",
+  "javascript",
+  "typescript",
+  "frameworks",
+  "python",
+  "shell",
+  "systems",
+  "jvm",
+  "dotnet",
+  "mobile",
+  "other",
 ]
 include = []
 exclude = ["tooling", "testing", "**/*.config.*", "**/config.*"]
 
-[[job]]
+[[jobs]]
 id = "WEBPAGE"
 name = "Webpage layouts"
 description = "Markup, framework component shells, and server templates."
@@ -155,188 +155,188 @@ extends = ["web_templates"]
 include = ["**/*.webmanifest"]
 exclude = ["tooling", "testing"]
 
-[[job]]
+[[jobs]]
 id = "STYLES"
 name = "Style Files (css, scss, etc.)"
 description = "Compiles raw style files."
 extends = []
 include = [
-    "**/*.css",
-    "**/*.scss",
-    "**/*.sass",
-    "**/*.less",
-    "**/*.styl",
-    "**/*.pcss",
-    "**/*.sss",
-    "**/*.wxss",
-    "**/*.acss",
+  "**/*.css",
+  "**/*.scss",
+  "**/*.sass",
+  "**/*.less",
+  "**/*.styl",
+  "**/*.pcss",
+  "**/*.sss",
+  "**/*.wxss",
+  "**/*.acss",
 ]
 exclude = ["tooling", "testing", "**/.stylelintrc*", "**/stylelint.config.*"]
 
-[[job]]
+[[jobs]]
 id = "CONFIGS"
 name = "Project Configuration Files"
 description = "Compiles all project related configuration files."
 extends = []
 include = [
-    # Generic Configuration Extensions
-    "**/*.json",
-    "**/*.jsonc",
-    "**/*.yaml",
-    "**/*.yml",
-    "**/*.toml",
-    "**/*.config.*",
-    "**/config.*",
+  # Generic Configuration Extensions
+  "**/*.json",
+  "**/*.jsonc",
+  "**/*.yaml",
+  "**/*.yml",
+  "**/*.toml",
+  "**/*.config.*",
+  "**/config.*",
 
-    # Tool-Specific and Dotfiles
-    "**/.editorconfig",
-    "**/.browserslistrc",
-    "**/browserslist",
+  # Tool-Specific and Dotfiles
+  "**/.editorconfig",
+  "**/.browserslistrc",
+  "**/browserslist",
 
-    # Version Control, Environments, and DevOps
-    "**/*ignore",
-    "**/.gitattributes",
-    "**/.gitmodules",
-    "**/.env*",
-    "**/Dockerfile*",
-    "**/docker-compose*.yml",
-    "**/.github/workflows/*.yml",
+  # Version Control, Environments, and DevOps
+  "**/*ignore",
+  "**/.gitattributes",
+  "**/.gitmodules",
+  "**/.env*",
+  "**/Dockerfile*",
+  "**/docker-compose*.yml",
+  "**/.github/workflows/*.yml",
 
-    # Package Managers
-    "**/package.json",
-    "**/package-lock.json",
-    "**/yarn.lock",
-    "**/pnpm-lock.yaml",
-    "**/bun.lockb",
-    "**/composer.json",
-    "**/composer.lock",
-    "**/Cargo.toml",
-    "**/Cargo.lock",
-    "**/Gemfile",
-    "**/Gemfile.lock",
+  # Package Managers
+  "**/package.json",
+  "**/package-lock.json",
+  "**/yarn.lock",
+  "**/pnpm-lock.yaml",
+  "**/bun.lockb",
+  "**/composer.json",
+  "**/composer.lock",
+  "**/Cargo.toml",
+  "**/Cargo.lock",
+  "**/Gemfile",
+  "**/Gemfile.lock",
 
-    # Linter and Formatter Configurations
-    "**/.eslintrc*",
-    "**/eslint.config.*",
-    "**/.prettierrc*",
-    "**/prettier.config.*",
-    "**/.stylelintrc*",
-    "**/stylelint.config.*",
+  # Linter and Formatter Configurations
+  "**/.eslintrc*",
+  "**/eslint.config.*",
+  "**/.prettierrc*",
+  "**/prettier.config.*",
+  "**/.stylelintrc*",
+  "**/stylelint.config.*",
 
-    # TypeScript and Babel
-    "**/tsconfig*.json",
-    "**/.babelrc*",
-    "**/babel.config.*",
+  # TypeScript and Babel
+  "**/tsconfig*.json",
+  "**/.babelrc*",
+  "**/babel.config.*",
 
-    # Bundlers and Task Runners
-    "**/webpack.config.*",
-    "**/vite.config.*",
-    "**/rollup.config.*",
-    "**/next.config.*",
-    "**/nuxt.config.*",
-    "**/gatsby-config.*",
-    "**/gulpfile.*",
+  # Bundlers and Task Runners
+  "**/webpack.config.*",
+  "**/vite.config.*",
+  "**/rollup.config.*",
+  "**/next.config.*",
+  "**/nuxt.config.*",
+  "**/gatsby-config.*",
+  "**/gulpfile.*",
 
-    # IDE Settings (Fixed base path roots)
-    "**/*/settings.json",
-    "**/.vscode/**/*.json",
-    "**/.idea/**/*.xml",
+  # IDE Settings (Fixed base path roots)
+  "**/*/settings.json",
+  "**/.vscode/**/*.json",
+  "**/.idea/**/*.xml",
 ]
 exclude = ["**/package.js"]
 
-[[job]]
+[[jobs]]
 id = "TESTS"
 name = "Test Files"
 description = "Compiles all project test files and specs."
 extends = []
 include = [
-    # Standard Test and Spec Files
-    "**/*.test.*",
-    "**/*.spec.*",
-    "**/*_test.*",
-    "**/*_spec.*",
-    "**/*.test.*",
-    "**/*-test.*",
-    "**/test-*.*",
-    "**/test.*",
-    "**/test/**/*.*",
+  # Standard Test and Spec Files
+  "**/*.test.*",
+  "**/*.spec.*",
+  "**/*_test.*",
+  "**/*_spec.*",
+  "**/*.test.*",
+  "**/*-test.*",
+  "**/test-*.*",
+  "**/test.*",
+  "**/test/**/*.*",
 
-    # Ecosystem-Specific Naming Conventions
-    "**/test_*.py",
-    "**/*Test.php",
-    "**/*Spec.scala",
+  # Ecosystem-Specific Naming Conventions
+  "**/test_*.py",
+  "**/*Test.php",
+  "**/*Spec.scala",
 
-    # Dedicated Test and Mock Directories
-    "**/__tests__/**/*",
-    "**/__snapshots__/**/*",
-    "**/__mocks__/**/*",
-    "**/tests/**/*",
-    "**/specs/**/*",
-    "**/test/**/*",
+  # Dedicated Test and Mock Directories
+  "**/__tests__/**/*",
+  "**/__snapshots__/**/*",
+  "**/__mocks__/**/*",
+  "**/tests/**/*",
+  "**/specs/**/*",
+  "**/test/**/*",
 
-    # Test Framework Configurations
-    "**/jest.config.*",
-    "**/vitest.config.*",
-    "**/playwright.config.*",
-    "**/cypress.config.*",
-    "**/karma.conf.*",
+  # Test Framework Configurations
+  "**/jest.config.*",
+  "**/vitest.config.*",
+  "**/playwright.config.*",
+  "**/cypress.config.*",
+  "**/karma.conf.*",
 
-    # Test Helpers and Setup Files
-    "**/setupTests.*",
-    "**/test-setup.*",
-    "**/test.setup.*",
+  # Test Helpers and Setup Files
+  "**/setupTests.*",
+  "**/test-setup.*",
+  "**/test.setup.*",
 ]
 exclude = []
 
-[[job]]
+[[jobs]]
 id = "DOCUMENTATION"
 name = "Documentation Files"
 description = "Compiles core text and legal project guides."
 extends = []
 include = [
-    # Readme and Core Guides
-    "**/README*",
-    "**/readme*",
-    "**/README.*",
-    "**/readme.*",
+  # Readme and Core Guides
+  "**/README*",
+  "**/readme*",
+  "**/README.*",
+  "**/readme.*",
 
-    # Licensing and Legal
-    "**/LICENSE*",
-    "**/license*",
-    "**/LICENSE.*",
-    "**/license.*",
-    "**/COPYING*",
-    "**/NOTICE*",
+  # Licensing and Legal
+  "**/LICENSE*",
+  "**/license*",
+  "**/LICENSE.*",
+  "**/license.*",
+  "**/COPYING*",
+  "**/NOTICE*",
 
-    # Versioning and History
-    "**/CHANGELOG*",
-    "**/changelog*",
-    "**/CHANGELOG.*",
-    "**/changelog.*",
-    "**/HISTORY*",
-    "**/RELEASES*",
+  # Versioning and History
+  "**/CHANGELOG*",
+  "**/changelog*",
+  "**/CHANGELOG.*",
+  "**/changelog.*",
+  "**/HISTORY*",
+  "**/RELEASES*",
 
-    # Standard Technical Documentation Formats
-    "**/*.md",
-    "**/*.markdown",
-    "**/*.mdx",
-    "**/*.rst",
-    "**/*.adoc",
-    "**/*.asciidoc",
-    "**/*.txt",
+  # Standard Technical Documentation Formats
+  "**/*.md",
+  "**/*.markdown",
+  "**/*.mdx",
+  "**/*.rst",
+  "**/*.adoc",
+  "**/*.asciidoc",
+  "**/*.txt",
 
-    # Community and Governance Guidelines
-    "**/CONTRIBUTING*",
-    "**/contributing*",
-    "**/CODE_OF_CONDUCT*",
-    "**/code_of_conduct*",
-    "**/SECURITY*",
-    "**/SUPPORT*",
+  # Community and Governance Guidelines
+  "**/CONTRIBUTING*",
+  "**/contributing*",
+  "**/CODE_OF_CONDUCT*",
+  "**/code_of_conduct*",
+  "**/SECURITY*",
+  "**/SUPPORT*",
 
-    # Dedicated Documentation Directories
-    "**/docs/**/*",
-    "**/doc/**/*",
-    "**/.github/ISSUE_TEMPLATE/**/*",
-    "**/.github/PULL_REQUEST_TEMPLATE/**/*",
+  # Dedicated Documentation Directories
+  "**/docs/**/*",
+  "**/doc/**/*",
+  "**/.github/ISSUE_TEMPLATE/**/*",
+  "**/.github/PULL_REQUEST_TEMPLATE/**/*",
 ]
 exclude = ["tooling"]

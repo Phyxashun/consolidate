@@ -1,11 +1,11 @@
 // FILE-PATH: src/utils/FilesParser.ts
 
-import type { FileConfig, Job, JobDefinition } from '../config';
+import type { FilesConfig, Job, JobDefinition } from '../config';
 
 export class FilesParser {
-  private config: FileConfig;
+  private config: FilesConfig;
 
-  private constructor(parsedConfig: FileConfig) {
+  private constructor(parsedConfig: FilesConfig) {
     this.config = parsedConfig;
   }
 
@@ -14,11 +14,11 @@ export class FilesParser {
   }
 
   // Expose root config if needed for top-level logging metrics
-  public get corpus(): FileConfig {
+  public get corpus(): FilesConfig {
     return this.config;
   }
 
-  public static async load(tomlConfig: FileConfig): Promise<FilesParser> {
+  public static load(tomlConfig: FilesConfig): FilesParser {
     return new FilesParser(tomlConfig);
   }
 
