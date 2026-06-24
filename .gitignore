@@ -41,7 +41,7 @@ ALL_REBUILT/**/*
 
 # Lock files
 *.lock
-bun.lock
+**/bun.lock
 
 # JUST FOR TESTING ***REMOVE/COMMENT OUT FOR PRODUCTION AND GIT PUSH***
 # *.md
